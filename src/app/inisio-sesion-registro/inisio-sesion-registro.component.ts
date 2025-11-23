@@ -114,7 +114,7 @@ export class InisioSesionRegistroComponent {
       //console.log(this.usuarioService.getCorreoUsuario());
       this.mostrarMensajeRegistro();
     }, (error)=>{
-      console.error('Error al verificar contra', error);
+      console.error('Error al verificar la contraseña', error);
       this.mostrarMensajeFallaInicio();
     });
   }
