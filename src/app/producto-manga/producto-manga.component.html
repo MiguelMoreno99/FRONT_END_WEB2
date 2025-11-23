@@ -1,0 +1,186 @@
+<div *ngIf="isInsertarCarrito " class="alert alert-info" role="alert">
+    Agregaste un producto al carrito
+   </div>
+<main style="margin-bottom: 5%;">
+  <div class="container-img" *ngFor="let manga of this.productoInfo">
+    <img [src]="manga.imagen" [alt]="manga.nombre">
+  </div>
+  <div class="container-info-producto" *ngFor="let manga of this.productoInfo">
+      <div class="container-precio">
+          <span>${{manga.precio}}</span>
+          <i class='bx bx-chevron-left bx-rotate-180' ></i>
+      </div>
+
+      <div class="container-detalles-producto">
+          <h3>{{manga.nombre}}</h3> 
+      </div>
+
+      <div class="container-agregar-carrito">
+          <div class="container-cantidad">
+              <input type="number"
+              placeholder="1"
+              value="1"
+              min="1"
+              class=input-cantidad>
+              <div class="btn-mas-menos">
+                  <i class='bx bx-chevron-up' id="increment"></i>
+                  <i class='bx bx-chevron-down' id="decrement"></i>
+              </div>
+          </div>
+          <span class="add-cart" (click)="agregarProductoCarritoUsuario(manga.idProducto)">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </span>
+      </div>
+
+      <div class="container-descripcion">
+          <div class="title-descripcion">
+              <h4>Descripción</h4>
+          </div>
+          <div class="text-descripcion">
+              <p>{{manga.descripcion}}
+              </p>
+          </div>
+      </div>
+  </div>
+</main>
+
+<section class="container-productos-relacionados" >
+  <h2>Productos Similaeres</h2>
+  <div class="container-card-lista-productos">
+      <div class="card">
+          <div class="card-img">
+            <img src="../assets/img/Vagabond.jpg" alt="Vagabond 1">
+            <div class="button-group">
+                <span>
+                    <i class="fa-regular fa-eye"></i>
+                </span>
+                <span class="add-cart" >
+                    <i class="fa-solid fa-cart-shopping" style="color: crimson;" ></i>
+                </span>
+            </div>
+          </div>
+          <div class="info-card">
+              <div class="texto-producto">
+                  <h3>Vagabond</h3>
+              </div>
+              <div class="precio">$179.90</div>
+          </div>
+      </div>
+
+      <div class="card">
+          <div class="card-img">
+            <img src="../assets/img/Bocchi-the-rock.jpg" alt="Bocchi-the-rock 1">
+          </div>
+          <div class="info-card">
+              <div class="texto-producto">
+                  <h3>Playera rock-Iron Maiden</h3>
+                  <p class="categoria">
+                      Playeras,Casual
+                  </p>
+              </div>
+              <div class="precio">$185.20</div>
+          </div>
+      </div>
+
+      <div class="card">
+          <div class="card-img">
+            <img src="../assets/img/Oshi-no-Ko.jpg" alt="oshinoko">
+          </div>
+          <div class="info-card">
+              <div class="texto-producto">
+                  <h3>Playera -El mas duro de México</h3>
+                  <p class="categoria">
+                      Playeras,Casual
+                  </p>
+              </div>
+              <div class="precio">$140.00</div>
+          </div>
+      </div>
+
+      <div class="card">
+          <div class="card-img">
+            <img src="../assets/img/Bocchi-the-rock.jpg" alt="Bocchi-the-rock 1">
+          </div>
+          <div class="info-card">
+              <div class="texto-producto">
+                  <h3>Playera Unisex-Nirvana</h3>
+                  <p class="categoria">
+                      Playeras,Casual
+                  </p>
+              </div>
+              <div class="precio">$200.40</div>
+          </div>
+      </div>
+  </div>
+</section>
+<footer class="footer">
+  <div class="container container-footer">
+      <div class="menu-footer">
+          <div class="contact-info">
+              <p class="title-footer">Contáctanos</p>
+              <ul>
+                  <li>
+                      Dirección: Calle Isaac Newton 286 - Polanco V seccion CP 11560 Ciudad de México - México.
+                  </li>
+                  <li>
+                      Teléfono: (+52) 55.5208.35.50 / (+52) 55.89.95.22.77 / (+52) 55.89.95.22.78
+                  </li>
+                  <li>
+                      Fáx: 555555300
+                  </li>
+                  <li>
+                      Correo: atencionarrobapanini.com.mx.
+                  </li>
+              </ul>
+              <div class="social-icons">
+                  <span class="facebook">
+                      <i class="fa-brands fa-facebook"></i>
+                  </span>
+                  <span class="twitter">
+                      <i class="fa-brands fa-x-twitter"></i>
+                  </span>
+                  <span class="instagram">
+                      <i class="fa-brands fa-instagram"></i>
+                  </span>
+                  <span class="tiktok">
+                      <i class="fa-brands fa-tiktok"></i>
+                  </span>
+                  <span class="youtube">
+                      <i class="fa-brands fa-youtube"></i>
+                  </span>
+              </div>
+          </div>
+
+          <div class="information">
+              <p class="title-footer">Información</p>
+              <ul>
+                  <li><a href="#">Acerca de Nosotros</a></li>
+                  <li><a href="#">Información de Envíos</a></li>   
+                  <li><a href="#"></a>Políticas de Privacidad</li>
+                  <li><a href="#"></a>Términos y Condiciones</li>
+                  <li><a href="#"></a>Distribuidores</li>
+              </ul>
+          </div>
+
+          <div class="my-account">
+              <p class="title-footer">Tu Cuenta</p>
+
+              <ul>
+                  <li><a href="#">Mi Cuenta</a></li>
+                  <li><a href="#">Historial de Pedidos</a></li>
+                  <li><a href="#">Lista de Descuentos</a></li>
+                  <li><a href="#">Boletín</a></li>
+                  <li><a href="#">Reembolsos</a></li>
+              </ul>
+          </div>
+      </div>
+
+      <div class="copyright">
+          <p>
+              Desarrollado por Constanza Montiel &copy; 2024
+          </p>
+
+          
+      </div>
+  </div>
+</footer>

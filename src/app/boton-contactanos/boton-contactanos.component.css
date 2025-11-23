@@ -1,0 +1,16 @@
+.btn button {
+  font-weight: 700;
+  color: brown;
+  padding: 9px 25px;
+  background: #eceff1;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+}
+
+.btn button:hover {
+  background-color: #eceff1;
+  color: darkgoldenrod;
+  transform: scale(1.1);
+}

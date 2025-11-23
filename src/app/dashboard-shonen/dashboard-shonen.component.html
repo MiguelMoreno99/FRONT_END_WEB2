@@ -1,0 +1,23 @@
+
+<section class="container top-products">      
+    <div class="container-products">
+        <!--Primer Producto-->
+        <div class="card-product" *ngFor="let element of this.topProductos">
+            <div class="container-img">
+                <img [src]="element.imagen" [alt]="element.nombre">
+                <div class="button-group">
+                    <span>
+                        <a [routerLink]="['/producto-mangas', element.idProducto]"> <i class="fa-regular fa-eye"></i></a>
+                    </span>
+                </div>
+            </div>
+            <div class="content-card-product">
+                <h3>{{element.nombre}}</h3>
+                <span class="add-cart">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </span>
+                <p class="price">${{element.precio}}</p>
+            </div>
+        </div>
+    </div>
+  </section>

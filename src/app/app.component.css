@@ -1,0 +1,254 @@
+/*Encabezado*/
+header {
+  background-color: dodgerblue;
+  height: 85px;
+  display: flex;
+  justify-content: center;
+  width: auto;
+  /*align-items: center;
+ 
+  padding: 10px;*/
+  margin: 0; 
+}
+
+.contenedor{
+  display: flex;
+  padding: 0;
+  margin: 0;
+  /* border: 2px solid black;  */
+  height: 85px;
+  box-sizing: border-box;
+  align-items: center;
+  width: 90%;
+  justify-content: space-between;
+  /* width 1665.125px*/
+}
+
+.header .logo {
+  cursor: pointer;
+  
+}
+.logo{
+  box-sizing: border-box;
+  position: relative;
+  transform: scale(1.2)
+}
+form {
+  box-sizing: border-box;
+  width: 323.75px;
+}
+.header .logo img {
+  height: 40px;
+  width: auto;
+  transition: all 0.3s;
+}
+
+.header .logo img:hover {
+  transform: scale(1.2);
+}
+
+.header .btn button {
+  font-weight: 700;
+  color: brown;
+  padding: 9px 25px;
+  background: #eceff1;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+}
+
+.header .btn button:hover {
+  background-color: #eceff1;
+  color: darkgoldenrod;
+  transform: scale(1.1);
+}
+
+.search {
+  --padding: 14px;
+
+  width: max-content;
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  border-radius: 28px;
+  background: #f6f6f6;
+  /*padding: var(--padding);*/
+}
+
+.search-input {
+  font-size: 16px;
+  font-family: 'Lexend', sans-serif;
+  color: #333333;
+  margin-left: var(--padding);
+  outline: none;
+  border: none;
+  background: transparent;
+}
+
+main {
+  width: 100%;
+  padding: 20px;
+  margin: 600px; /* Center horizontally */
+  margin-top: 50vh; /* Vertically center using viewport height */
+  position: relative; /* Establish containing block for absolute positioning */
+  top: -50%; /* Shift upward by half of its own height */
+  transform: translateY(-50%); /* Correctly center vertically */
+  background-color:  aliceblue ;
+}
+
+.hero{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 2rem 0; 
+  width: 437.02125px;
+  height: 85px;
+ /*  border:2px solid red ; */
+  
+}
+
+.container-user{
+  display: flex;
+  gap: 1rem; 
+  cursor: pointer;
+  width: 480px;
+  align-items: center;
+  /* border:2px solid black ; */
+  
+}
+
+.container-user .fa-user{
+  font-size: 3rem;
+  color:rgb(255, 255, 255);
+  padding-right: 2.5rem;
+  border-right: 1px solid #e2e2e2;
+}
+
+.container-user .fa-cart-shopping {
+  font-size: 3rem;
+  color: #ffffff;
+  padding-left: 1rem;
+  
+}
+
+.content-shopping-cart{
+  display: flex;
+  flex-direction: column;
+ 
+}
+
+.content-shopping-cart .text, .number{
+  color:rgb(245, 247, 248);
+}
+
+.infoUsuario span{
+  box-sizing: border-box;
+  font-size: 13px;
+  font-family: 'Lexend', sans-serif;
+  width: 100px;
+  color:rgb(245, 247, 248);
+  font-weight: bold;
+}
+
+.infoUsuario{
+  box-sizing: border-box;
+  display: inline-block;
+  /* align-items: center; */
+  /* margin-right: 4.5%; */
+}
+
+ .container-hero{
+  position: relative;
+  width: 42;
+} 
+
+form .search{
+  box-sizing: border-box;
+  width: 323px;
+}
+
+/*Carrito*/
+.container-cart-products{
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: aliceblue;
+  width: 400px;
+  z-index: 1;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20);
+  border-radius: 10px;
+  margin-right: 2%;
+  /*Aqui pondria el grid en todo su caso */
+}
+
+.cart-product{
+  display: flex;
+  flex-direction: column ;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+  /* border: 2px solid red; */
+}
+
+.info-cart-product{
+  display: flex;
+  flex-direction: row ;
+  justify-content: space-between;
+  align-items:center;
+  box-sizing: border-box;
+  width: max-content;
+  border-bottom: 2px solid black;
+  padding-bottom: 1px;
+  /* border: 2px solid blue; */
+}
+
+.titulo-producto-carrito{
+  font-size: 20px;
+  margin-left: 1.5%;
+  margin-bottom: 0;
+  display: inline-block;
+}
+
+.precio-producto-carrito{
+  font-weight: 700;
+  font-size: 20px;
+  margin-left: 10px; 
+  padding-right: 2px;
+}
+
+.cantidad-producto-carrito{
+  font-weight: 400;
+  font-size: 20px;
+}
+svg{
+  cursor: pointer;
+}
+.icon-close{
+  box-sizing: border-box;
+  width: 25px;
+  height: 25px;
+}
+
+.cart-total{
+  display: flex;
+  flex-direction: row ;
+  justify-content: space-between;
+  align-items:center;
+  box-sizing: border-box;
+  color: white;
+  background-color: steelblue;
+  padding: 2%;
+}
+
+.cart-total button{
+
+  text-decoration: none;
+  color: white;
+  background-color: goldenrod;
+  display: inline-block;
+  border-radius: 3rem;
+}
+
+

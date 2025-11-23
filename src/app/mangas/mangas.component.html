@@ -1,0 +1,74 @@
+<div *ngIf="isInsertarCarrito " class="alert alert-info" role="alert">
+   Agregaste un producto al carrito
+  </div>
+<div class="titulo-shonen">
+    <h1>Mangas</h1>
+</div>
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <span class="fs-5 d-none d-sm-inline">Géneros</span>
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                    <li>
+                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline" (click)="nombreSeinen()">Seinen</span> </a>
+                        <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu" *ngFor="let nombre of nombreSeinenTodosLosMangas">
+                            <li class="w-100">
+                                <a [routerLink]="['/producto-mangas', nombre.idProducto]" class="nav-link px-0"> <span class="d-none d-sm-inline">{{nombre.nombre}}</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                            <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline" (click)="nombreShonen()">Shonen</span></a>
+                        <ul class="collapse show nav flex-column ms-1" id="submenu2" data-bs-parent="#menu"  *ngFor="let  nombre of nombreShonenTodosLosMangas">
+                            <li class="w-100">
+                                <a  [routerLink]="['/producto-mangas', nombre.idProducto]" class="nav-link px-0"> <span class="d-none d-sm-inline">{{nombre.nombre}}</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline" (click)="nombreShonen()">Shojo</span> </a>
+                            <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu" *ngFor="let  nombre of nombreShonenTodosLosMangas">
+                            <li class="w-100">
+                                <a [routerLink]="['/producto-mangas', nombre.idProducto]" class="nav-link px-0"> <span class="d-none d-sm-inline">{{nombre.nombre}}</span> </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <hr>
+                
+            </div>
+        </div>
+        <div class="col py-3">
+            <section class="top-products">      
+                <div class="container-products">
+                    <!--Primer Producto-->
+                    <div class="card-product" *ngFor="let manga of todosLosMangas" >
+                        <div class="container-img">
+                           <img [src]="manga.imagen" [alt]="manga.nombre">
+                            <div class="button-group">
+                                <span>
+                                    <a [routerLink]="['/producto-mangas', manga.idProducto]"><i class="fa-regular fa-eye"></i></a>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="content-card-product">
+                            <h3>{{manga.nombre}}</h3>
+                            <p class="price">{{manga.precio}}</p>
+                            <span class="add-cart" (click)="this.agregarProductoCarritoUsuario(manga.idProducto)">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <!--Segundo Producto-->
+                </div>
+            </section>
+            
+        </div>
+    </div>
+</div>

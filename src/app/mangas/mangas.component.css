@@ -1,0 +1,229 @@
+/*UTILITIES*/
+.container{
+  max-width: 100%; 
+  margin-left: auto;
+  margin-right: auto;
+  
+   /* border: 2px solid red;   */
+}
+
+*{
+  box-sizing: border-box;
+}
+/*Esto lo podria poner en golobal*/
+img{
+  display:block;
+  max-width: 100%;
+}
+
+/*Titulo Shonen*/
+.titulo-shonen{
+  padding-top: 4px;
+  padding-left: 25px;
+  background-image: linear-gradient(#00000080,#00000080), url('https://i.pinimg.com/originals/3c/1f/7f/3c1f7fbc2616b88c74255417eeea8ff3.jpg');
+  background-position: bottom;
+  width: 100%;
+  height: 70px;
+}
+
+.titulo-shonen h1{
+  color: white;
+}
+
+/*TOP PRODUCTOS*/
+
+.top-products{
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  transform: scale(.9); /* Downscale the container */
+  /* margin-bottom: 3rem; */
+   /* border: 2px solid rgb(0, 42, 255);   */
+}
+
+.container-options{
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.container-options span{
+  color: crimson;
+  background-color: white;
+  padding: .7rem 3rem;
+  font-size: 1.4rem;
+  text-transform: capitalize;
+  border-radius: 2rem;
+  cursor: pointer;
+}
+
+.container-options span:hover{
+  background-color: antiquewhite;
+  color: white;
+}
+
+.container-options span.active{
+  background-color: antiquewhite;
+  color: white;
+}
+
+.container-products{
+  padding: 24px;
+   /* border: 2px solid red;    */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  
+}
+
+.card-product{
+  background-color: dodgerblue;
+  padding: 2rem 3rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  box-shadow: 0 0 2px rgba(0, 0, 0, .1);
+}
+
+.container-img{
+position: relative;
+
+}
+
+.container-img img{
+width: 20rem;
+}
+
+.container-img .discount{
+position: absolute;
+left: 1rem;
+top: 1rem;
+background-color: goldenrod;
+color: #000;
+padding: 2px 1.2rem;
+border-radius: 1rem;
+font-size: 1.2rem;
+}
+
+.card-product:hover .discount{
+background-color:dodgerblue;
+}
+
+.button-group{
+display: flex;
+flex-direction: column;
+gap:1rem;
+
+position: absolute;
+top: 0;
+right: -3rem;
+z-index: -1;
+transition: all .4s ease;
+}
+
+.button-group span{
+border: 1px solid goldenrod;
+padding: .8rem;
+background-color: goldenrod;
+
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 50%;
+cursor: pointer;
+transition: all .4s ease;
+}
+
+/* .button-group span:hover{
+background-color: goldenrod;
+} */
+
+.button-group span i{
+font-size: 1.5rem;
+color: white;
+}
+
+/* .button-group span:hover i{
+color: white;
+} */
+
+.card-product:hover .button-group{
+z-index: 0;
+right: -1rem;
+}
+
+.content-card-product{
+  display: grid;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(3, min-content);
+  row-gap: 1rem;
+  /* border: 2px solid white; */
+}
+
+.stars{
+  position: absolute;
+grid-row: 1/2;
+grid-column: 1/-1;
+}
+
+.stars i{
+font-size: 1.3rem;
+color: goldenrod;
+}
+
+.content-card-product h3{
+grid-row: 2/3;
+grid-column: 1/-1;
+
+font-weight: 400;
+font-size: 1.6rem;
+margin-bottom: 1rem;
+cursor: pointer;
+}
+
+/* .content-card-product h3:hover{
+color: goldenrod;
+} */
+
+.add-cart{
+justify-self: start;
+border: 2px solid goldenrod;
+padding: 1rem;
+border-radius: 50%;
+cursor: pointer;
+transition: all .4s ease;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+}
+
+.add-cart:hover{
+background-color: goldenrod;
+}
+
+.add-cart i{
+font-size: 1.5rem;
+color: goldenrod;
+}
+
+.add-cart:hover i{
+color: crimson;
+}
+
+.content-card-product .price{
+  justify-self: end;
+  align-self: center;
+  font-size: 1.7rem;
+  font-weight: 600;
+  grid-row: 3;
+  grid-column: 1/2;
+  /* border: 2px solid black; */
+}
+
+
+ /*Generos*/
+ 

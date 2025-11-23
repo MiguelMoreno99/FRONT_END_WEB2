@@ -1,0 +1,92 @@
+<main>
+  <div class="container-img" *ngFor="let producto of this.productoCarrito">
+    <img [src]="producto.imagen" [alt]="producto.nombre">
+  </div>
+  <div class="container-info-producto">
+      <div class="container-detalles-producto">
+          <div class="container-form">
+              <label for="color">Ubicación</label>
+              <select name="color" id="color">
+                  <option disabled selected value="">Escoge una opcion</option>
+                  <option value="mexico">México</option>
+                  <option value="usa">Estados Unidos</option>
+                  <option value="canada">Canadá</option>
+              </select>
+          </div>
+
+          <div class="container-form">
+            <label for="Codigo">Estado</label>
+            <input type="text" placeholder="Estado"
+            required>
+         </div>
+        
+         <div class="container-form">
+          <label for="Codigo">Ciudad</label>
+          <input type="text" placeholder="Ciudad"
+          required>
+         </div>
+          <div class="container-form">
+              <label for="direccion">Dirección</label>
+              <input type="text" placeholder="Dirección"
+              required>
+          </div>
+
+          <div class="container-form">
+              <label for="Codigo">Codigo Postal</label>
+              <input type="text" placeholder="Codigo Postal"
+              required>
+          </div>
+
+          <button class="limpiar">Limpiar</button>
+      </div>
+      <div class="container-descripcion">
+          <div class="title-descripcion">
+              <h4>Tarjeta debito/credito</h4>
+              <i class='bx bx-credit-card' ></i>
+          </div>
+          <div class="text-descripcion">
+
+              <form>
+                  <h4>Nombre del titular</h4>
+                  <div class="input-box">
+                      <input type="text" placeholder="Ej: Juan Perez"
+                      required>
+                      <i class='bx bxs-user'></i>
+                  </div>
+                  <h4>Numero de tarjeta</h4>
+                  <div class="input-box">
+                      <input type="text" 
+                      placeholder="Ej:4000 0012 3456 7899 " required>
+                      <i class='bx bxs-lock-alt' ></i>
+                  </div>
+                  <h4>Fecha de expiración</h4>
+                  <div class="input-box">
+                      <input 
+                      placeholder="Ej: 12/37" required>
+                   
+                  </div>
+                  <h4>Codigo de seguridad</h4>
+                  <div class="input-box">
+                      <input
+                      placeholder="Ej: 321" required>
+                      
+                  </div>
+              </form>
+          </div>
+      </div>
+      <div class="container-precio">
+        <span>TOTAL: ${{this.precioTotal}}</span>
+        <i class='bx bx-chevron-left bx-rotate-180' ></i>
+     </div>
+     <div class="container-agregar-carrito">
+
+        <a [routerLink]="['/']"><button class="btn-agregar-carrito" (click)="ordenFinalizada()" id="botonPagar">
+          PAGAR
+      </button></a>
+      <a [routerLink]="['/mangas']"><button class="btn-agregar-carrito" (click)="eliminarOrden()">
+        <i class='bx bxs-receipt' ></i>
+        ME FALTARON PRODUCTOS
+    </button></a>
+  </div>
+  </div>
+</main>

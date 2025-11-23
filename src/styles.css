@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@500&family=Lexend:wght@300&display=swap');
+@import '@fortawesome/fontawesome-free/css/all.css';
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+
+*{
+  font-family: 'Kumbh Sans', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-color: aliceblue;
+}
+
+

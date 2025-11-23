@@ -1,0 +1,138 @@
+
+.contenido-boletin{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    
+}
+
+.contenido-boletin span{
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: goldenrod;
+}
+.contenido-boletin p{
+    font-weight: 500;
+    color: white;
+}
+.info-boletin{
+    position: relative;
+    left: 300px;
+    top: 50px;
+    display: flex;
+    justify-content: center;
+    margin-right: 1rem; /* Adjust spacing as needed */
+    width:100% ;
+    /* border: 2px solid black;  */
+    box-sizing: border-box;
+    width: 25%;
+  }
+
+.input-Control{
+    width: 10%;
+    display: flex;
+    gap: 1.5rem;
+    box-sizing: border-box;
+    margin-left: 2%; 
+    
+}
+.input-Control input{
+    border: 1px solid #ccc; 
+    padding: 10px;         
+    border-radius: 15px;    
+    font-size: 16px;       
+    outline: none;         
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    color: #b2c6d9;
+    background-color: rgba(0,0,0,0);
+    
+}
+.input-boletin{
+    display: grid;
+    grid-template-columns: repeat(6, .5fr);
+    justify-content: center;
+    align-items: center;
+    gap: 1%;
+    position: relative;
+    top: 60px;
+}
+
+.item1{
+    grid-column: 3/4;
+}
+.input-Control + a{
+    margin-top: 2rem;
+    /* margin-left: 170px; */
+    text-decoration: none;
+    color: white;
+    background-color: goldenrod;
+    display: inline-block;
+    padding: 1rem 3rem;
+    text-transform: uppercase;
+    border-radius: 3rem;
+}
+.titulo-producto-carrito{
+    font-size: 20px;
+    margin-left: 1.5%;
+    margin-bottom: 0;
+    display: inline-block;
+  }
+  
+  .precio-producto-carrito{
+    font-weight: 700;
+    font-size: 20px;
+    margin-left: 10px; 
+    padding-right: 2px;
+  }
+  
+  .cantidad-producto-carrito{
+    font-weight: 400;
+    font-size: 20px;
+  }
+  svg{
+    cursor: pointer;
+  }
+  .icon-close{
+    box-sizing: border-box;
+    width: 25px;
+    height: 25px;
+  }
+  
+  .cart-total{
+    display: flex;
+    flex-direction: row ;
+    justify-content: space-between;
+    align-items:center;
+    box-sizing: border-box;
+    color: white;
+    background-color: steelblue;
+    padding: 2%;
+  }
+  
+  .cart-total button{
+  
+    text-decoration: none;
+    color: white;
+    background-color: goldenrod;
+    display: inline-block;
+    border-radius: 3rem;
+  }
+
+  img{
+    display:block;
+    max-width: 100%;
+  }
+
+  .formulario__register{
+    display: none;
+  }
+  
+  .error span {
+    color: red;
+  }
+  
+  .mensajes{
+    position: relative;
+  }
+  
+  

@@ -1,0 +1,186 @@
+
+
+<div class="container-navbar">
+    <nav class="navbar contenedorMenu">
+     <i class="fa-solid fa-bars"></i>
+         <ul class="menu">
+             <li><a href="#">Panini Comics</a></li>
+             <li><a href="#">Marvel Comics</a></li>
+             <li><a href="#">DC Comics</a></li>
+             <li><a href="#">Libros y Revistas</a></li>
+             <li><a href="#">Estampas</a></li>
+             <li><a href="#">Figuras</a></li>
+         </ul>
+     </nav>
+  </div>
+  <section class="banner">
+    <div class="content-banner">
+        <h2>¡Todos tus mangas favoritos!</h2>
+        <p>Directo desde Japón</p>
+        <a [routerLink]="['/mangas']">Encuentralos Aquí</a>
+    </div>
+  </section>
+  
+  
+  <main class="main-content">
+    <section class="container">
+        <div class="subscribe page-footer">
+            <div class="info-boletin">
+                <div class="contenido-boletin">
+                    <span>Suscríbete a nuestro boletín</span>
+                    <p>Enterate de las ofertas y novedades de Panini</p>
+                </div>
+            </div>
+            <div class="input-boletin">
+                <div class="input-Control item1">
+                    <label>Nombre Completo</label>
+                    <input name="fullname" type="text" id="boletin-fullname" placeholder="Ingresa nombre completo">
+                </div>
+                <div class="input-Control">
+                    <label>Correo Electrónico</label>
+                    <input name="correo" type="text" id="boletin-correo" placeholder="Ingresa correo electrónico">
+                </div>
+                <a href="#">Enviar</a>
+            </div>
+        </div>
+    </section>
+    <section class="container top-categories">
+        <h1 class="header-1">Los Titulos Más Vendidos</h1>
+        <div class="container-categories">
+            <div class="dashboard-seinen">
+                <div class="card-category category-artbooks">
+                    <p>Seinen</p>
+                </div>
+                <app-dashboard-shonen></app-dashboard-shonen>
+            </div>
+            <div class="dashboard-shonen">    
+                <div class="card-category category-manga">
+                    <p>Shonen</p>
+                </div>
+                <app-dashboard-shonen></app-dashboard-shonen>
+            </div>
+            <div class="dashboard-shojo">
+                <div class="card-category category-revistas">
+                    <p>Shojo</p>
+                </div>
+                <app-dashboard-shonen></app-dashboard-shonen>
+             </div>
+           
+        </div>
+        
+    </section>
+
+    <section class="container">
+        <div>
+            <div class="orden-info">
+                <div class="carrusel-info">
+                    <i class="fa-solid fa-truck-fast "></i>
+                    <div class="feature-content">
+                        <span>Envíos Gratis</span>
+                        <p>A partir de $500 MXN</p>
+                    </div>
+                </div>
+                <div class="carrusel-info">
+                    <i class="fa-solid fa-shield-heart"></i>
+                    <div class="feature-content">
+                        <span>Protección Contra Daños</span>
+                        <p>Cambio o Devolución</p>
+                    </div>
+                </div>
+                <div class="carrusel-info">
+                    <i class="fa-solid fa-tag"></i>
+                    <div class="feature-content">
+                        <span>Descuentos</span>
+                        <p>10 veces al año!</p>
+                    </div>
+                </div>
+                <div class="carrusel-info">
+                    <i class="fa-solid fa-phone"></i>
+                    <div class="feature-content">
+                        <span>Servicio al Cliente</span>
+                        <p>7am a 10pm</p>
+                    </div>
+                </div>
+            </div>
+     </div>
+    </section>
+    
+
+        
+       
+    
+      
+ </main>
+  
+  <footer class="footer">
+      <div class="container container-footer">
+          <div class="menu-footer">
+              <div class="contact-info">
+                  <p class="title-footer">Contáctanos</p>
+                  <ul>
+                      <li>
+                          Dirección: Calle Isaac Newton 286 - Polanco V seccion CP 11560 Ciudad de México - México.
+                      </li>
+                      <li>
+                          Teléfono: (+52) 55.5208.35.50 / (+52) 55.89.95.22.77 / (+52) 55.89.95.22.78
+                      </li>
+                      <li>
+                          Fáx: 555555300
+                      </li>
+                      <li>
+                          Correo: atencionarrobapanini.com.mx.
+                      </li>
+                  </ul>
+                  <div class="social-icons">
+                      <span class="facebook">
+                          <i class="fa-brands fa-facebook"></i>
+                      </span>
+                      <span class="twitter">
+                          <i class="fa-brands fa-x-twitter"></i>
+                      </span>
+                      <span class="instagram">
+                          <i class="fa-brands fa-instagram"></i>
+                      </span>
+                      <span class="tiktok">
+                          <i class="fa-brands fa-tiktok"></i>
+                      </span>
+                      <span class="youtube">
+                          <i class="fa-brands fa-youtube"></i>
+                      </span>
+                  </div>
+              </div>
+  
+              <div class="information">
+                  <p class="title-footer">Información</p>
+                  <ul>
+                      <li><a href="#">Acerca de Nosotros</a></li>
+                      <li><a href="#">Información de Envíos</a></li>   
+                      <li><a href="#"></a>Políticas de Privacidad</li>
+                      <li><a href="#"></a>Términos y Condiciones</li>
+                      <li><a href="#"></a>Distribuidores</li>
+                  </ul>
+              </div>
+  
+              <div class="my-account">
+                  <p class="title-footer">Tu Cuenta</p>
+  
+                  <ul>
+                      <li><a href="#">Mi Cuenta</a></li>
+                      <li><a href="#">Historial de Pedidos</a></li>
+                      <li><a href="#">Lista de Descuentos</a></li>
+                      <li><a href="#">Boletín</a></li>
+                      <li><a href="#">Reembolsos</a></li>
+                  </ul>
+              </div>
+          </div>
+  
+          <div class="copyright">
+              <p>
+                  Desarrollado por Constanza Montiel &copy; 2024
+              </p>
+  
+              
+          </div>
+      </div>
+  </footer>
+  
