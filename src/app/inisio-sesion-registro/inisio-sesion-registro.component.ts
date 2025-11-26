@@ -111,7 +111,6 @@ export class InisioSesionRegistroComponent {
       this.spanInicio = true;
       this.usuarioService.setUsuarioSesion(true);
       this.usuarioService.setCorreoUsuario(this.inicioSesionForm.value.correo);
-      //console.log(this.usuarioService.getCorreoUsuario());
       this.mostrarMensajeRegistro();
     }, (error)=>{
       console.error('Error al verificar la contraseña', error);
