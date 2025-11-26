@@ -1,19 +1,16 @@
 import { Component, inject } from '@angular/core';
-import { RouterOutlet, RouterLink} from '@angular/router';
-//import { provideRouter } from '@angular/router';
+import { RouterOutlet, RouterLink } from '@angular/router';
 import { HomePageComponent } from './home-page/home-page.component';
 import { BotonContactanosComponent } from './boton-contactanos/boton-contactanos.component';
 import { InisioSesionRegistroComponent } from './inisio-sesion-registro/inisio-sesion-registro.component';
-import { UsuarioService } from './usuario.service';
+import { UsuarioService } from './services/usuario.service';
 import { CommonModule } from '@angular/common';
 import { IStepOption, TourMatMenuModule, TourService } from 'ngx-ui-tour-md-menu';
-// import { trigger, state, style, transition, animate } from '@angular/animations';
-
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,HomePageComponent, BotonContactanosComponent, InisioSesionRegistroComponent,
+  imports: [RouterOutlet, HomePageComponent, BotonContactanosComponent, InisioSesionRegistroComponent,
     RouterLink, CommonModule, TourMatMenuModule
   ],
   template: `
@@ -32,17 +29,6 @@ import { IStepOption, TourMatMenuModule, TourService } from 'ngx-ui-tour-md-menu
         <div class="container-hero">
               <div class="hero">
                   <div class="container-user">
-                    @if(this.isUsuarioSesionAbierta){
-                      <div class="infoUsuario">
-                        <span>{{this.usuarioService.getCorreoUsuario()}}</span>
-                      </div>
-                      <a [routerLink]="['/info-usuario']" class="btn">
-                      <i class="fa-solid fa-user"></i></a>
-                    }
-                    @else{
-                      <a [routerLink]="['/inicio-de-sesion-registro']" class="btn">
-                      <i class="fa-solid fa-user" tourAnchor="LogInRegister"></i></a>
-                    }
                       <i class="fa-solid fa-cart-shopping" (click)="muestraCarrito()" (click)="this.mostrarProductosCarritoUsuario()" tourAnchor="Carrito"></i>
                   </div>
               </div>
@@ -85,7 +71,7 @@ import { IStepOption, TourMatMenuModule, TourService } from 'ngx-ui-tour-md-menu
   </div>
 
 `,
-  styleUrl: './app.component.css', 
+  styleUrl: './app.component.css',
   /* animations: [
     trigger('transformMenu', [
       state('start', style({
@@ -107,7 +93,7 @@ import { IStepOption, TourMatMenuModule, TourService } from 'ngx-ui-tour-md-menu
 
 export class AppComponent {
   title = 'proyectoUix';
-  isUsuarioSesionAbierta:boolean = false;
+  isUsuarioSesionAbierta: boolean = false;
   isCartHidden: boolean = false;
   productosCarritoUsuario: any[] = [];
   precioTotal: number = 0;
@@ -139,73 +125,70 @@ export class AppComponent {
   muestraCarrito() {
     this.isCartHidden = !this.isCartHidden;
     //if(!this.isCartHidden){
-      //console.log(this.precioTotal)
-      if(this.isOrdenSigue){
-        this.precioTotal = 0;
-        //debugger
-      }
-      
-      //console.log(this.precioTotal)
-    
+    //console.log(this.precioTotal)
+    if (this.isOrdenSigue) {
+      this.precioTotal = 0;
+      //debugger
+    }
+
+    //console.log(this.precioTotal)
+
   };
 
-  constructor(protected usuarioService: UsuarioService){
-    /* this.correoUsuario = this.usuarioService.getCorreoUsuario();
-    console.log(this.correoUsuario); */
+  constructor(protected usuarioService: UsuarioService) {
+    // this.correoUsuario = this.usuarioService.getCorreoUsuario();
+    // console.log(this.correoUsuario);
   };
 
   ngOnInit() {
-    this.usuarioService.usuarioSesionAbierta$.subscribe((isSesionAbierta) => {
-      this.isUsuarioSesionAbierta = isSesionAbierta;
-    });
-    this.usuarioService.precioTotal$.subscribe((precioTotal)=>{
-      this.precioTotal = precioTotal;
-      this.isOrdenSigue = true;
-    })
-
+    // this.usuarioService.usuarioSesionAbierta$.subscribe((isSesionAbierta) => {
+    //   this.isUsuarioSesionAbierta = isSesionAbierta;
+    // });
+    // this.usuarioService.precioTotal$.subscribe((precioTotal) => {
+    //   this.precioTotal = precioTotal;
+    //   this.isOrdenSigue = true;
+    // })
     this.tourService.initialize(this.tourSteps, {});
     this.startTour();
     this.startTour();
     setTimeout(() => {
       this.startTour();
     }, 100);
-    
   }
 
   startTour() {
     this.tourService.start();
-
   }
 
-  mostrarProductosCarritoUsuario(){
-    this.usuarioService.traerProductosCarritoUsuario().subscribe((response)=>{
-      this.productosCarritoUsuario = response[0];
-      this.productosCarritoUsuario.forEach(element => {
+  mostrarProductosCarritoUsuario() {
+    // this.usuarioService.traerProductosCarritoUsuario().subscribe((response) => {
+    //   this.productosCarritoUsuario = response[0];
+    //   this.productosCarritoUsuario.forEach(element => {
 
-        element.precio = Number(element.precio);
-        this.precioTotal += element.precio;
+    //     element.precio = Number(element.precio);
+    //     this.precioTotal += element.precio;
 
-      });
-    })
+    //   });
+    // })
   }
 
-  eliminarProducto(id: number){
-    console.log(id)
-    this.usuarioService.eliminarProductoUsuario(id).subscribe((response)=>{
-      this.productosCarritoUsuario = response[0];
-      this.productosCarritoUsuario.forEach(element => {
-        element.precio = Number(element.precio);
-        this.precioTotal += element.precio;
+  eliminarProducto(id: number) {
+    // console.log(id)
+    // this.usuarioService.eliminarProductoUsuario(id).subscribe((response) => {
+    //   this.productosCarritoUsuario = response[0];
+    //   this.productosCarritoUsuario.forEach(element => {
+    //     element.precio = Number(element.precio);
+    //     this.precioTotal += element.precio;
 
-      });
-    })
+    //   });
+    // })
   }
 
-  agregarOrden(){
-    this.isOrdenSigue = false;
-    console.log(this.precioTotal)
-    this.usuarioService.setPrecioTotal(this.precioTotal)
-    this.usuarioService.agregarOrden();
+  agregarOrden() {
+    // this.isOrdenSigue = false;
+    // console.log(this.precioTotal)
+    // this.usuarioService.setPrecioTotal(this.precioTotal)
+    // this.usuarioService.agregarOrden();
   }
- 
+
 }

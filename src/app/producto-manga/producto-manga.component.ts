@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AdminMangasService } from '../admin-mangas.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { UsuarioService } from '../usuario.service';
+import { UsuarioService } from '../services/usuario.service';
 @Component({
   selector: 'app-producto-manga',
   standalone: true,
@@ -11,27 +11,27 @@ import { UsuarioService } from '../usuario.service';
   styleUrl: './producto-manga.component.css'
 })
 export class ProductoMangaComponent {
- 
+
   productoInfo: any[] = [];
   mangaProductoId = 0;
-  isInsertarCarrito:boolean = false;
+  isInsertarCarrito: boolean = false;
 
-  constructor(private adminMangas: AdminMangasService, private route: ActivatedRoute, private usuarioService: UsuarioService){
+  constructor(private adminMangas: AdminMangasService, private route: ActivatedRoute, private usuarioService: UsuarioService) {
     this.mangaProductoId = Number(this.route.snapshot.params['id']);
   }
 
-  ngOnInit(): void{
-    this.adminMangas.porductoInfo(this.mangaProductoId).subscribe((response)=>{
+  ngOnInit(): void {
+    this.adminMangas.porductoInfo(this.mangaProductoId).subscribe((response) => {
       this.productoInfo = response[0];
     })
   }
-  agregarProductoCarritoUsuario(id:number){
-    this.mostrarMensajeCarrito();
-    console.log(id);
-    this.usuarioService.agregarCarritoUsuario(id);
+  agregarProductoCarritoUsuario(id: number) {
+    // this.mostrarMensajeCarrito();
+    // console.log(id);
+    // this.usuarioService.agregarCarritoUsuario(id);
   }
 
-  mostrarMensajeCarrito(){
+  mostrarMensajeCarrito() {
     this.isInsertarCarrito = true;
   }
 }
