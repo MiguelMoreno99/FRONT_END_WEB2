@@ -20,7 +20,7 @@ import { IStepOption, TourMatMenuModule, TourService } from 'ngx-ui-tour-md-menu
   <header class="header"> 
     <div class="contenedor">
       <div class="logo" tourAnchor="logoHome">
-        <a [routerLink]="['/']"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Panini_group_logo.png" alt="Panini Logo"></a>
+        <a [routerLink]="['/']"><img src="https://betwarrior.com.mx/wp-content/uploads/sites/9/2024/05/Betwarrior-logo-cuadrado-convert.io-1.webp" alt="Panini Logo"></a>
       </div>
       <form>
         <div class="search">
@@ -113,29 +113,29 @@ export class AppComponent {
   precioTotal: number = 0;
   isOrdenSigue: boolean = true;
   //correoUsuario: string;
-  public readonly tourService = inject(TourService);
-  readonly tourSteps: IStepOption[] = [
+  // public readonly tourService = inject(TourService);
+  // readonly tourSteps: IStepOption[] = [
 
-    {
-      anchorId: 'logoHome',
-      content: 'Si lo presionas, siempre regresas a la página principal.',
-      title: 'logo Menu',
-      enableBackdrop: true,
-    },
-    {
-      anchorId: 'LogInRegister',
-      content: 'Aquí te puedes registrar o iniciar sesión para empezar tus compras.',
-      title: 'Inicio Sesión y Registro',
-      enableBackdrop: true,
-    },
-    {
-      anchorId: 'Carrito',
-      content: 'Aquí puedes ir verificando que productos vas agregando al carrito, así como también los puedes ir eliminando.',
-      title: 'Carrito',
-      enableBackdrop: true,
-    },
+  //   {
+  //     anchorId: 'logoHome',
+  //     content: 'Si lo presionas, siempre regresas a la página principal.',
+  //     title: 'logo Menu',
+  //     enableBackdrop: true,
+  //   },
+  //   {
+  //     anchorId: 'LogInRegister',
+  //     content: 'Aquí te puedes registrar o iniciar sesión para empezar tus compras.',
+  //     title: 'Inicio Sesión y Registro',
+  //     enableBackdrop: true,
+  //   },
+  //   {
+  //     anchorId: 'Carrito',
+  //     content: 'Aquí puedes ir verificando que productos vas agregando al carrito, así como también los puedes ir eliminando.',
+  //     title: 'Carrito',
+  //     enableBackdrop: true,
+  //   },
 
-  ]
+  // ]
   muestraCarrito() {
     this.isCartHidden = !this.isCartHidden;
     //if(!this.isCartHidden){
@@ -163,19 +163,19 @@ export class AppComponent {
       this.isOrdenSigue = true;
     })
 
-    this.tourService.initialize(this.tourSteps, {});
-    this.startTour();
-    this.startTour();
-    setTimeout(() => {
-      this.startTour();
-    }, 100);
+    // this.tourService.initialize(this.tourSteps, {});
+    // this.startTour();
+    // this.startTour();
+    // setTimeout(() => {
+    //   this.startTour();
+    // }, 100);
     
   }
 
-  startTour() {
-    this.tourService.start();
+  // startTour() {
+  //   this.tourService.start();
 
-  }
+  // }
 
   mostrarProductosCarritoUsuario(){
     this.usuarioService.traerProductosCarritoUsuario().subscribe((response)=>{

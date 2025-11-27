@@ -260,7 +260,7 @@ main{
 /*BANNER*/
 
 .banner{
-    background-image: linear-gradient(100deg, #000, #00000020), url('http://localhost:4200/assets/img/topbanner_paninimangaFondoPanini.webp');
+    background-image: linear-gradient(100deg, #000, #00000020), url('https://digitalhub.fifa.com/transform/418614b2-4dbb-4b1d-bc90-89acb051865b/Draw-flags-graphic-16x9?&io=transform:fill,width:768&quality=75');
     height: 60rem;
     background-size: cover;
     background-position: center;
