@@ -20,7 +20,7 @@
   class="alert alert-danger mensajes"
   role="alert"
 >
-  Hubo un error al registrarte. Verifica tus datos.
+  Hubo un error al registrarse, Verifique la información.
 </div>
 
 <div class="container contenedor__todo">
@@ -49,18 +49,46 @@
       class="col-12 col-md-6 contenedor__login-register"
       [ngStyle]="{ left: isRegistroVisible ? '420px' : '0px' }"
     >
-      <form action="" class="formulario__login" [formGroup]="inicioSesionForm">
+      <form
+        action=""
+        class="formulario__login error"
+        [formGroup]="inicioSesionForm"
+      >
         <h2>Inicia Sesión</h2>
         <input
           type="text"
           placeholder="Correo Electronico"
           formControlName="correo"
         />
+
+        <div
+          *ngIf="
+            inicioSesionForm.controls['correo'].invalid &&
+            (inicioSesionForm.controls['correo'].touched || isFormFalla)
+          "
+        >
+          <span *ngIf="inicioSesionForm.controls['correo'].errors?.['required']"
+            >Campo obligatorio</span
+          >
+        </div>
+
         <input
           type="password"
           placeholder="Contraseña"
           formControlName="contra"
         />
+
+        <div
+          *ngIf="
+            inicioSesionForm.controls['contra'].invalid &&
+            (inicioSesionForm.controls['contra'].touched || isFormFalla)
+          "
+        >
+          <span *ngIf="inicioSesionForm.controls['contra'].errors?.['required']"
+            >Campo obligatorio</span
+          >
+        </div>
+
         <button class="boton_Entrar" (click)="logIn()">Entrar</button>
       </form>
 
@@ -97,20 +125,28 @@
           <span *ngIf="registroForm.controls['apellido'].errors?.['required']"
             >Campo obligatorio</span
           >
+          <span
+            *ngIf="registroForm.controls['apellido'].errors?.['invalidName']"
+            >Sin caracteres especiales</span
+          >
         </div>
 
+        <input id="fecha" type="date" formControlName="fechaNacimiento" />
         <label
           for="fecha"
           style="font-size: 12px; color: gray; margin-left: 5px"
           >Fecha de Nacimiento</label
         >
-        <input id="fecha" type="date" formControlName="fechaNacimiento" />
         <div
           *ngIf="
             registroForm.controls['fechaNacimiento'].invalid &&
             (registroForm.controls['fechaNacimiento'].touched || isFormFalla)
           "
         >
+          <span
+            *ngIf="registroForm.controls['fechaNacimiento'].errors?.['fechaFutura']"
+            >Fecha debe ser menor a la fecha actual</span
+          >
           <span
             *ngIf="registroForm.controls['fechaNacimiento'].errors?.['required']"
             >Selecciona una fecha</span
@@ -124,7 +160,10 @@
             (registroForm.controls['correo'].touched || isFormFalla)
           "
         >
-          <span *ngIf="registroForm.controls['correo'].errors?.['email']"
+          <span *ngIf="registroForm.controls['correo'].errors?.['required']"
+            >Campo obligatorio</span
+          >
+          <span *ngIf="registroForm.controls['correo'].errors?.['invalidEmail']"
             >Correo inválido</span
           >
         </div>
@@ -140,8 +179,12 @@
             (registroForm.controls['contra'].touched || isFormFalla)
           "
         >
-          <span *ngIf="registroForm.controls['contra'].errors?.['minlength']"
-            >Mínimo 8 caracteres</span
+          <span *ngIf="registroForm.controls['contra'].errors?.['required']"
+            >Campo obligatorio</span
+          >
+          <span *ngIf="registroForm.controls['contra'].errors?.['weakPassword']"
+            >Debe contener por lo menos 8 caracteres, 1 mayuscula, 1 minuscula,
+            1 numero y 1 caracter especial</span
           >
         </div>
 
@@ -157,12 +200,17 @@
           "
         >
           <span
+            *ngIf="registroForm.controls['confirmarContra'].errors?.['required']"
+            >Campo obligatorio</span
+          >
+          <br />
+          <span
             *ngIf="registroForm.controls['confirmarContra'].errors?.['passwordMatch']"
             >Las contraseñas no coinciden</span
           >
         </div>
 
-        <button (click)="onSubmit()">Registrarse</button>
+        <button (click)="registrarUsuario()">Registrarse</button>
       </form>
     </div>
   </div>
