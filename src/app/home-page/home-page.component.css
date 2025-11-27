@@ -189,7 +189,7 @@ main{
 /*navbar*/
 
 .container-navbar{
-    background-color: crimson;
+    background-color: black;
     /*border: 2px solid  black;*/
     display: flex;
     align-items: center;
@@ -290,7 +290,7 @@ main{
     margin-top: 2rem;
     text-decoration: none;
     color: white;
-    background-color: steelblue;
+    background-color:  #FF3901;
     display: inline-block;
     padding: 1rem 3rem;
     text-transform: uppercase;
@@ -319,7 +319,7 @@ main{
 
 .subscribe.page-footer{
   position: relative;
-  background-color: steelblue;
+  background-color: black;
   
 
   /* background-color: #01324c; */
@@ -391,7 +391,7 @@ main{
     /* margin-left: 170px; */
     text-decoration: none;
     color: white;
-    background-color: goldenrod;
+    background-color:  #FF3901;
     display: inline-block;
     padding: 1rem 3rem;
     text-transform: uppercase;
@@ -507,7 +507,7 @@ main{
 }
 
 .category-manga{
-   background-image: linear-gradient(#00000080,#00000080), url('http://localhost:4200/assets/img/FondoSeinen.jpg');
+   background-image: linear-gradient(#00000080,#00000080), url('https://a1.espncdn.com/combiner/i?img=%2Fphoto%2F2025%2F1127%2Fr1581539_1296x518_5%2D2.jpg&w=628&h=251&scale=crop&cquality=80&location=center&format=jpg');
    background-size: cover;
    background-position: bottom;
    background-repeat: no-repeat;
@@ -515,7 +515,7 @@ main{
 
 
 .category-revistas{
-    background-image: linear-gradient(#00000080,#00000080), url('http://localhost:4200/assets/img/split-images-of-sign-of-affection-kimi-no-todoke-and-vampire-dormitory-anime.avif');
+    background-image: linear-gradient(#00000080,#00000080), url('https://a4.espncdn.com/combiner/i?img=%2Fphoto%2F2025%2F1127%2Fr1581618_1296x518_5%2D2.jpg&w=628&h=251&scale=crop&cquality=80&location=center&format=jpg');
     background-size: cover;
     background-position: 50% 25%;
     background-repeat: no-repeat;
@@ -523,7 +523,7 @@ main{
 /* https://static1.cbrimages.com/wordpress/wp-content/uploads/2024/01/split-images-of-sign-of-affection-kimi-no-todoke-and-vampire-dormitory-anime.jpg?q=50&fit=contain&w=1140&h=&dpr=1.5 */
 
 .category-artbooks{
-    background-image: linear-gradient(#00000080,#00000080), url('http://localhost:4200/assets/img/FondoAkira.webp');
+    background-image: linear-gradient(#00000080,#00000080), url('https://a4.espncdn.com/combiner/i?img=%2Fphoto%2F2025%2F1127%2Fr1581514_1296x518_5%2D2.jpg&w=628&h=251&scale=crop&cquality=80&location=center&format=jpg');
     background-size: cover;
     background-position: 50% 60%;
     background-repeat: no-repeat;
