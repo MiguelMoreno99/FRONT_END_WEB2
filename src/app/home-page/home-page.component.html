@@ -4,19 +4,16 @@
     <nav class="navbar contenedorMenu">
      <i class="fa-solid fa-bars"></i>
          <ul class="menu">
-             <li><a href="#">Panini Comics</a></li>
-             <li><a href="#">Marvel Comics</a></li>
-             <li><a href="#">DC Comics</a></li>
-             <li><a href="#">Libros y Revistas</a></li>
-             <li><a href="#">Estampas</a></li>
-             <li><a href="#">Figuras</a></li>
+             <li><a href="#">Jugadores</a></li>
+             <li><a href="#">Equipos</a></li>
+             <li><a href="#">Partidos</a></li>
          </ul>
      </nav>
   </div>
   <section class="banner">
     <div class="content-banner">
-        <h2>¡Todos tus mangas favoritos!</h2>
-        <p>Directo desde Japón</p>
+        <h2>¡Sige todos tus partidos desde aquí!</h2>
+        <p>En vivo y en directo</p>
         <a [routerLink]="['/mangas']">Encuentralos Aquí</a>
     </div>
   </section>
@@ -27,8 +24,8 @@
         <div class="subscribe page-footer">
             <div class="info-boletin">
                 <div class="contenido-boletin">
-                    <span>Suscríbete a nuestro boletín</span>
-                    <p>Enterate de las ofertas y novedades de Panini</p>
+                    <span>Registrate a nuestra página</span>
+                    <p>Enterate de todos los eventos</p>
                 </div>
             </div>
             <div class="input-boletin">
@@ -40,28 +37,28 @@
                     <label>Correo Electrónico</label>
                     <input name="correo" type="text" id="boletin-correo" placeholder="Ingresa correo electrónico">
                 </div>
-                <a href="#">Enviar</a>
+                <a href="#">Registrarse</a>
             </div>
         </div>
     </section>
     <section class="container top-categories">
-        <h1 class="header-1">Los Titulos Más Vendidos</h1>
+        <h1 class="header-1">Los Partidos Más Esperados</h1>
         <div class="container-categories">
             <div class="dashboard-seinen">
                 <div class="card-category category-artbooks">
-                    <p>Seinen</p>
+                    <p>Jugadores</p>
                 </div>
                 <app-dashboard-shonen></app-dashboard-shonen>
             </div>
             <div class="dashboard-shonen">    
                 <div class="card-category category-manga">
-                    <p>Shonen</p>
+                    <p>Estádisticas</p>
                 </div>
                 <app-dashboard-shonen></app-dashboard-shonen>
             </div>
             <div class="dashboard-shojo">
                 <div class="card-category category-revistas">
-                    <p>Shojo</p>
+                    <p>GOOOL</p>
                 </div>
                 <app-dashboard-shonen></app-dashboard-shonen>
              </div>
