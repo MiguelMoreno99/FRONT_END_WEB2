@@ -38,12 +38,13 @@ import { IStepOption, TourMatMenuModule, TourService } from 'ngx-ui-tour-md-menu
                       </div>
                       <a [routerLink]="['/info-usuario']" class="btn">
                       <i class="fa-solid fa-user"></i></a>
+                      
                     }
                     @else{
                       <a [routerLink]="['/inicio-de-sesion-registro']" class="btn">
                       <i class="fa-solid fa-user" tourAnchor="LogInRegister"></i></a>
                     }
-                      <i class="fa-solid fa-cart-shopping" (click)="muestraCarrito()" (click)="this.mostrarProductosCarritoUsuario()" tourAnchor="Carrito"></i>
+                    <i class="fa-regular fa-heart" (click)="muestraCarrito()" (click)="this.mostrarProductosCarritoUsuario()" tourAnchor="Carrito"></i>
                   </div>
               </div>
           </div>
