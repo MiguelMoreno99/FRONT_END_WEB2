@@ -5,16 +5,16 @@ import { UsuarioService } from '../services/usuario.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-inisio-sesion-registro',
+  selector: 'app-inicio-sesion-registro',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
-  templateUrl: './inisio-sesion-registro.component.html',
-  styleUrl: './inisio-sesion-registro.component.css'
+  templateUrl: './inicio-sesion-registro.component.html',
+  styleUrl: './inicio-sesion-registro.component.css'
 })
-export class InisioSesionRegistroComponent {
+export class InicioSesionRegistroComponent {
   isRegistroVisible: boolean = false;
   isMensajeRegistroVisible: boolean = false;
-  spanRejistro: boolean = false;
+  spanRegistro: boolean = false;
   spanInicio: boolean = false;
   placeHolderReset: boolean = true;
   isFormFalla: boolean = false;
@@ -63,7 +63,8 @@ export class InisioSesionRegistroComponent {
         console.log('Usuario registrado:', resp);
         this.mostrarMensajeRegistro();
         this.mostrarRegistro();
-        this.formDirective.resetForm();
+        this.formDirective?.resetForm();
+        this.registroForm.reset();
       },
       error: (err) => {
         console.error('Error al registrar:', err);
@@ -95,7 +96,7 @@ export class InisioSesionRegistroComponent {
     });
   }
 
-  specialChars(control: FormControl): { [key: string]: boolean } | null {
+  specialChars(control: AbstractControl): { [key: string]: boolean } | null {
     const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
     if (control.value && nameRegexp.test(control.value)) {
       return { invalidName: true };
@@ -104,7 +105,7 @@ export class InisioSesionRegistroComponent {
       return null;
   }
 
-  emailValidator(control: FormControl): { [key: string]: boolean } | null {
+  emailValidator(control: AbstractControl): { [key: string]: boolean } | null {
     const emailRegexp: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (control.value && !emailRegexp.test(control.value)) {
       return { invalidEmail: true };
@@ -112,7 +113,7 @@ export class InisioSesionRegistroComponent {
     return null;
   }
 
-  fechaPasadaValidator(control: FormControl): { [key: string]: boolean } | null {
+  fechaPasadaValidator(control: AbstractControl): { [key: string]: boolean } | null {
     if (!control.value) {
       return null;
     }
@@ -125,7 +126,7 @@ export class InisioSesionRegistroComponent {
     return null;
   }
 
-  passwordValidator(control: FormControl): { [key: string]: boolean } | null {
+  passwordValidator(control: AbstractControl): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) {
       return null;
@@ -137,10 +138,10 @@ export class InisioSesionRegistroComponent {
     return null;
   }
 
-  confirmarContra = (control: FormControl): { [key: string]: any } | null => {
-    const password = this.registroForm?.get('contra')?.value as string;
-    const passwordConfirm = control.value as string;
-    if (password !== passwordConfirm) {
+  confirmarContra = (control: AbstractControl): { [key: string]: any } | null => {
+    const password = control.parent?.get('contra')?.value;
+    const passwordConfirm = control.value;
+    if (password && passwordConfirm && password !== passwordConfirm) {
       return { passwordMatch: true };
     }
     return null;
@@ -157,7 +158,7 @@ export class InisioSesionRegistroComponent {
     this.isMensajeRegistroVisible = true;
     setTimeout(() => {
       this.isMensajeRegistroVisible = false;
-      this.spanRejistro = false;
+      this.spanRegistro = false;
     }, 3000);
   }
 

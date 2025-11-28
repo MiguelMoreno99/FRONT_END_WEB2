@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { HomePageComponent } from './home-page/home-page.component';
 import { BotonContactanosComponent } from './boton-contactanos/boton-contactanos.component';
-import { InisioSesionRegistroComponent } from './inisio-sesion-registro/inisio-sesion-registro.component';
+import { InicioSesionRegistroComponent } from './inicio-sesion-registro/inicio-sesion-registro.component';
 import { UsuarioService } from './services/usuario.service';
 import { CommonModule } from '@angular/common';
 import { IStepOption, TourMatMenuModule, TourService } from 'ngx-ui-tour-md-menu';
@@ -10,7 +10,7 @@ import { IStepOption, TourMatMenuModule, TourService } from 'ngx-ui-tour-md-menu
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HomePageComponent, BotonContactanosComponent, InisioSesionRegistroComponent,
+  imports: [RouterOutlet, HomePageComponent, BotonContactanosComponent, InicioSesionRegistroComponent,
     RouterLink, CommonModule, TourMatMenuModule
   ],
   template: `
