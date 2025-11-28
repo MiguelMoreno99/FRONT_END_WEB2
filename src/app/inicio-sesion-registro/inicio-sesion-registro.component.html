@@ -1,0 +1,217 @@
+<div
+  *ngIf="isMensajeRegistroVisible"
+  class="alert alert-success mensajes"
+  role="alert"
+>
+  <span *ngIf="spanRegistro"
+    >¡Tu registro fue exitoso! A continuación inicia sesión</span
+  >
+  <span *ngIf="spanInicio">Bienvenido</span>
+</div>
+<div
+  *ngIf="isMensajeFallaInicio"
+  class="alert alert-danger mensajes"
+  role="alert"
+>
+  La contraseña o el correo son incorrectos. Intentalo de nuevo
+</div>
+<div
+  *ngIf="isMensajeFallaRegistro"
+  class="alert alert-danger mensajes"
+  role="alert"
+>
+  Hubo un error al registrarse, Verifique la información.
+</div>
+
+<div class="container contenedor__todo">
+  <div class="row">
+    <div class="col-12 col-md-6 caja__trasera">
+      <div
+        class="caja__trasera-login"
+        [ngStyle]="{ opacity: isRegistroVisible ? '1' : '0' }"
+      >
+        <h3>Inicia Sesión Aquí</h3>
+        <p>Inicia Sesión</p>
+        <button (click)="mostrarRegistro()">Inicia Sesión</button>
+      </div>
+      <div
+        class="caja__trasera-register"
+        [ngStyle]="{ opacity: isRegistroVisible ? '0' : '1' }"
+      >
+        <h3>Crea tu cuenta</h3>
+        <button id="btn__register" (click)="mostrarRegistro()">
+          Registrarse
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="col-12 col-md-6 contenedor__login-register"
+      [ngStyle]="{ left: isRegistroVisible ? '420px' : '0px' }"
+    >
+      <form
+        action=""
+        class="formulario__login error"
+        [formGroup]="inicioSesionForm"
+      >
+        <h2>Inicia Sesión</h2>
+        <input
+          type="text"
+          placeholder="Correo Electronico"
+          formControlName="correo"
+        />
+
+        <div
+          *ngIf="
+            inicioSesionForm.controls['correo'].invalid &&
+            (inicioSesionForm.controls['correo'].touched || isFormFalla)
+          "
+        >
+          <span *ngIf="inicioSesionForm.controls['correo'].errors?.['required']"
+            >Campo obligatorio</span
+          >
+        </div>
+
+        <input
+          type="password"
+          placeholder="Contraseña"
+          formControlName="contra"
+        />
+
+        <div
+          *ngIf="
+            inicioSesionForm.controls['contra'].invalid &&
+            (inicioSesionForm.controls['contra'].touched || isFormFalla)
+          "
+        >
+          <span *ngIf="inicioSesionForm.controls['contra'].errors?.['required']"
+            >Campo obligatorio</span
+          >
+        </div>
+
+        <button class="boton_Entrar" (click)="logIn()">Entrar</button>
+      </form>
+
+      <form
+        action=""
+        class="formulario__register error"
+        [ngStyle]="{ display: isRegistroVisible ? 'block' : 'none' }"
+        [formGroup]="registroForm"
+      >
+        <h2>Registrarse</h2>
+
+        <input type="text" placeholder="Nombre" formControlName="nombre" />
+        <div
+          *ngIf="
+            registroForm.controls['nombre'].invalid &&
+            (registroForm.controls['nombre'].touched || isFormFalla)
+          "
+        >
+          <span *ngIf="registroForm.controls['nombre'].errors?.['required']"
+            >Campo obligatorio</span
+          >
+          <span *ngIf="registroForm.controls['nombre'].errors?.['invalidName']"
+            >Sin caracteres especiales</span
+          >
+        </div>
+
+        <input type="text" placeholder="Apellido" formControlName="apellido" />
+        <div
+          *ngIf="
+            registroForm.controls['apellido'].invalid &&
+            (registroForm.controls['apellido'].touched || isFormFalla)
+          "
+        >
+          <span *ngIf="registroForm.controls['apellido'].errors?.['required']"
+            >Campo obligatorio</span
+          >
+          <span
+            *ngIf="registroForm.controls['apellido'].errors?.['invalidName']"
+            >Sin caracteres especiales</span
+          >
+        </div>
+
+        <input id="fecha" type="date" formControlName="fechaNacimiento" />
+        <label
+          for="fecha"
+          style="font-size: 12px; color: gray; margin-left: 5px"
+          >Fecha de Nacimiento</label
+        >
+        <div
+          *ngIf="
+            registroForm.controls['fechaNacimiento'].invalid &&
+            (registroForm.controls['fechaNacimiento'].touched || isFormFalla)
+          "
+        >
+          <span
+            *ngIf="registroForm.controls['fechaNacimiento'].errors?.['fechaFutura']"
+            >Fecha debe ser menor a la fecha actual</span
+          >
+          <span
+            *ngIf="registroForm.controls['fechaNacimiento'].errors?.['required']"
+            >Selecciona una fecha</span
+          >
+        </div>
+
+        <input type="text" placeholder="Correo" formControlName="correo" />
+        <div
+          *ngIf="
+            registroForm.controls['correo'].invalid &&
+            (registroForm.controls['correo'].touched || isFormFalla)
+          "
+        >
+          <span *ngIf="registroForm.controls['correo'].errors?.['required']"
+            >Campo obligatorio</span
+          >
+          <span *ngIf="registroForm.controls['correo'].errors?.['invalidEmail']"
+            >Correo inválido</span
+          >
+        </div>
+
+        <input
+          type="password"
+          placeholder="Contraseña"
+          formControlName="contra"
+        />
+        <div
+          *ngIf="
+            registroForm.controls['contra'].invalid &&
+            (registroForm.controls['contra'].touched || isFormFalla)
+          "
+        >
+          <span *ngIf="registroForm.controls['contra'].errors?.['required']"
+            >Campo obligatorio</span
+          >
+          <span *ngIf="registroForm.controls['contra'].errors?.['weakPassword']"
+            >Debe contener por lo menos 8 caracteres, 1 mayuscula, 1 minuscula,
+            1 numero y 1 caracter especial</span
+          >
+        </div>
+
+        <input
+          type="password"
+          placeholder="Confirmar contraseña"
+          formControlName="confirmarContra"
+        />
+        <div
+          *ngIf="
+            registroForm.controls['confirmarContra'].invalid &&
+            (registroForm.controls['confirmarContra'].touched || isFormFalla)
+          "
+        >
+          <span
+            *ngIf="registroForm.controls['confirmarContra'].errors?.['required']"
+            >Campo obligatorio</span
+          >
+          <br />
+          <span
+            *ngIf="registroForm.controls['confirmarContra'].errors?.['passwordMatch']"
+            >Las contraseñas no coinciden</span
+          >
+        </div>
+
+        <button (click)="registrarUsuario()">Registrarse</button>
+      </form>
+    </div>
+  </div>
+</div>

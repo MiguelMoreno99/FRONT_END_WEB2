@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UsuarioService } from '../usuario.service';
+import { UsuarioService } from '../services/usuario.service';
 
 @Component({
   selector: 'app-info-usuario',
@@ -9,7 +9,7 @@ import { UsuarioService } from '../usuario.service';
   styleUrl: './info-usuario.component.css'
 })
 export class InfoUsuarioComponent {
-  constructor(private usuarioService: UsuarioService){
+  constructor(private usuarioService: UsuarioService) {
 
   }
 }
