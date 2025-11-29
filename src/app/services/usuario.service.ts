@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { LoginRequest, RegistroRequest, Usuario } from '../models/usuario.model';
+import { LoginRequest, RegistroRequest, Usuario, EditRequest } from '../models/usuario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,18 @@ export class UsuarioService {
 
   registrarUsuario(datos: RegistroRequest): Observable<Usuario> {
     return this.http.post<Usuario>(this.apiUrl, datos);
+  }
+
+  actualizarUsuario(datos: EditRequest): Observable<Usuario> {
+    return this.http.put<Usuario>(this.apiUrl, datos).pipe(
+      tap((usuarioActualizado) => {
+        this.guardarSesion(usuarioActualizado);
+      })
+    );
+  }
+
+  eliminarUsuario(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
   login(datos: LoginRequest): Observable<Usuario> {

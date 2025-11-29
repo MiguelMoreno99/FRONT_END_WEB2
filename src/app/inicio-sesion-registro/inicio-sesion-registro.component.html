@@ -111,7 +111,7 @@
             >Campo obligatorio</span
           >
           <span *ngIf="registroForm.controls['nombre'].errors?.['invalidName']"
-            >Sin caracteres especiales</span
+            >Sin caracteres especiales ni numeros</span
           >
         </div>
 
@@ -127,7 +127,7 @@
           >
           <span
             *ngIf="registroForm.controls['apellido'].errors?.['invalidName']"
-            >Sin caracteres especiales</span
+            >Sin caracteres especiales ni numeros</span
           >
         </div>
 

@@ -97,7 +97,7 @@ export class InicioSesionRegistroComponent {
   }
 
   specialChars(control: AbstractControl): { [key: string]: boolean } | null {
-    const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+    const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]/;
     if (control.value && nameRegexp.test(control.value)) {
       return { invalidName: true };
     }

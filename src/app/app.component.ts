@@ -30,7 +30,6 @@ import { CommonModule } from '@angular/common';
       <div class="container-hero">
           <div class="hero">
               <div class="container-user">
-                
                 @if (usuarioService.isLoggedIn$ | async) {
                   <div class="infoUsuario">
                     <span>{{ usuarioService.obtenerInfoUsuario('correo') }}</span>
@@ -38,13 +37,12 @@ import { CommonModule } from '@angular/common';
                   <a [routerLink]="['/info-usuario']" class="btn">
                     <i class="fa-solid fa-user"></i>
                   </a>
+                  <i class="fa-solid fa-heart"></i>
                 } @else {
                   <a [routerLink]="['/inicio-de-sesion-registro']" class="btn">
                     <i class="fa-solid fa-user"></i>
                   </a>
                 }
-
-                <i class="fa-solid fa-cart-shopping"></i>
               </div>
           </div>
       </div>
