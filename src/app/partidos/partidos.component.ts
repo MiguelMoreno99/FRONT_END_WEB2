@@ -14,6 +14,8 @@ import { Partido } from '../models/partido.model';
 export class PartidosComponent implements OnInit {
   // lista con campo extra stadiumImage para la vista
   public partidosView: Array<Partido & { stadiumImage: string }> = [];
+  public partidoSeleccionado: Partido | null = null;
+  public mostrarModal: boolean = false;
 
   // ruta de imágenes de estadios: agrega tus archivos en src/assets/img/estadios/
   private stadiumImages = [
@@ -48,5 +50,25 @@ export class PartidosComponent implements OnInit {
     if (!this.stadiumImages.length) return '';
     const i = Math.floor(Math.random() * this.stadiumImages.length);
     return this.stadiumImages[i];
+  }
+
+  // Métodos para el modal
+  abrirModal(partido: Partido) {
+    this.partidoSeleccionado = partido;
+    this.mostrarModal = true;
+    // Prevenir scroll del body cuando el modal está abierto
+    document.body.style.overflow = 'hidden';
+  }
+
+  cerrarModal() {
+    this.partidoSeleccionado = null;
+    this.mostrarModal = false;
+    // Restaurar scroll del body
+    document.body.style.overflow = 'auto';
+  }
+
+  // Prevenir que el modal se cierre al hacer click dentro del contenido
+  prevenirCierre(event: Event) {
+    event.stopPropagation();
   }
 }
