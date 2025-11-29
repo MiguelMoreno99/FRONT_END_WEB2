@@ -17,7 +17,7 @@ export class UsuarioService {
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    this.checkToken();
+    this.checkSession();
   }
 
   registrarUsuario(datos: RegistroRequest): Observable<Usuario> {
@@ -33,33 +33,72 @@ export class UsuarioService {
   }
 
   private guardarSesion(usuario: Usuario): void {
-    if (usuario.token) {
-      localStorage.setItem('authToken', usuario.token);
-    }
     localStorage.setItem('usuarioData', JSON.stringify(usuario));
     this.currentUserSubject.next(usuario);
     this.isLoggedInSubject.next(true);
   }
 
   logout() {
-    localStorage.removeItem('authToken');
     localStorage.removeItem('usuarioData');
     this.currentUserSubject.next(null);
     this.isLoggedInSubject.next(false);
   }
 
-  private checkToken(): void {
+  private checkSession(): void {
     const userJson = localStorage.getItem('usuarioData');
-    const token = localStorage.getItem('authToken');
     if (userJson) {
-      const user = JSON.parse(userJson);
-      this.currentUserSubject.next(user);
-      this.isLoggedInSubject.next(true);
+      try {
+        const userObj = JSON.parse(userJson);
+        this.isLoggedInSubject.next(true);
+        this.currentUserSubject.next(userObj);
+        // if (userObj.token) {
+        //   this.http.post<boolean>(`${this.apiUrl}/validar-token`, { token: userObj.token })
+        //     .subscribe({
+        //       next: (esValido) => {
+        //         if (!esValido) this.logout();
+        //       },
+        //       error: (err) => {
+        //         console.error('Error de validación:', err);
+        //         this.logout();
+        //       }
+        //     });
+        // }
+      } catch (e) {
+        console.error('Datos de sesión corruptos', e);
+        this.logout();
+      }
     }
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('authToken');
+  obtenerInfoUsuario(campo: string): any {
+    // campos posibles:
+    // activo
+    // nombre
+    // apellido
+    // correo
+    // favoritos
+    // fechaNacimiento
+    // fechaRegistro
+    // id
+    // rol
+    // token
+    // message
+    const usuarioJson = localStorage.getItem('usuarioData');
+    if (!usuarioJson) {
+      return null;
+    }
+    try {
+      const objetoCompleto = JSON.parse(usuarioJson);
+      if (objetoCompleto.usuario && objetoCompleto.usuario[campo] !== undefined) {
+        return objetoCompleto.usuario[campo];
+      }
+      if (objetoCompleto[campo] !== undefined) {
+        return objetoCompleto[campo];
+      }
+      return null;
+    } catch (e) {
+      console.error('Error al leer datos del usuario del storage', e);
+      return null;
+    }
   }
-
 }
