@@ -1,0 +1,47 @@
+<div class="titulo-shonen">
+    <h1>Partidos</h1>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <section class="top-products">      
+                <div class="container-products">
+                    <div class="card-product" *ngFor="let p of partidosView">
+                        <div style="display: none;">{{ p.stadiumImage }}</div>
+                        <div class="container-img" 
+                             [ngStyle]="{ 'background-image': 'linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(' + p.stadiumImage + ')' }">
+                            <div class="button-group">
+                                <span>
+                                    <a [routerLink]="['/partido', p.id]"><i class="fa-regular fa-eye"></i></a>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="content-card-product">
+                            <div class="equipos">
+                                <div class="equipo">
+                                    <div class="nombre">{{ p.equipoA.nombre }}</div>
+                                    <div class="goles">{{ p.golesEquipoA }}</div>
+                                </div>
+                                <div class="versus">vs</div>
+                                <div class="equipo">
+                                    <div class="nombre">{{ p.equipoB.nombre }}</div>
+                                    <div class="goles">{{ p.golesEquipoB }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="detalles">
+                                <span class="fecha">{{ p.fecha | date:'medium' }}</span>
+                                <span class="estadio">{{ p.estadio || p.ciudad }}</span>
+                            </div>
+                            
+                            <!-- <span class="add-cart" (click)="agregarAlCarritoPartido(p)">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </span> -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

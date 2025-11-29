@@ -31,7 +31,7 @@ import { IStepOption, TourMatMenuModule, TourService } from 'ngx-ui-tour-md-menu
                   <div class="container-user">
                    @if(this.isUsuarioSesionAbierta){
                       <div class="infoUsuario">
-                        <span>{{this.usuarioService.getCorreoUsuario()}}</span>
+                        <span></span>
                       </div>
                       <a [routerLink]="['/info-usuario']" class="btn">
                       <i class="fa-solid fa-user"></i></a>

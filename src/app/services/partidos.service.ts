@@ -1,0 +1,34 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { Partido } from '../models/partido.model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PartidoService {
+  private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Partido';
+
+  constructor(private http: HttpClient) {}
+
+  getPartidos(): Observable<Partido[]> {
+    const headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+
+    // pedimos como texto y parseamos para evitar el fallo de parseo si llega HTML
+    return this.http.get(this.apiUrl, { headers, responseType: 'text' }).pipe(
+      map(text => {
+        try {
+          return JSON.parse(text) as Partido[];
+        } catch (e) {
+          console.error('Respuesta no JSON desde API Partido:', text);
+          throw new Error('Respuesta inválida del servidor al obtener partidos');
+        }
+      }),
+      catchError(err => {
+        console.error('Error en getPartidos:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+}
