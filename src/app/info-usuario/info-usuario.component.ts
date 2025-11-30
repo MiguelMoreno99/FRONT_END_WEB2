@@ -37,7 +37,7 @@ export class InfoUsuarioComponent implements OnInit {
       next: (usuario) => {
         this.usuarioActual = usuario;
       },
-      error: (err) => console.error('Error al obtener usuario', err)
+      error: (err) => this.mostrarMensajeError('Error al obtener usuario.')
     });
   }
 
@@ -66,7 +66,7 @@ export class InfoUsuarioComponent implements OnInit {
 
   guardarCambios(): void {
     if (this.perfilForm.invalid || !this.usuarioActual) {
-      this.mensajeError = 'Error verifica tu información.';
+      this.mostrarMensajeError('Error verifica tu información.');
       return;
     }
     const datosActualizados = {
@@ -74,7 +74,7 @@ export class InfoUsuarioComponent implements OnInit {
       nombre: this.perfilForm.get('nombre')?.value,
       apellido: this.perfilForm.get('apellido')?.value,
       fechaNacimiento: new Date(this.perfilForm.get('fechaNacimiento')?.value).toISOString(),
-      activo: "true",
+      activo: true,
       favoritos: {
         partidos: [],
         equipos: []
@@ -82,13 +82,16 @@ export class InfoUsuarioComponent implements OnInit {
     };
     this.usuarioService.actualizarUsuario(datosActualizados).subscribe({
       next: (usuarioRespuesta) => {
-        this.usuarioActual = usuarioRespuesta;
-        this.mensajeExito = 'Información actualizada correctamente.';
+        this.ngOnInit()
+        this.mostrarMensajeExito('Información actualizada correctamente.');
         this.isEditando = false;
       },
       error: (err) => {
-        console.error(err);
-        this.mensajeError = 'Error al actualizar la información. Intenta de nuevo.';
+        if (err.error.message === "Usuario no encontrado") {
+          this.mostrarMensajeError('Error Usuario no encontrado.');
+        } else {
+          this.mostrarMensajeError('Error no se pudo actualizar la información, intentelo más tarde.');
+        }
       }
     });
   }
@@ -103,8 +106,7 @@ export class InfoUsuarioComponent implements OnInit {
           this.cerrarSesion();
         },
         error: (err) => {
-          console.error(err);
-          this.mensajeError = 'No se pudo eliminar la cuenta. Contacta a soporte.';
+          this.mostrarMensajeError('No se pudo eliminar la cuenta. Intentelo mas tarde.');
         }
       });
     }
@@ -135,5 +137,19 @@ export class InfoUsuarioComponent implements OnInit {
       return { fechaFutura: true };
     }
     return null;
+  }
+
+  mostrarMensajeError(mensaje: string): void {
+    this.mensajeError = mensaje;
+    setTimeout(() => {
+      this.mensajeError = '';
+    }, 3000);
+  }
+
+  mostrarMensajeExito(mensaje: string): void {
+    this.mensajeExito = mensaje;
+    setTimeout(() => {
+      this.mensajeExito = '';
+    }, 3000);
   }
 }

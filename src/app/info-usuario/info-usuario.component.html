@@ -57,14 +57,20 @@
           <div class="mb-3 row">
             <label class="col-sm-4 fw-bold">Fecha de Nacimiento:</label>
             <div class="col-sm-8">
-              {{ usuarioActual?.usuario?.fechaNacimiento | date : "longDate" }}
+              {{
+                usuarioActual?.usuario?.fechaNacimiento
+                  | date : "longDate" : "UTC"
+              }}
             </div>
           </div>
 
           <div class="mb-3 row">
             <label class="col-sm-4 fw-bold">Miembro desde:</label>
             <div class="col-sm-8">
-              {{ usuarioActual?.usuario?.fechaRegistro | date : "mediumDate" }}
+              {{
+                usuarioActual?.usuario?.fechaRegistro
+                  | date : "mediumDate" : "UTC"
+              }}
             </div>
           </div>
 

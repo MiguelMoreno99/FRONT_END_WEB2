@@ -1,3 +1,8 @@
+export interface LoginRequest { //esto devuelve un Usuario o   // "Credenciales inválidas"
+  email: string;
+  password: string;
+}
+
 export interface Usuario {
   usuario: {
     id: string;
@@ -18,7 +23,7 @@ export interface Usuario {
   rol?: string;
 }
 
-export interface RegistroRequest {
+export interface RegistroRequest { //esto devuelve un UsuarioRespuesta o   // "El correo ya está registrado"
   nombre: string;
   apellido: string;
   fechaNacimiento: string;
@@ -27,19 +32,29 @@ export interface RegistroRequest {
   rol: string;
 }
 
-export interface EditRequest {
+export interface EditRequest { //esto devuelve un UsuarioRespuesta tambien o   //  "Usuario no encontrado"
   correo: string;
   nombre: string;
   apellido: string;
   fechaNacimiento: string;
-  activo: string;
+  activo: boolean;
   favoritos?: {
     partidos: string[];
     equipos: string[];
   };
 }
 
-export interface LoginRequest {
-  email: string;
-  password: string;
+export interface UsuarioRespuesta {
+  id: string;
+  nombre: string;
+  apellido: string;
+  fechaNacimiento: string;
+  correo: string;
+  rol: string;
+  fechaRegistro: string;
+  activo: boolean;
+  favoritos?: {
+    partidos: string[];
+    equipos: string[];
+  };
 }

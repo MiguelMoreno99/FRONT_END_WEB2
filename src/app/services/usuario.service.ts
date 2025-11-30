@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { LoginRequest, RegistroRequest, Usuario, EditRequest } from '../models/usuario.model';
+import { LoginRequest, Usuario, RegistroRequest, EditRequest, UsuarioRespuesta } from '../models/usuario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,14 +20,30 @@ export class UsuarioService {
     this.checkSession();
   }
 
-  registrarUsuario(datos: RegistroRequest): Observable<Usuario> {
-    return this.http.post<Usuario>(this.apiUrl, datos);
+  registrarUsuario(datos: RegistroRequest): Observable<UsuarioRespuesta> {
+    return this.http.post<UsuarioRespuesta>(this.apiUrl, datos);
   }
 
-  actualizarUsuario(datos: EditRequest): Observable<Usuario> {
-    return this.http.put<Usuario>(this.apiUrl, datos).pipe(
+  actualizarUsuario(datos: EditRequest): Observable<UsuarioRespuesta> {
+    return this.http.put<UsuarioRespuesta>(this.apiUrl, datos).pipe(
       tap((usuarioActualizado) => {
-        this.guardarSesion(usuarioActualizado);
+        const registroData = {
+          usuario: {
+            id: usuarioActualizado.id,
+            nombre: usuarioActualizado.nombre,
+            apellido: usuarioActualizado.apellido,
+            fechaNacimiento: usuarioActualizado.fechaNacimiento,
+            correo: usuarioActualizado.correo,
+            rol: usuarioActualizado.rol,
+            fechaRegistro: usuarioActualizado.fechaRegistro,
+            activo: usuarioActualizado.activo,
+            favoritos: this.currentUserSubject.value?.usuario.favoritos || { partidos: [], equipos: [] }
+          },
+          token: this.currentUserSubject.value?.token,
+          message: this.currentUserSubject.value?.message,
+          rol: this.currentUserSubject.value?.rol,
+        }
+        this.guardarSesion(registroData);
       })
     );
   }
