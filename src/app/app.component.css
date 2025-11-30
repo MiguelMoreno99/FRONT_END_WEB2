@@ -1,6 +1,6 @@
 /*Encabezado*/
 header {
-  background-color:  #FF3901;
+  background-color: #FF3901;
   height: 85px;
   display: flex;
   justify-content: center;
@@ -8,10 +8,10 @@ header {
   /*align-items: center;
  
   padding: 10px;*/
-  margin: 0; 
+  margin: 0;
 }
 
-.contenedor{
+.contenedor {
   display: flex;
   padding: 0;
   margin: 0;
@@ -26,17 +26,20 @@ header {
 
 .header .logo {
   cursor: pointer;
-  
+
 }
-.logo{
+
+.logo {
   box-sizing: border-box;
   position: relative;
   transform: scale(1.2)
 }
+
 form {
   box-sizing: border-box;
   width: 323.75px;
 }
+
 .header .logo img {
   height: 40px;
   width: auto;
@@ -89,87 +92,93 @@ form {
 main {
   width: 100%;
   padding: 20px;
-  margin: 600px; /* Center horizontally */
-  margin-top: 50vh; /* Vertically center using viewport height */
-  position: relative; /* Establish containing block for absolute positioning */
-  top: -50%; /* Shift upward by half of its own height */
-  transform: translateY(-50%); /* Correctly center vertically */
-  background-color:  aliceblue ;
+  margin: 600px;
+  /* Center horizontally */
+  margin-top: 50vh;
+  /* Vertically center using viewport height */
+  position: relative;
+  /* Establish containing block for absolute positioning */
+  top: -50%;
+  /* Shift upward by half of its own height */
+  transform: translateY(-50%);
+  /* Correctly center vertically */
+  background-color: aliceblue;
 }
 
-.hero{
+.hero {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 2rem 0; 
+  padding: 2rem 0;
   width: 437.02125px;
   height: 85px;
- /*  border:2px solid red ; */
-  
+  /*  border:2px solid red ; */
+
 }
 
-.container-user{
+.container-user {
   display: flex;
-  gap: 1rem; 
+  gap: 1rem;
   cursor: pointer;
   width: 480px;
   align-items: center;
   /* border:2px solid black ; */
-  
+
 }
 
-.container-user .fa-user{
+.container-user .fa-user {
   font-size: 3rem;
-  color:rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
   padding-right: 2.5rem;
   border-right: 1px solid #e2e2e2;
 }
 
-.container-user .fa-cart-shopping {
+.container-user .fa-heart {
   font-size: 3rem;
   color: #ffffff;
   padding-left: 1rem;
-  
+
 }
 
-.content-shopping-cart{
+.content-shopping-cart {
   display: flex;
   flex-direction: column;
- 
+
 }
 
-.content-shopping-cart .text, .number{
-  color:rgb(245, 247, 248);
+.content-shopping-cart .text,
+.number {
+  color: rgb(245, 247, 248);
 }
 
-.infoUsuario span{
+.infoUsuario span {
   box-sizing: border-box;
   font-size: 13px;
   font-family: 'Lexend', sans-serif;
   width: 100px;
-  color:rgb(245, 247, 248);
+  color: rgb(245, 247, 248);
   font-weight: bold;
 }
 
-.infoUsuario{
+.infoUsuario {
   box-sizing: border-box;
   display: inline-block;
   /* align-items: center; */
   /* margin-right: 4.5%; */
 }
 
- .container-hero{
+.container-hero {
   position: relative;
   width: 42;
-} 
+}
 
-form .search{
+form .search {
   box-sizing: border-box;
   width: 323px;
 }
 
 /*Carrito*/
-.container-cart-products{
+.container-cart-products {
   position: absolute;
   top: 50px;
   right: 0;
@@ -182,9 +191,9 @@ form .search{
   /*Aqui pondria el grid en todo su caso */
 }
 
-.cart-product{
+.cart-product {
   display: flex;
-  flex-direction: column ;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   padding: 30px;
@@ -192,11 +201,11 @@ form .search{
   /* border: 2px solid red; */
 }
 
-.info-cart-product{
+.info-cart-product {
   display: flex;
-  flex-direction: row ;
+  flex-direction: row;
   justify-content: space-between;
-  align-items:center;
+  align-items: center;
   box-sizing: border-box;
   width: max-content;
   border-bottom: 2px solid black;
@@ -204,45 +213,47 @@ form .search{
   /* border: 2px solid blue; */
 }
 
-.titulo-producto-carrito{
+.titulo-producto-carrito {
   font-size: 20px;
   margin-left: 1.5%;
   margin-bottom: 0;
   display: inline-block;
 }
 
-.precio-producto-carrito{
+.precio-producto-carrito {
   font-weight: 700;
   font-size: 20px;
-  margin-left: 10px; 
+  margin-left: 10px;
   padding-right: 2px;
 }
 
-.cantidad-producto-carrito{
+.cantidad-producto-carrito {
   font-weight: 400;
   font-size: 20px;
 }
-svg{
+
+svg {
   cursor: pointer;
 }
-.icon-close{
+
+.icon-close {
   box-sizing: border-box;
   width: 25px;
   height: 25px;
 }
 
-.cart-total{
+.cart-total {
   display: flex;
-  flex-direction: row ;
+  flex-direction: row;
   justify-content: space-between;
-  align-items:center;
+  align-items: center;
   box-sizing: border-box;
   color: white;
   background-color: steelblue;
   padding: 2%;
 }
 
-.cart-total button{
+.cart-total button {
 
   text-decoration: none;
   color: white;
@@ -250,5 +261,3 @@ svg{
   display: inline-block;
   border-radius: 3rem;
 }
-
-

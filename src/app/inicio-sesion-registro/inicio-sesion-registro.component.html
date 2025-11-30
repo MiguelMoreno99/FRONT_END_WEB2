@@ -1,28 +1,20 @@
+@if (mensajeExito) {
 <div
-  *ngIf="isMensajeRegistroVisible"
-  class="alert alert-success mensajes"
+  class="alert alert-success alert-dismissible fade show mensajes"
   role="alert"
 >
-  <span *ngIf="spanRegistro"
-    >¡Tu registro fue exitoso! A continuación inicia sesión</span
-  >
-  <span *ngIf="spanInicio">Bienvenido</span>
+  {{ mensajeExito }}
+  <button type="button" class="btn-close" (click)="mensajeExito = ''"></button>
 </div>
+} @if (mensajeError) {
 <div
-  *ngIf="isMensajeFallaInicio"
-  class="alert alert-danger mensajes"
+  class="alert alert-danger alert-dismissible fade show mensajes"
   role="alert"
 >
-  La contraseña o el correo son incorrectos. Intentalo de nuevo
+  {{ mensajeError }}
+  <button type="button" class="btn-close" (click)="mensajeError = ''"></button>
 </div>
-<div
-  *ngIf="isMensajeFallaRegistro"
-  class="alert alert-danger mensajes"
-  role="alert"
->
-  Hubo un error al registrarse, Verifique la información.
-</div>
-
+}
 <div class="container contenedor__todo">
   <div class="row">
     <div class="col-12 col-md-6 caja__trasera">
@@ -70,6 +62,10 @@
           <span *ngIf="inicioSesionForm.controls['correo'].errors?.['required']"
             >Campo obligatorio</span
           >
+          <span
+            *ngIf="inicioSesionForm.controls['correo'].errors?.['invalidEmail']"
+            >Correo inválido</span
+          >
         </div>
 
         <input
@@ -111,7 +107,7 @@
             >Campo obligatorio</span
           >
           <span *ngIf="registroForm.controls['nombre'].errors?.['invalidName']"
-            >Sin caracteres especiales</span
+            >Sin caracteres especiales ni numeros</span
           >
         </div>
 
@@ -127,7 +123,7 @@
           >
           <span
             *ngIf="registroForm.controls['apellido'].errors?.['invalidName']"
-            >Sin caracteres especiales</span
+            >Sin caracteres especiales ni numeros</span
           >
         </div>
 

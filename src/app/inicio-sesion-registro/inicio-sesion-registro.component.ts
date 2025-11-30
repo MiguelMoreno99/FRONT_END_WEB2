@@ -13,13 +13,9 @@ import { Router } from '@angular/router';
 })
 export class InicioSesionRegistroComponent {
   isRegistroVisible: boolean = false;
-  isMensajeRegistroVisible: boolean = false;
-  spanRegistro: boolean = false;
-  spanInicio: boolean = false;
-  placeHolderReset: boolean = true;
   isFormFalla: boolean = false;
-  isMensajeFallaInicio: boolean = false;
-  isMensajeFallaRegistro: boolean = false;
+  mensajeExito: string = '';
+  mensajeError: string = '';
   registroForm: FormGroup;
   inicioSesionForm: FormGroup;
 
@@ -37,14 +33,14 @@ export class InicioSesionRegistroComponent {
     },
     );
     this.inicioSesionForm = new FormGroup({
-      correo: new FormControl('', [Validators.required]),
+      correo: new FormControl('', [Validators.required, this.emailValidator]),
       contra: new FormControl('', [Validators.required])
     });
   }
 
   registrarUsuario() {
     if (this.registroForm.invalid) {
-      this.mostrarMensajeFallaRegistro();
+      this.mostrarMensajeError("Hubo un error al registrarse, Verifique la información.");
       this.isFormFalla = true;
       return;
     }
@@ -60,22 +56,24 @@ export class InicioSesionRegistroComponent {
     };
     this.usuarioService.registrarUsuario(registroData).subscribe({
       next: (resp) => {
-        console.log('Usuario registrado:', resp);
-        this.mostrarMensajeRegistro();
+        this.mostrarMensajeExito("Tu registro fue exitoso! A continuación inicia sesión");
         this.mostrarRegistro();
         this.formDirective?.resetForm();
         this.registroForm.reset();
       },
       error: (err) => {
-        console.error('Error al registrar:', err);
-        this.mostrarMensajeFallaRegistro();
+        if (err.error.message === "El correo ya está registrado") {
+          this.mostrarMensajeError("El correo electronico ingresado ya está asignado a una cuenta!.");
+        } else {
+          this.mostrarMensajeError("Hubo un error al registrarse, intentelo más tarde.");
+        }
       }
     });
   }
 
   logIn() {
     if (this.inicioSesionForm.invalid) {
-      this.mostrarMensajeFallaInicio();
+      this.mostrarMensajeError("Error verifica tu información.");
       this.isFormFalla = true;
       return;
     }
@@ -86,18 +84,20 @@ export class InicioSesionRegistroComponent {
 
     this.usuarioService.login(loginData).subscribe({
       next: (usuario) => {
-        console.log('Login exitoso:', usuario);
         this.router.navigate(['/']);
       },
       error: (error) => {
-        console.error('Error login', error);
-        this.mostrarMensajeFallaInicio();
+        if (error.error.message === "Credenciales inválidas") {
+          this.mostrarMensajeError("La contraseña o el correo son incorrectos. Intentalo de nuevo");
+        } else {
+          this.mostrarMensajeError("Hubo un problema para iniciar sesión. Intentalo de nuevo más tarde.");
+        }
       }
     });
   }
 
   specialChars(control: AbstractControl): { [key: string]: boolean } | null {
-    const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+    const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]/;
     if (control.value && nameRegexp.test(control.value)) {
       return { invalidName: true };
     }
@@ -154,25 +154,17 @@ export class InicioSesionRegistroComponent {
     this.inicioSesionForm.reset();
   }
 
-  mostrarMensajeRegistro(): void {
-    this.isMensajeRegistroVisible = true;
+  mostrarMensajeError(mensaje: string): void {
+    this.mensajeError = mensaje;
     setTimeout(() => {
-      this.isMensajeRegistroVisible = false;
-      this.spanRegistro = false;
+      this.mensajeError = '';
     }, 3000);
   }
 
-  mostrarMensajeFallaInicio() {
-    this.isMensajeFallaInicio = true;
+  mostrarMensajeExito(mensaje: string): void {
+    this.mensajeExito = mensaje;
     setTimeout(() => {
-      this.isMensajeFallaInicio = false;
-    }, 3000)
-  }
-
-  mostrarMensajeFallaRegistro() {
-    this.isMensajeFallaRegistro = true;
-    setTimeout(() => {
-      this.isMensajeFallaRegistro = false;
-    }, 3000)
+      this.mensajeExito = '';
+    }, 3000);
   }
 }
