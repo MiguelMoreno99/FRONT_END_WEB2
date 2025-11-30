@@ -40,7 +40,7 @@ export class InicioSesionRegistroComponent {
 
   registrarUsuario() {
     if (this.registroForm.invalid) {
-      this.mostrarMensajeError("Hubo un error al registrarse, Verifique la información.");
+      this.mostrarMensajeError("Error, verifica tu información.");
       this.isFormFalla = true;
       return;
     }
