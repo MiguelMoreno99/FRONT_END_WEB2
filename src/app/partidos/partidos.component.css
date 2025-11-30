@@ -1,0 +1,465 @@
+/*UTILITIES*/
+.container{
+  max-width: 100%; 
+  margin-left: auto;
+  margin-right: auto;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+/*Esto lo podria poner en global*/
+img{
+  display:block;
+  max-width: 100%;
+}
+
+/*Titulo Shonen*/
+.titulo-shonen{
+  padding-top: 4px;
+  padding-left: 25px;
+  background-image: linear-gradient(#00000080,#00000080), url('https://i.pinimg.com/originals/3c/1f/7f/3c1f7fbc2616b88c74255417eeea8ff3.jpg');
+  background-position: bottom;
+  width: 100%;
+  height: 70px;
+}
+
+.titulo-shonen h1{
+  color: white;
+}
+
+/*TOP PRODUCTOS*/
+
+.top-products{
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  transform: scale(.9);
+}
+
+.container-options{
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.container-options span{
+  color: crimson;
+  background-color: white;
+  padding: .7rem 3rem;
+  font-size: 1.4rem;
+  text-transform: capitalize;
+  border-radius: 2rem;
+  cursor: pointer;
+}
+
+.container-options span:hover{
+  background-color: antiquewhite;
+  color: white;
+}
+
+.container-options span.active{
+  background-color: antiquewhite;
+  color: white;
+}
+
+.container-products{
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* ESTILOS CORREGIDOS PARA LAS TARJETAS DE PARTIDOS */
+.card-product{
+  background-color: #1a1a1a;
+  border-radius: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-product:hover{
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* CONTENEDOR DE IMAGEN CORREGIDO */
+.container-img{
+  position: relative;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Debug: mostrar borde temporal para ver el contenedor */
+.container-img {
+  border: 2px solid #FF3901; /* Rojo para debug - quitar después */
+}
+
+/* Estilos para cuando la imagen no carga */
+.container-img::before {
+  content: "Estadio";
+  color: white;
+  font-size: 1.2rem;
+  position: absolute;
+  z-index: 1;
+}
+
+.button-group{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: absolute;
+  top: 1rem;
+  right: -3rem;
+  z-index: 2;
+  transition: all .4s ease;
+}
+
+.button-group span{
+  border: 1px solid goldenrod;
+  padding: .8rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all .4s ease;
+  width: 40px;
+  height: 40px;
+}
+
+.button-group span:hover{
+  background-color: goldenrod;
+}
+
+.button-group span i{
+  font-size: 1.2rem;
+  color: white;
+}
+
+.card-product:hover .button-group{
+  right: 1rem;
+}
+
+/* CONTENIDO DE LA TARJETA */
+.content-card-product{
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ESTILOS PARA LOS EQUIPOS */
+.equipos{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.equipo{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.nombre{
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.goles{
+  font-size: 2rem;
+  font-weight: 700;
+  color: goldenrod;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.versus{
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ccc;
+  padding: 0 0.5rem;
+}
+
+/* DETALLES DEL PARTIDO */
+.detalles{
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #ccc;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fecha, .estadio{
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.3rem;
+}
+
+.add-cart{
+  align-self: center;
+  border: 2px solid goldenrod;
+  padding: 0.8rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all .4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.add-cart:hover{
+  background-color: goldenrod;
+}
+
+.add-cart i{
+  font-size: 1.3rem;
+  color: goldenrod;
+}
+
+.add-cart:hover i{
+  color: white;
+}
+
+/* MEDIA QUERIES PARA RESPONSIVE */
+@media (max-width: 768px) {
+  .container-products{
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+  
+  .top-products{
+    padding: 1rem;
+    transform: scale(1);
+  }
+  
+  .equipos{
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .versus{
+    padding: 0.5rem 0;
+  }
+}
+
+/* ESTILOS PARA EL MODAL */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    border-radius: 15px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.modal-header h2 {
+    color: goldenrod;
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-button:hover {
+    background-color: rgba(255, 0, 0, 0.3);
+    color: #ff4444;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+/* Equipos en el modal */
+.modal-equipos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.modal-equipo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.modal-equipo-nombre {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.modal-goles {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: goldenrod;
+}
+
+.modal-vs {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ccc;
+    padding: 0 1rem;
+}
+
+/* Grid de información */
+.modal-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid goldenrod;
+}
+
+.info-label {
+    color: #ccc;
+    font-weight: 500;
+}
+
+.info-label i {
+    margin-right: 0.5rem;
+    color: goldenrod;
+}
+
+.info-value {
+    color: white;
+    font-weight: 600;
+}
+
+/* Detalles de equipos */
+.equipos-detalle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.equipo-detalle {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.equipo-detalle h4 {
+    color: goldenrod;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.equipo-detalle p {
+    color: #ccc;
+    margin-bottom: 0.5rem;
+}
+
+.equipo-detalle strong {
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 10px;
+        max-height: 95vh;
+    }
+    
+    .modal-equipos {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .modal-vs {
+        padding: 0.5rem 0;
+    }
+    
+    .modal-info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .equipos-detalle {
+        grid-template-columns: 1fr;
+    }
+    
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+    }
+}
