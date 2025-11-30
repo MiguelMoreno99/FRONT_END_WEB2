@@ -6,7 +6,7 @@
          <ul class="menu">
              <li><a href="#">Jugadores</a></li>
              <li><a href="#">Equipos</a></li>
-             <li><a href="#">Partidos</a></li>
+             <li><a [routerLink]="['/partidos']">Partidos</a></li>
          </ul>
      </nav>
   </div>
@@ -14,7 +14,7 @@
     <div class="content-banner">
         <h2>¡Sige todos tus partidos desde aquí!</h2>
         <p>En vivo y en directo</p>
-        <a [routerLink]="['/mangas']">Encuentralos Aquí</a>
+        <a [routerLink]="['/partidos']">Encuentralos Aquí</a>
     </div>
   </section>
   
@@ -67,35 +67,31 @@
         
     </section>
 
-    <section class="container">
+     <section class="container">
         <div>
             <div class="orden-info">
                 <div class="carrusel-info">
-                    <i class="fa-solid fa-truck-fast "></i>
+                    <i class="fa-solid fa-user-secret"></i>
                     <div class="feature-content">
-                        <span>Envíos Gratis</span>
-                        <p>A partir de $500 MXN</p>
+                        <span>Políticas de Privacidad</span>
                     </div>
                 </div>
                 <div class="carrusel-info">
                     <i class="fa-solid fa-shield-heart"></i>
                     <div class="feature-content">
-                        <span>Protección Contra Daños</span>
-                        <p>Cambio o Devolución</p>
+                        <span>Condiciones para el uso</span>
                     </div>
                 </div>
                 <div class="carrusel-info">
-                    <i class="fa-solid fa-tag"></i>
+                    <i class="fa-solid fa-address-card"></i>
                     <div class="feature-content">
-                        <span>Descuentos</span>
-                        <p>10 veces al año!</p>
+                        <span>Anuncios </span>                        
                     </div>
                 </div>
                 <div class="carrusel-info">
-                    <i class="fa-solid fa-phone"></i>
+                    <i class="fa-solid fa-cookie"></i>
                     <div class="feature-content">
-                        <span>Servicio al Cliente</span>
-                        <p>7am a 10pm</p>
+                        <span>Políticas de cookies</span>
                     </div>
                 </div>
             </div>
@@ -115,9 +111,6 @@
               <div class="contact-info">
                   <p class="title-footer">Contáctanos</p>
                   <ul>
-                      <li>
-                          Dirección: Calle Isaac Newton 286 - Polanco V seccion CP 11560 Ciudad de México - México.
-                      </li>
                       <li>
                           Teléfono: (+52) 55.5208.35.50 / (+52) 55.89.95.22.77 / (+52) 55.89.95.22.78
                       </li>
@@ -173,7 +166,7 @@
   
           <div class="copyright">
               <p>
-                  Desarrollado por Constanza Montiel &copy; 2024
+                  Desarrollado por Constanza Montiel y Miguel Moreno &copy; 2025
               </p>
   
               
