@@ -1,0 +1,393 @@
+
+<!-- src/app/equipos/equipos.component.html -->
+<div class="titulo-shonen">
+    <h1>Equipos</h1>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <section class="top-products">      
+                <div class="container-products">
+                    <!-- Tarjeta para cada equipo -->
+                    <div class="card-product" *ngFor="let e of equiposView">
+                        <div class="container-img" 
+                             [style.background-image]="'linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(' + (e.bandera || 'assets/img/equipos/default.jpg') + ')'">
+                            <div class="button-group">
+                                <span>
+                                    <a (click)="abrirModal(e)" style="cursor: pointer;">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </a>
+                                </span>
+                                <span>
+                                  <a [routerLink]="['/inicio-de-sesion-registro']">
+                                        <i class="fa-solid fa-heart"></i>
+                                    </a>
+                                </span>
+                                 <span>
+                                  <a (click)="abrirModalEdicion(e)" style="cursor: pointer;">
+                                        <i class="fa-solid fa-pencil"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="content-card-product">
+                            <h3 style="color: white;">{{ e.nombre }}</h3>
+                            
+                            <div class="equipo-info">
+                                 <p style="color: white; margin: 0.8rem 0; font-size: 1rem;">
+            <strong style="color: goldenrod; margin-right: 0.5rem;">País:</strong> 
+            <span>{{ e.nombreCompletoPais }}</span>
+        </p>
+        <p style="color: white; margin: 0.8rem 0; font-size: 1rem;">
+            <strong style="color: goldenrod; margin-right: 0.5rem;">Siglas:</strong> 
+            <span style="color: goldenrod; font-weight: bold; background: rgba(218,165,32,0.2); padding: 0.2rem 0.6rem; border-radius: 4px;">
+                {{ e.siglasEquipo }}
+            </span>
+        </p>
+        <p style="color: white; margin: 0.8rem 0; font-size: 1rem;">
+            <strong style="color: goldenrod; margin-right: 0.5rem;">Grupo:</strong> 
+            <span style="color: #4CAF50; font-weight: bold; background: rgba(76,175,80,0.2); padding: 0.2rem 0.6rem; border-radius: 4px;">
+                {{ e.grupo }}
+            </span>
+        </p>
+        <p style="color: white; margin: 0.8rem 0; font-size: 1rem;">
+            <strong style="color: goldenrod; margin-right: 0.5rem;">Ranking FIFA:</strong> 
+            <span style="color: #2196F3; font-weight: bold; background: rgba(33,150,243,0.2); padding: 0.2rem 0.6rem; border-radius: 4px;">
+                #{{ e.rankingFifa }}
+            </span>
+        </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- Modal básico -->
+<div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>{{ equipoSeleccionado?.nombre }}</h2>
+            <button class="close-button" (click)="cerrarModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body" *ngIf="equipoSeleccionado">
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">País completo</span>
+                    <div class="info-value">
+                        <span class="pais-info">{{ equipoSeleccionado.nombreCompletoPais }}</span>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Siglas</span>
+                    <div class="info-value">
+                        <span class="siglas-badge">{{ equipoSeleccionado.siglasEquipo }}</span>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Grupo</span>
+                    <div class="info-value">
+                        <span class="grupo-badge">{{ equipoSeleccionado.grupo }}</span>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Ranking FIFA</span>
+                    <div class="info-value">
+                        <span class="ranking-badge">#{{ equipoSeleccionado.rankingFifa }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div *ngIf="equipoSeleccionado.informacion">
+                <h4>Información</h4>
+                <div class="informacion-equipo">
+                    {{ equipoSeleccionado.informacion }}
+                </div>
+            </div>
+                
+                <div *ngIf="equipoSeleccionado.jugadores && equipoSeleccionado.jugadores.length > 0">
+                    <h4>Jugadores</h4>
+                    <div class="jugadores-list">
+                        <div *ngFor="let jugador of equipoSeleccionado.jugadores" class="jugador-item">
+                            #{{ jugador.numeroCamiseta }} - {{ jugador.nombre }} {{ jugador.apellido }} ({{ jugador.posicion }})
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="modal-overlay" *ngIf="mostrarModalEdicion" (click)="cerrarModalEdicion()">
+    <div class="modal-content modal-edicion" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>
+                <i class="fa-solid fa-pen-to-square"></i>
+                Editar Equipo: {{ equipoSeleccionado?.nombre }}
+            </h2>
+            <button class="close-button" (click)="cerrarModalEdicion()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body" *ngIf="equipoEditado">
+            <!-- Mensajes de éxito/error -->
+            <div class="mensaje-exito" *ngIf="mensajeExito">
+                <i class="fa-solid fa-circle-check"></i> {{ mensajeExito }}
+            </div>
+            
+            <div class="mensaje-error" *ngIf="mensajeError">
+                <i class="fa-solid fa-circle-exclamation"></i> {{ mensajeError }}
+            </div>
+
+            <!-- Formulario de edición -->
+            <form class="formulario-edicion" (ngSubmit)="guardarCambios()">
+                <div class="form-grid">
+                    <!-- Nombre -->
+                    <div class="form-group">
+                        <label for="nombre">
+                            <i class="fa-solid fa-signature"></i> Nombre del Equipo
+                        </label>
+                        <input 
+                            type="text" 
+                            id="nombre" 
+                            [(ngModel)]="equipoEditado.nombre" 
+                            name="nombre"
+                            required
+                            class="form-input"
+                            placeholder="Ej: Argentina">
+                    </div>
+
+                    <!-- País completo -->
+                    <div class="form-group">
+                        <label for="pais">
+                            <i class="fa-solid fa-earth-americas"></i> País Completo
+                        </label>
+                        <input 
+                            type="text" 
+                            id="pais" 
+                            [(ngModel)]="equipoEditado.nombreCompletoPais" 
+                            name="pais"
+                            required
+                            class="form-input"
+                            placeholder="Ej: República Argentina">
+                    </div>
+
+                    <!-- Siglas -->
+                    <div class="form-group">
+                        <label for="siglas">
+                            <i class="fa-solid fa-flag"></i> Siglas
+                        </label>
+                        <input 
+                            type="text" 
+                            id="siglas" 
+                            [(ngModel)]="equipoEditado.siglasEquipo" 
+                            name="siglas"
+                            required
+                            maxlength="3"
+                            class="form-input siglas-input"
+                            placeholder="ARG">
+                    </div>
+
+                    <!-- Grupo - COMBO BOX MEJORADO -->
+                    <div class="form-group">
+                        <label for="grupo">
+                            <i class="fa-solid fa-layer-group"></i> Grupo
+                        </label>
+                        <div class="combo-box-container">
+                            <select 
+                                id="grupo" 
+                                [(ngModel)]="equipoEditado.grupo" 
+                                name="grupo"
+                                required
+                                class="form-select combo-box">
+                                <option value="">-- Seleccionar grupo --</option>
+                                <option *ngFor="let grupo of ordenarGrupos()" [value]="grupo">
+                                    Grupo {{ grupo }}
+                                </option>
+                            </select>
+                            <div class="combo-box-icon">
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ranking FIFA -->
+                    <div class="form-group">
+                        <label for="ranking">
+                            <i class="fa-solid fa-ranking-star"></i> Ranking FIFA
+                        </label>
+                        <input 
+                            type="number" 
+                            id="ranking" 
+                            [(ngModel)]="equipoEditado.rankingFifa" 
+                            name="ranking"
+                            required
+                            min="1"
+                            max="211"
+                            class="form-input"
+                            placeholder="1">
+                    </div>
+
+                    <!-- Bandera (URL) -->
+                    <div class="form-group">
+                        <label for="bandera">
+                            <i class="fa-solid fa-image"></i> URL de la Bandera
+                        </label>
+                        <input 
+                            type="text" 
+                            id="bandera" 
+                            [(ngModel)]="equipoEditado.bandera" 
+                            name="bandera"
+                            class="form-input"
+                            placeholder="assets/img/equipos/argentina.jpg">
+                    </div>
+
+                    <!-- Información -->
+                    <div class="form-group full-width">
+                        <label for="informacion">
+                            <i class="fa-solid fa-circle-info"></i> Información
+                        </label>
+                        <textarea 
+                            id="informacion" 
+                            [(ngModel)]="equipoEditado.informacion" 
+                            name="informacion"
+                            rows="4"
+                            class="form-textarea"
+                            placeholder="Información sobre el equipo..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Sección de Jugadores -->
+                <div class="seccion-jugadores">
+                    <h3>
+                        <i class="fa-solid fa-users"></i> Jugadores
+                        <button type="button" class="btn-agregar" (click)="agregandoJugador = !agregandoJugador">
+                            <i class="fa-solid fa-plus"></i> Agregar Jugador
+                        </button>
+                    </h3>
+
+                    <!-- Formulario para nuevo jugador -->
+                    <div class="formulario-nuevo-jugador" *ngIf="agregandoJugador">
+                        <h4>Nuevo Jugador</h4>
+                        <div class="form-grid-jugador">
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <input 
+                                    type="text" 
+                                    [(ngModel)]="nuevoJugador.nombre" 
+                                    name="jugadorNombre"
+                                    required
+                                    class="form-input"
+                                    placeholder="Lionel">
+                            </div>
+                            <div class="form-group">
+                                <label>Apellido</label>
+                                <input 
+                                    type="text" 
+                                    [(ngModel)]="nuevoJugador.apellido" 
+                                    name="jugadorApellido"
+                                    required
+                                    class="form-input"
+                                    placeholder="Messi">
+                            </div>
+
+                            <!-- Posición del Jugador - COMBO BOX MEJORADO -->
+                            <div class="form-group">
+                                <label>Posición</label>
+                                <div class="combo-box-container">
+                                    <select 
+                                        [(ngModel)]="nuevoJugador.posicion" 
+                                        name="jugadorPosicion"
+                                        required
+                                        class="form-select combo-box">
+                                        <option value="">-- Seleccionar posición --</option>
+                                        <option *ngFor="let posicion of ordenarPosiciones()" [value]="posicion">
+                                            {{ posicion }}
+                                        </option>
+                                    </select>
+                                    <div class="combo-box-icon">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Número</label>
+                                <input 
+                                    type="number" 
+                                    [(ngModel)]="nuevoJugador.numeroCamiseta" 
+                                    name="jugadorNumero"
+                                    min="1"
+                                    max="99"
+                                    class="form-input"
+                                    placeholder="10">
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha Nacimiento</label>
+                                <input 
+                                    type="date" 
+                                    [(ngModel)]="nuevoJugador.fechaNacimiento" 
+                                    name="jugadorFechaNac"
+                                    class="form-input">
+                            </div>
+                            <div class="form-group acciones">
+                                <button type="button" class="btn-guardar-jugador" (click)="agregarJugador()">
+                                    <i class="fa-solid fa-save"></i> Guardar
+                                </button>
+                                <button type="button" class="btn-cancelar" (click)="agregandoJugador = false; resetearNuevoJugador()">
+                                    <i class="fa-solid fa-times"></i> Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de jugadores -->
+                    <div class="lista-jugadores" *ngIf="equipoEditado.jugadores && equipoEditado.jugadores.length > 0">
+                        <div class="jugador-item-editable" *ngFor="let jugador of equipoEditado.jugadores">
+                            <div class="jugador-info">
+                                <span class="jugador-numero">#{{ jugador.numeroCamiseta || '?' }}</span>
+                                <div class="jugador-datos">
+                                    <div class="jugador-nombre">{{ jugador.nombre }} {{ jugador.apellido }}</div>
+                                    <div class="jugador-detalle">
+                                        <span class="posicion-badge">{{ jugador.posicion }}</span>
+                                    </div>
+                                    <div class="jugador-detalle" *ngIf="jugador.fechaNacimiento">
+                                        {{ jugador.fechaNacimiento | date:'dd/MM/yyyy' }}
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-eliminar" (click)="eliminarJugador(jugador.id)" title="Eliminar jugador">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="sin-jugadores" *ngIf="!equipoEditado.jugadores || equipoEditado.jugadores.length === 0">
+                        <i class="fa-solid fa-user-slash"></i>
+                        <p>No hay jugadores registrados</p>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="modal-actions">
+                    <button type="submit" class="btn-guardar" [disabled]="guardando">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        {{ guardando ? 'Guardando...' : 'Guardar Cambios' }}
+                    </button>
+                    <button type="button" class="btn-cancelar" (click)="cerrarModalEdicion()">
+                        <i class="fa-solid fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

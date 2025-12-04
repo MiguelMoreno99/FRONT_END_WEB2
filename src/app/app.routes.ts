@@ -7,6 +7,7 @@ import { DashboardShonenComponent } from './dashboard-shonen/dashboard-shonen.co
 import { PartidosComponent } from './partidos/partidos.component';
 import { EnvioCompraComponent } from './envio-compra/envio-compra.component';
 import { ProductoMangaComponent } from './producto-manga/producto-manga.component';
+import { EquiposComponent } from './equipos/equipos.component';
 
 export const routes: Routes = [
   { path: '', component: HomePageComponent, title: 'Home page' },
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'info-usuario', component: InfoUsuarioComponent, title: 'Información Usuario' },
   { path: 'dashboard-shonen', component: DashboardShonenComponent, title: 'Dashboard Shonen' },
   { path: 'partidos', component: PartidosComponent, title: 'Partidos' },
+  { path: 'equipos', component: EquiposComponent, title: 'Equipos' },
   { path: 'envio-compra', component: EnvioCompraComponent, title: 'Envio y compra' },
   { path: 'producto-mangas/:id', component: ProductoMangaComponent, title: 'Información Producto' }
 ];
