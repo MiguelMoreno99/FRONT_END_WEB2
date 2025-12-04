@@ -27,6 +27,8 @@ export class PartidosComponent implements OnInit {
     'assets/img/estadios/estadio3.jpg',
     'assets/img/estadios/estadio4.jpg'
   ];
+  public partidosFiltrados: Array<Partido & { stadiumImage: string }> = [];
+  public filtroActual: 'todos' | 'favoritos' = 'todos';
 
   constructor(private partidoService: PartidoService, private favoritosService: FavoritosService, private usuarioService: UsuarioService) { }
 
@@ -42,6 +44,7 @@ export class PartidosComponent implements OnInit {
           ...p,
           stadiumImage: this.randomImage()
         }));
+        this.aplicarFiltro();
         console.log('Partidos cargados:', this.partidosView);
       },
       error: (err) => {
@@ -99,6 +102,7 @@ export class PartidosComponent implements OnInit {
           this.mostrarMensajeExito(resp.message);
           this.favoritosIds = this.favoritosIds.filter(id => id !== partidoId);
           this.actualizarUsuarioStorage();
+          this.aplicarFiltro();
         },
         error: (err) => this.mostrarMensajeError('No se pudo eliminar de favoritos.')
       });
@@ -108,6 +112,7 @@ export class PartidosComponent implements OnInit {
           this.mostrarMensajeExito(resp.message);
           this.favoritosIds.push(partidoId);
           this.actualizarUsuarioStorage();
+          this.aplicarFiltro();
         },
         error: (err) => this.mostrarMensajeError('No se pudo agregar a favoritos.')
       });
@@ -115,10 +120,17 @@ export class PartidosComponent implements OnInit {
   }
 
   private actualizarUsuarioStorage() {
-    const usuarioActual = this.usuarioService.obtenerInfoUsuario('usuario'); // Ojo: tu método puede variar
-    // Como tu UsuarioService es complejo, una forma simple es confiar en que la próxima recarga traerá los datos frescos, 
-    // pero para UX inmediata modificamos el array local this.favoritosIds.
-    // Si quisieras persistirlo en el service, deberías llamar un método updateLocalUser en el servicio.
+    const usuarioJson = localStorage.getItem('usuarioData');
+
+    if (usuarioJson) {
+      const usuarioData = JSON.parse(usuarioJson);
+      if (!usuarioData.usuario.favoritos) {
+        usuarioData.usuario.favoritos = { partidos: [], equipos: [] };
+      }
+      usuarioData.usuario.favoritos.partidos = this.favoritosIds;
+      localStorage.setItem('usuarioData', JSON.stringify(usuarioData));
+    }
+    this.usuarioService.checkSession();
   }
 
   mostrarMensajeExito(msg: string) {
@@ -129,5 +141,20 @@ export class PartidosComponent implements OnInit {
   mostrarMensajeError(msg: string) {
     this.mensajeError = msg;
     setTimeout(() => this.mensajeError = '', 3000);
+  }
+
+  cambiarFiltro(opcion: 'todos' | 'favoritos') {
+    this.filtroActual = opcion;
+    this.aplicarFiltro();
+  }
+
+  aplicarFiltro() {
+    if (this.filtroActual === 'favoritos') {
+      this.partidosFiltrados = this.partidosView.filter(p =>
+        this.favoritosIds.includes(p.id)
+      );
+    } else {
+      this.partidosFiltrados = [...this.partidosView];
+    }
   }
 }

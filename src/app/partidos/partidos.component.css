@@ -57,13 +57,18 @@ img {
 }
 
 .container-options span:hover {
-  background-color: antiquewhite;
+  background-color: black;
   color: white;
 }
 
 .container-options span.active {
-  background-color: antiquewhite;
+  background-color: #FF3901;
   color: white;
+}
+
+h3 {
+  color: black;
+  text-align: center;
 }
 
 .container-products {

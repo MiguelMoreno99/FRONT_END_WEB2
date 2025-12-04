@@ -36,8 +36,22 @@
   <div class="row">
     <div class="col-12">
       <section class="top-products">
+        <div class="container-options">
+          <span
+            [class.active]="filtroActual === 'todos'"
+            (click)="cambiarFiltro('todos')"
+          >
+            Todos
+          </span>
+          <span
+            [class.active]="filtroActual === 'favoritos'"
+            (click)="cambiarFiltro('favoritos')"
+          >
+            Favoritos
+          </span>
+        </div>
         <div class="container-products">
-          <div class="card-product" *ngFor="let p of partidosView">
+          <div class="card-product" *ngFor="let p of partidosFiltrados">
             <div style="display: none">{{ p.stadiumImage }}</div>
             <div
               class="container-img"
@@ -88,11 +102,19 @@
                 <span class="fecha">{{ p.fecha | date : "medium" }}</span>
                 <span class="estadio">{{ p.estadio || p.ciudad }}</span>
               </div>
-
-              <!-- <span class="add-cart" (click)="agregarAlCarritoPartido(p)">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                            </span> -->
             </div>
+          </div>
+          <div
+            *ngIf="
+              filtroActual === 'favoritos' && partidosFiltrados.length === 0
+            "
+            class="text-center w-100"
+            style="grid-column: 1/-1; color: white"
+          >
+            <h3>
+              No tienes partidos favoritos aún
+              <i class="fa-regular fa-face-sad-tear"></i>
+            </h3>
           </div>
         </div>
       </section>
