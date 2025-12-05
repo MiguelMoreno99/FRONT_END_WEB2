@@ -15,6 +15,12 @@
                                 <span>
                                     <a (click)="abrirModal(p)" style="cursor: pointer;"><i class="fa-regular fa-eye"></i></a>
                                 </span>
+                                 <span>
+                                    <a routerLink="inicio-de-sesion-registro" style="cursor: pointer;"><i class="fa-regular fa-heart"></i></a>
+                                </span>
+                                 <span>
+                                    <a  (click)="abrirModalEdicion(p)" style="cursor: pointer;"><i class="fa-regular fa-edit"></i></a>
+                                </span>
                             </div>
                         </div>
                         <div class="content-card-product">
@@ -116,6 +122,145 @@
                     <h4>{{ partidoSeleccionado.equipoB.nombre }}</h4>
                     <p><strong>País:</strong> {{ partidoSeleccionado.equipoB.nombreCompletoPais }}</p>
                     <p><strong>Ranking FIFA:</strong> {{ partidoSeleccionado.equipoB.rankingFifa || 'N/A' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal para edición del partido -->
+<div class="modal-overlay modal-edicion" *ngIf="mostrarModalEdicion" (click)="cerrarModalEdicion()">
+    <div class="modal-content modal-edicion-content" (click)="prevenirCierre($event)" [formGroup]="formularioEdicion">
+        <div class="modal-header">
+            <h2>
+                <i class="fa-regular fa-edit" style="margin-right: 10px;"></i>
+                Editar Partido
+            </h2>
+            <button class="close-button" (click)="cerrarModalEdicion()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body">
+            <!-- Información de equipos (solo lectura) -->
+            <div class="modal-equipos" style="margin-bottom: 2rem;">
+                <div class="modal-equipo">
+                    <div class="modal-equipo-nombre">{{ partidoEditando?.equipoA?.nombre }}</div>
+                    <div class="modal-goles">
+                        <input type="number" formControlName="golesEquipoA" 
+                               class="goles-input" min="0">
+                    </div>
+                </div>
+                <div class="modal-vs">VS</div>
+                <div class="modal-equipo">
+                    <div class="modal-equipo-nombre">{{ partidoEditando?.equipoB?.nombre }}</div>
+                    <div class="modal-goles">
+                        <input type="number" formControlName="golesEquipoB" 
+                               class="goles-input" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de edición -->
+            <div class="formulario-edicion">
+                <div class="form-grid">
+                    <!-- Columna 1 -->
+                    <div class="form-group">
+                        <label for="fecha">
+                            <i class="fa-solid fa-calendar"></i> Fecha *
+                        </label>
+                        <input type="date" id="fecha" formControlName="fecha" 
+                               class="form-input" [class.is-invalid]="tieneError('fecha', 'required')">
+                        <div *ngIf="tieneError('fecha', 'required')" class="error-message">
+                            La fecha es requerida
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estadio">
+                            <i class="fa-solid fa-location-dot"></i> Estadio *
+                        </label>
+                        <input type="text" id="estadio" formControlName="estadio" 
+                               class="form-input" placeholder="Nombre del estadio"
+                               [class.is-invalid]="tieneError('estadio', 'required')">
+                        <div *ngIf="tieneError('estadio', 'required')" class="error-message">
+                            El estadio es requerido
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ciudad">
+                            <i class="fa-solid fa-city"></i> Ciudad *
+                        </label>
+                        <input type="text" id="ciudad" formControlName="ciudad" 
+                               class="form-input" placeholder="Ciudad"
+                               [class.is-invalid]="tieneError('ciudad', 'required')">
+                        <div *ngIf="tieneError('ciudad', 'required')" class="error-message">
+                            La ciudad es requerida
+                        </div>
+                    </div>
+
+                    <!-- Columna 2 -->
+                    <div class="form-group">
+                        <label for="fase">
+                            <i class="fa-solid fa-diagram-project"></i> Fase *
+                        </label>
+                        <select id="fase" formControlName="fase" 
+                                class="form-select" [class.is-invalid]="tieneError('fase', 'required')">
+                            <option value="">Seleccionar fase</option>
+                            <option *ngFor="let fase of fases" [value]="fase">{{ fase }}</option>
+                        </select>
+                        <div *ngIf="tieneError('fase', 'required')" class="error-message">
+                            La fase es requerida
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="grupo">
+                            <i class="fa-solid fa-people-group"></i> Grupo
+                        </label>
+                        <select id="grupo" formControlName="grupo" class="form-select">
+                            <option value="">Sin grupo</option>
+                            <option *ngFor="let grupo of grupos" [value]="grupo">Grupo {{ grupo }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="arbitro">
+                            <i class="fa-solid fa-whistle"></i> Árbitro Principal
+                        </label>
+                        <input type="text" id="arbitro" formControlName="arbitroPrincipal" 
+                               class="form-input" placeholder="Nombre del árbitro">
+                    </div>
+
+                    <!-- Estado (full width) -->
+                    <div class="form-group full-width">
+                        <label for="estado">
+                            <i class="fa-solid fa-flag"></i> Estado del Partido *
+                        </label>
+                        <div class="estado-options">
+                            <label *ngFor="let estado of estados" class="estado-option">
+                                <input type="radio" formControlName="estado" [value]="estado">
+                                <span class="estado-badge" [class.selected]="formularioEdicion.get('estado')?.value === estado">
+                                    {{ estado }}
+                                </span>
+                            </label>
+                        </div>
+                        <div *ngIf="tieneError('estado', 'required')" class="error-message">
+                            El estado es requerido
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancelar" (click)="cerrarModalEdicion()">
+                        <i class="fa-solid fa-times"></i> Cancelar
+                    </button>
+                    <button type="button" class="btn-guardar" 
+                            (click)="guardarCambios()"
+                            [disabled]="formularioEdicion.invalid">
+                        <i class="fa-solid fa-save"></i> Guardar Cambios
+                    </button>
                 </div>
             </div>
         </div>

@@ -137,3 +137,498 @@ input[readonly] {
     background-color: #333;
     border: none;
 }
+
+/* Estilos adicionales para los modales y botones */
+
+/* Botones en el header */
+.card-header .btn {
+    margin-left: 5px;
+    font-size: 0.9rem;
+    padding: 5px 15px;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+/* MODALES */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    border-radius: 15px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.modal-header h2 {
+    color: goldenrod;
+    margin: 0;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-button:hover {
+    background-color: rgba(255, 0, 0, 0.3);
+    color: #ff4444;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+/* Formularios en modales */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    color: goldenrod;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-input, .form-select, .form-textarea {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: goldenrod;
+    box-shadow: 0 0 0 2px rgba(218, 165, 32, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Botones de acción en modales */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-guardar, .btn-cancelar {
+    padding: 0.8rem;}
+/* Cuando el select está enfocado */
+.form-select:focus {
+    outline: none !important;
+    border-color: goldenrod !important;
+    box-shadow: 0 0 0 2px rgba(218, 165, 32, 0.2) !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Placeholder/opción por defecto */
+.form-select option:first-child {
+    color: #888 !important;
+    font-style: italic !important;
+}
+
+/* Opciones dentro del select */
+.form-select option {
+    background-color: #1a1a1a !important;
+    color: white !important;
+    padding: 10px !important;
+    font-size: 1rem !important;
+}
+
+/* Opción seleccionada */
+.form-select option:checked {
+    background: goldenrod !important;
+    color: black !important;
+    font-weight: bold !important;
+}
+
+/* Opción al pasar el mouse */
+.form-select option:hover {
+    background: rgba(218, 165, 32, 0.3) !important;
+}
+
+/* Contenedor para mejor control */
+.combo-box-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Para cuando el select está vacío o sin selección */
+.form-select:invalid {
+    color: #aaa !important;
+}
+
+.form-select:valid {
+    color: white !important;
+}
+
+select:not(:empty) {
+    color: white !important;
+}
+
+
+select#grupo {
+    color: white !important;
+}
+
+select#grupo option:first-child {
+    color: #aaa !important;
+}
+
+select#grupo option:not(:first-child) {
+    color: white !important;
+}
+
+.form-select,
+.form-select option,
+.form-select optgroup {
+    color-scheme: dark !important;
+    color: white !important;
+}
+
+/* ==================== ESTILOS PARA LA SECCIÓN DE JUGADORES ==================== */
+
+.seccion-jugadores {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.seccion-jugadores h3 {
+    color: goldenrod;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.btn-agregar {
+    background: goldenrod;
+    color: black;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-agregar:hover {
+    background: #ffd700;
+    transform: translateY(-2px);
+}
+
+/* Lista de jugadores */
+.jugadores-lista {
+    max-height: 400px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Formulario de cada jugador */
+.jugador-formulario {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.jugador-formulario:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 215, 0, 0.4);
+}
+
+/* Grid para el formulario de jugador */
+.form-grid-jugador {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.form-grid-jugador .form-group {
+    margin-bottom: 0;
+}
+
+.form-grid-jugador .acciones {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Botón eliminar jugador */
+.btn-eliminar {
+    background: rgba(244, 67, 54, 0.2);
+    border: 1px solid #f44336;
+    color: #f44336;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-eliminar:hover {
+    background: rgba(244, 67, 54, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Mensaje cuando no hay jugadores */
+.sin-jugadores {
+    text-align: center;
+    padding: 2rem;
+    color: #aaa;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+/* Estilos para los botones de acción (completar) */
+.btn-guardar, .btn-cancelar {
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-guardar {
+    background: goldenrod;
+    color: black;
+}
+
+.btn-guardar:hover:not(:disabled) {
+    background: #ffd700;
+    transform: translateY(-2px);
+}
+
+.btn-guardar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-cancelar {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-cancelar:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ==================== ESTILOS PARA LOS SELECTS ==================== */
+
+/* Estilo base para selects mejorado */
+.form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 215, 0, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 0.8rem 3rem 0.8rem 1rem !important;
+    color: white !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+    cursor: pointer !important;
+}
+
+/* Flecha personalizada */
+.form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='goldenrod' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 1rem center !important;
+    background-size: 16px 12px !important;
+}
+
+/* Placeholder/opción por defecto */
+.form-select option:first-child {
+    color: #888 !important;
+    font-style: italic !important;
+}
+
+/* Opciones dentro del select */
+.form-select option {
+    background-color: #1a1a1a !important;
+    color: white !important;
+    padding: 10px !important;
+    font-size: 1rem !important;
+}
+
+/* Responsive para formularios */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-grid-jugador {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-actions {
+        flex-direction: column;
+    }
+    
+    .btn-guardar, .btn-cancelar {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .modal-content {
+        margin: 10px;
+        max-height: 95vh;
+    }
+}
+
+/* Scrollbar personalizado */
+.jugadores-lista::-webkit-scrollbar {
+    width: 8px;
+}
+
+.jugadores-lista::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.jugadores-lista::-webkit-scrollbar-thumb {
+    background: rgba(218, 165, 32, 0.5);
+    border-radius: 4px;
+}
+
+.jugadores-lista::-webkit-scrollbar-thumb:hover {
+    background: rgba(218, 165, 32, 0.7);
+}
+
+/* Estilo para inputs de fecha */
+input[type="date"] {
+    color-scheme: dark;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8);
+    cursor: pointer;
+}
+
+/* Estilo para inputs de tiempo */
+input[type="time"] {
+    color-scheme: dark;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8);
+    cursor: pointer;
+}
+
+/* Mejoras visuales */
+.form-input::placeholder {
+    color: #888;
+}
+
+.form-textarea::placeholder {
+    color: #888;
+}
+
+/* Validación visual */
+.form-input.is-invalid, 
+.form-select.is-invalid {
+    border-color: #f44336 !important;
+    background: rgba(244, 67, 54, 0.1) !important;
+}
+
+.error-message {
+    color: #f44336;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
