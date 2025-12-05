@@ -30,9 +30,9 @@ export class InfoUsuarioComponent implements OnInit {
   
   // Listas para selects
   equiposDisponibles: any[] = []; // Cambia 'any' por tu tipo de equipo
-  fases = ['Fase de Grupos', 'Octavos de Final', 'Cuartos de Final', 'Semifinales', 'Final'];
+  public fases = ['FASE_GRUPOS', 'OCTAVOS', 'CUARTOS', 'SEMIFINAL', 'FINAL'];
   grupos = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-  estados = ['Programado', 'En Juego', 'Finalizado', 'Cancelado'];
+  estados = ['Programado'];
   posiciones = ['Portero', 'Defensa', 'Medio', 'Delantero'];
 
   constructor(

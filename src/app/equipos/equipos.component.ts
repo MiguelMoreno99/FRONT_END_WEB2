@@ -28,7 +28,7 @@ export class EquiposComponent implements OnInit {
   public grupoFiltro: string = '';
   
   // Combo box para Grupo (más opciones)
-  public grupos: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+  public grupos = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   
   // Combo box para Posición del jugador
   public posiciones: string[] = [

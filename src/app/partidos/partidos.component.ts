@@ -29,8 +29,8 @@ export class PartidosComponent implements OnInit {
   public formularioEdicion: FormGroup;
   
   // Opciones para los selects
-  public estados = ['Programado', 'En Juego', 'Finalizado', 'Cancelado'];
-  public fases = ['Fase de Grupos', 'Octavos de Final', 'Cuartos de Final', 'Semifinales', 'Final'];
+  public estados = ['PROGRAMADO', 'EN_JUEGO', 'FINALIZADO', 'SUSPENDIDO'];
+  public fases = ['FASE_GRUPOS', 'OCTAVOS', 'CUARTOS', 'SEMIFINAL', 'FINAL'];
   public grupos = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
   // ruta de imágenes de estadios
