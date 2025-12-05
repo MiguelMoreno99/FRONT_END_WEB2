@@ -182,7 +182,7 @@ export class PartidosComponent implements OnInit {
       this.partidosFiltrados = [...this.partidosView];
     }
   }
-}
+
   // Métodos para el modal de edición
   abrirModalEdicion(partido: Partido) {
     this.partidoEditando = { ...partido }; // Crear copia para editar
