@@ -8,7 +8,8 @@ import { LoginRequest, Usuario, RegistroRequest, EditRequest, UsuarioRespuesta }
 })
 
 export class UsuarioService {
-  private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Usuarios';
+  private apiUrl = 'http://localhost:8080/api/Usuarios';
+  //private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Usuarios';
 
   private currentUserSubject = new BehaviorSubject<Usuario | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
@@ -72,25 +73,25 @@ export class UsuarioService {
     this.isLoggedInSubject.next(false);
   }
 
-  private checkSession(): void {
+  checkSession(): void {
     const userJson = localStorage.getItem('usuarioData');
     if (userJson) {
       try {
         const userObj = JSON.parse(userJson);
         this.isLoggedInSubject.next(true);
         this.currentUserSubject.next(userObj);
-        // if (userObj.token) {
-        //   this.http.post<boolean>(`${this.apiUrl}/validar-token`, { token: userObj.token })
-        //     .subscribe({
-        //       next: (esValido) => {
-        //         if (!esValido) this.logout();
-        //       },
-        //       error: (err) => {
-        //         console.error('Error de validación:', err);
-        //         this.logout();
-        //       }
-        //     });
-        // }
+        if (userObj.token) {
+          this.http.post<boolean>(`${this.apiUrl}/validar-token`, { token: userObj.token })
+            .subscribe({
+              next: (esValido) => {
+                if (!esValido) this.logout();
+              },
+              error: (err) => {
+                console.error('Error de validación:', err);
+                this.logout();
+              }
+            });
+        }
       } catch (e) {
         console.error('Datos de sesión corruptos', e);
         this.logout();

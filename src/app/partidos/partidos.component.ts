@@ -3,6 +3,8 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule, NgFor } from '@angular/common';
 import { PartidoService } from '../services/partidos.service';
 import { Partido } from '../models/partido.model';
+import { FavoritosService } from '../services/favoritos.service';
+import { UsuarioService } from '../services/usuario.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
@@ -13,10 +15,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './partidos.component.css'
 })
 export class PartidosComponent implements OnInit {
-  // lista con campo extra stadiumImage para la vista
   public partidosView: Array<Partido & { stadiumImage: string }> = [];
   public partidoSeleccionado: Partido | null = null;
   public mostrarModal: boolean = false;
+  public userId: string | null = null;
+  public favoritosIds: string[] = [];
+  public mensajeExito: string = '';
+  public mensajeError: string = '';
   public mostrarModalEdicion: boolean = false;
   public partidoEditando: Partido | null = null;
   
@@ -35,12 +40,11 @@ export class PartidosComponent implements OnInit {
     'assets/img/estadios/estadio3.jpg',
     'assets/img/estadios/estadio4.jpg'
   ];
+  public partidosFiltrados: Array<Partido & { stadiumImage: string }> = [];
+  public filtroActual: 'todos' | 'favoritos' = 'todos';
 
-  constructor(
-    private partidoService: PartidoService,
-    private fb: FormBuilder
-  ) {
-    // Inicializar formulario
+  constructor(private partidoService: PartidoService, private favoritosService: FavoritosService, private usuarioService: UsuarioService, private fb: FormBuilder) { 
+  // Inicializar formulario
     this.formularioEdicion = this.fb.group({
       fecha: ['', Validators.required],
       estadio: ['', Validators.required],
@@ -56,6 +60,7 @@ export class PartidosComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPartidos();
+    this.loadUsuario();
   }
 
   private loadPartidos() {
@@ -65,10 +70,23 @@ export class PartidosComponent implements OnInit {
           ...p,
           stadiumImage: this.randomImage()
         }));
+        this.aplicarFiltro();
         console.log('Partidos cargados:', this.partidosView);
       },
       error: (err) => {
         console.error('Error cargando partidos', err);
+      }
+    });
+  }
+
+  private loadUsuario() {
+    this.usuarioService.currentUser$.subscribe(usuario => {
+      if (usuario && usuario.usuario) {
+        this.userId = usuario.usuario.id;
+        this.favoritosIds = usuario.usuario.favoritos?.partidos || [];
+      } else {
+        this.userId = null;
+        this.favoritosIds = [];
       }
     });
   }
@@ -96,6 +114,75 @@ export class PartidosComponent implements OnInit {
     event.stopPropagation();
   }
 
+  esFavorito(partidoId: string): boolean {
+    return this.favoritosIds.includes(partidoId);
+  }
+
+  toggleFavorito(partidoId: string): void {
+    if (!this.userId) return;
+
+    if (this.esFavorito(partidoId)) {
+      this.favoritosService.eliminarPartido(partidoId, this.userId).subscribe({
+        next: (resp) => {
+          this.mostrarMensajeExito(resp.message);
+          this.favoritosIds = this.favoritosIds.filter(id => id !== partidoId);
+          this.actualizarUsuarioStorage();
+          this.aplicarFiltro();
+        },
+        error: (err) => this.mostrarMensajeError('No se pudo eliminar de favoritos.')
+      });
+    } else {
+      this.favoritosService.agregarPartido(partidoId, this.userId).subscribe({
+        next: (resp) => {
+          this.mostrarMensajeExito(resp.message);
+          this.favoritosIds.push(partidoId);
+          this.actualizarUsuarioStorage();
+          this.aplicarFiltro();
+        },
+        error: (err) => this.mostrarMensajeError('No se pudo agregar a favoritos.')
+      });
+    }
+  }
+
+  private actualizarUsuarioStorage() {
+    const usuarioJson = localStorage.getItem('usuarioData');
+
+    if (usuarioJson) {
+      const usuarioData = JSON.parse(usuarioJson);
+      if (!usuarioData.usuario.favoritos) {
+        usuarioData.usuario.favoritos = { partidos: [], equipos: [] };
+      }
+      usuarioData.usuario.favoritos.partidos = this.favoritosIds;
+      localStorage.setItem('usuarioData', JSON.stringify(usuarioData));
+    }
+    this.usuarioService.checkSession();
+  }
+
+  mostrarMensajeExito(msg: string) {
+    this.mensajeExito = msg;
+    setTimeout(() => this.mensajeExito = '', 3000);
+  }
+
+  mostrarMensajeError(msg: string) {
+    this.mensajeError = msg;
+    setTimeout(() => this.mensajeError = '', 3000);
+  }
+
+  cambiarFiltro(opcion: 'todos' | 'favoritos') {
+    this.filtroActual = opcion;
+    this.aplicarFiltro();
+  }
+
+  aplicarFiltro() {
+    if (this.filtroActual === 'favoritos') {
+      this.partidosFiltrados = this.partidosView.filter(p =>
+        this.favoritosIds.includes(p.id)
+      );
+    } else {
+      this.partidosFiltrados = [...this.partidosView];
+    }
+  }
+}
   // Métodos para el modal de edición
   abrirModalEdicion(partido: Partido) {
     this.partidoEditando = { ...partido }; // Crear copia para editar

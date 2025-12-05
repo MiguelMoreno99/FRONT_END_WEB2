@@ -1,131 +1,243 @@
 <div class="titulo-shonen">
-    <h1>Partidos</h1>
+  <h1>Partidos</h1>
+</div>
+
+<div
+  class="container mt-3"
+  style="position: fixed; z-index: 1050; top: 20px; right: 20px; width: auto"
+>
+  <div
+    *ngIf="mensajeExito"
+    class="alert alert-success alert-dismissible fade show"
+    role="alert"
+  >
+    {{ mensajeExito }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="mensajeExito = ''"
+    ></button>
+  </div>
+  <div
+    *ngIf="mensajeError"
+    class="alert alert-danger alert-dismissible fade show"
+    role="alert"
+  >
+    {{ mensajeError }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="mensajeError = ''"
+    ></button>
+  </div>
 </div>
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <section class="top-products">      
-                <div class="container-products">
-                    <div class="card-product" *ngFor="let p of partidosView">
-                        <div style="display: none;">{{ p.stadiumImage }}</div>
-                        <div class="container-img" 
-                             [ngStyle]="{ 'background-image': 'linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(' + p.stadiumImage + ')' }">
-                            <div class="button-group">
-                                <span>
-                                    <a (click)="abrirModal(p)" style="cursor: pointer;"><i class="fa-regular fa-eye"></i></a>
-                                </span>
-                                 <span>
-                                    <a routerLink="inicio-de-sesion-registro" style="cursor: pointer;"><i class="fa-regular fa-heart"></i></a>
-                                </span>
-                                 <span>
-                                    <a  (click)="abrirModalEdicion(p)" style="cursor: pointer;"><i class="fa-regular fa-edit"></i></a>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="content-card-product">
-                            <div class="equipos">
-                                <div class="equipo">
-                                    <div class="nombre">{{ p.equipoA.nombre }}</div>
-                                    <div class="goles">{{ p.golesEquipoA }}</div>
-                                </div>
-                                <div class="versus">vs</div>
-                                <div class="equipo">
-                                    <div class="nombre">{{ p.equipoB.nombre }}</div>
-                                    <div class="goles">{{ p.golesEquipoB }}</div>
-                                </div>
-                            </div>
-                            
-                            <div class="detalles">
-                                <span class="fecha">{{ p.fecha | date:'medium' }}</span>
-                                <span class="estadio">{{ p.estadio || p.ciudad }}</span>
-                            </div>
-                            
-                            <!-- <span class="add-cart" (click)="agregarAlCarritoPartido(p)">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                            </span> -->
-                        </div>
-                    </div>
-                </div>
-            </section>
+  <div class="row">
+    <div class="col-12">
+      <section class="top-products">
+        <div class="container-options">
+          <span
+            [class.active]="filtroActual === 'todos'"
+            (click)="cambiarFiltro('todos')"
+          >
+            Todos
+          </span>
+          <span
+            [class.active]="filtroActual === 'favoritos'"
+            (click)="cambiarFiltro('favoritos')"
+          >
+            Favoritos
+          </span>
         </div>
+        <div class="container-products">
+          <div class="card-product" *ngFor="let p of partidosFiltrados">
+            <div style="display: none">{{ p.stadiumImage }}</div>
+            <div
+              class="container-img"
+              [ngStyle]="{
+                'background-image':
+                  'linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(' +
+                  p.stadiumImage +
+                  ')'
+              }"
+            >
+              <div class="button-group">
+                <span>
+                  <a (click)="abrirModal(p)" style="cursor: pointer"
+                    ><i class="fa-regular fa-eye"></i
+                  ></a>
+                </span>
+                <span
+                  *ngIf="userId"
+                  (click)="toggleFavorito(p.id)"
+                  class="btn-heart"
+                >
+                  <i
+                    [class]="
+                      esFavorito(p.id)
+                        ? 'fa-solid fa-heart'
+                        : 'fa-regular fa-heart'
+                    "
+                    [class.heart-active]="esFavorito(p.id)"
+                  >
+                  </i>
+                </span>
+                 <span>
+                     <a  (click)="abrirModalEdicion(p)" style="cursor: pointer;"><i class="fa-regular fa-edit"></i></a>
+                 </span>
+              </div>
+            </div>
+            <div class="content-card-product">
+              <div class="equipos">
+                <div class="equipo">
+                  <div class="nombre">{{ p.equipoA.nombre }}</div>
+                  <div class="goles">{{ p.golesEquipoA }}</div>
+                </div>
+                <div class="versus">vs</div>
+                <div class="equipo">
+                  <div class="nombre">{{ p.equipoB.nombre }}</div>
+                  <div class="goles">{{ p.golesEquipoB }}</div>
+                </div>
+              </div>
+
+              <div class="detalles">
+                <span class="fecha">{{ p.fecha | date : "medium" }}</span>
+                <span class="estadio">{{ p.estadio || p.ciudad }}</span>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="
+              filtroActual === 'favoritos' && partidosFiltrados.length === 0
+            "
+            class="text-center w-100"
+            style="grid-column: 1/-1; color: white"
+          >
+            <h3>
+              No tienes partidos favoritos aún
+              <i class="fa-regular fa-face-sad-tear"></i>
+            </h3>
+          </div>
+        </div>
+      </section>
     </div>
+  </div>
 </div>
 <!-- Modal para detalles del partido -->
 <div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
-    <div class="modal-content" (click)="prevenirCierre($event)">
-        <div class="modal-header">
-            <h2>Detalles del Partido</h2>
-            <button class="close-button" (click)="cerrarModal()">
-                <i class="fa-solid fa-times"></i>
-            </button>
-        </div>
-        
-        <div class="modal-body" *ngIf="partidoSeleccionado">
-            <!-- Encabezado con equipos y resultado -->
-            <div class="modal-equipos">
-                <div class="modal-equipo">
-                    <div class="modal-equipo-nombre">{{ partidoSeleccionado.equipoA.nombre }}</div>
-                    <div class="modal-goles">{{ partidoSeleccionado.golesEquipoA }}</div>
-                </div>
-                <div class="modal-vs">VS</div>
-                <div class="modal-equipo">
-                    <div class="modal-equipo-nombre">{{ partidoSeleccionado.equipoB.nombre }}</div>
-                    <div class="modal-goles">{{ partidoSeleccionado.golesEquipoB }}</div>
-                </div>
-            </div>
-
-            <!-- Información detallada -->
-            <div class="modal-info-grid">
-                <div class="info-item">
-                    <span class="info-label"><i class="fa-solid fa-calendar"></i> Fecha:</span>
-                    <span class="info-value">{{ partidoSeleccionado.fecha | date:'fullDate' }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label"><i class="fa-solid fa-clock"></i> Hora:</span>
-                    <span class="info-value">{{ partidoSeleccionado.fecha | date:'shortTime' }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label"><i class="fa-solid fa-location-dot"></i> Estadio:</span>
-                    <span class="info-value">{{ partidoSeleccionado.estadio }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label"><i class="fa-solid fa-city"></i> Ciudad:</span>
-                    <span class="info-value">{{ partidoSeleccionado.ciudad }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label"><i class="fa-solid fa-diagram-project"></i> Fase:</span>
-                    <span class="info-value">{{ partidoSeleccionado.fase }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label"><i class="fa-solid fa-people-group"></i> Grupo:</span>
-                    <span class="info-value">{{ partidoSeleccionado.grupo }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label"><i class="fa-solid fa-whistle"></i> Árbitro:</span>
-                    <span class="info-value">{{ partidoSeleccionado.arbitroPrincipal }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label"><i class="fa-solid fa-flag"></i> Estado:</span>
-                    <span class="info-value">{{ partidoSeleccionado.estado }}</span>
-                </div>
-            </div>
-
-            <!-- Información de equipos -->
-            <div class="equipos-detalle">
-                <div class="equipo-detalle">
-                    <h4>{{ partidoSeleccionado.equipoA.nombre }}</h4>
-                    <p><strong>País:</strong> {{ partidoSeleccionado.equipoA.nombreCompletoPais }}</p>
-                    <p><strong>Ranking FIFA:</strong> {{ partidoSeleccionado.equipoA.rankingFifa || 'N/A' }}</p>
-                </div>
-                <div class="equipo-detalle">
-                    <h4>{{ partidoSeleccionado.equipoB.nombre }}</h4>
-                    <p><strong>País:</strong> {{ partidoSeleccionado.equipoB.nombreCompletoPais }}</p>
-                    <p><strong>Ranking FIFA:</strong> {{ partidoSeleccionado.equipoB.rankingFifa || 'N/A' }}</p>
-                </div>
-            </div>
-        </div>
+  <div class="modal-content" (click)="prevenirCierre($event)">
+    <div class="modal-header">
+      <h2>Detalles del Partido</h2>
+      <button class="close-button" (click)="cerrarModal()">
+        <i class="fa-solid fa-times"></i>
+      </button>
     </div>
+
+    <div class="modal-body" *ngIf="partidoSeleccionado">
+      <!-- Encabezado con equipos y resultado -->
+      <div class="modal-equipos">
+        <div class="modal-equipo">
+          <div class="modal-equipo-nombre">
+            {{ partidoSeleccionado.equipoA.nombre }}
+          </div>
+          <div class="modal-goles">{{ partidoSeleccionado.golesEquipoA }}</div>
+        </div>
+        <div class="modal-vs">VS</div>
+        <div class="modal-equipo">
+          <div class="modal-equipo-nombre">
+            {{ partidoSeleccionado.equipoB.nombre }}
+          </div>
+          <div class="modal-goles">{{ partidoSeleccionado.golesEquipoB }}</div>
+        </div>
+      </div>
+
+      <!-- Información detallada -->
+      <div class="modal-info-grid">
+        <div class="info-item">
+          <span class="info-label"
+            ><i class="fa-solid fa-calendar"></i> Fecha:</span
+          >
+          <span class="info-value">{{
+            partidoSeleccionado.fecha | date : "fullDate"
+          }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label"
+            ><i class="fa-solid fa-clock"></i> Hora:</span
+          >
+          <span class="info-value">{{
+            partidoSeleccionado.fecha | date : "shortTime"
+          }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label"
+            ><i class="fa-solid fa-location-dot"></i> Estadio:</span
+          >
+          <span class="info-value">{{ partidoSeleccionado.estadio }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label"
+            ><i class="fa-solid fa-city"></i> Ciudad:</span
+          >
+          <span class="info-value">{{ partidoSeleccionado.ciudad }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label"
+            ><i class="fa-solid fa-diagram-project"></i> Fase:</span
+          >
+          <span class="info-value">{{ partidoSeleccionado.fase }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label"
+            ><i class="fa-solid fa-people-group"></i> Grupo:</span
+          >
+          <span class="info-value">{{ partidoSeleccionado.grupo }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label"
+            ><i class="fa-solid fa-whistle"></i> Árbitro:</span
+          >
+          <span class="info-value">{{
+            partidoSeleccionado.arbitroPrincipal
+          }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label"
+            ><i class="fa-solid fa-flag"></i> Estado:</span
+          >
+          <span class="info-value">{{ partidoSeleccionado.estado }}</span>
+        </div>
+      </div>
+
+      <!-- Información de equipos -->
+      <div class="equipos-detalle">
+        <div class="equipo-detalle">
+          <h4>{{ partidoSeleccionado.equipoA.nombre }}</h4>
+          <p>
+            <strong>País:</strong>
+            {{ partidoSeleccionado.equipoA.nombreCompletoPais }}
+          </p>
+          <p>
+            <strong>Ranking FIFA:</strong>
+            {{ partidoSeleccionado.equipoA.rankingFifa || "N/A" }}
+          </p>
+        </div>
+        <div class="equipo-detalle">
+          <h4>{{ partidoSeleccionado.equipoB.nombre }}</h4>
+          <p>
+            <strong>País:</strong>
+            {{ partidoSeleccionado.equipoB.nombreCompletoPais }}
+          </p>
+          <p>
+            <strong>Ranking FIFA:</strong>
+            {{ partidoSeleccionado.equipoB.rankingFifa || "N/A" }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 <!-- Modal para edición del partido -->
 <div class="modal-overlay modal-edicion" *ngIf="mostrarModalEdicion" (click)="cerrarModalEdicion()">
