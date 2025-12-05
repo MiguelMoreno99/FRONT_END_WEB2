@@ -36,3 +36,33 @@ export interface Partido {
   fechaCreacion?: string;
   fechaActualizacion?: string;
 }
+
+export interface PartidoEdit {
+  id: string;
+  equipoA?: Equipo;
+  equipoB?: Equipo;
+  golesEquipoA?: number;
+  golesEquipoB?: number;
+  fecha?: string;
+  estadio?: string;
+  ciudad?: string;
+  estado?: string;
+  fase?: string;
+  grupo?: string;
+  arbitroPrincipal?: string;
+  fechaCreacion?: string;
+  fechaActualizacion?: string;
+}
+
+export interface EquipoEdit {
+  id?: string;
+  nombre?: string;
+  nombreCompletoPais?: string;
+  bandera?: string;
+  informacion?: string;
+  siglasEquipo?: string;
+  grupo?: string;
+  rankingFifa?: number;
+  fechaCreacion?: string;
+  jugadores?: Jugador[];
+}
