@@ -32,13 +32,7 @@ export class EquiposComponent implements OnInit {
   
   // Combo box para Posición del jugador
   public posiciones: string[] = [
-    'Portero',
-    'Defensa Central',
-    'Lateral Derecho', 
-    'Lateral Izquierdo',
-    'Carrilero Derecho',
-    'Carrilero Izquierdo',
-    'Mediocentro'
+    'Portero', 'Defensa', 'Medio', 'Delantero'
   ];
 
   // Para nuevo jugador
