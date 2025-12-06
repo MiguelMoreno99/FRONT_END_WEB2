@@ -37,7 +37,6 @@ import { CommonModule } from '@angular/common';
                   <a [routerLink]="['/info-usuario']" class="btn">
                     <i class="fa-solid fa-user"></i>
                   </a>
-                  <i class="fa-solid fa-heart"></i>
                 } @else {
                   <a [routerLink]="['/inicio-de-sesion-registro']" class="btn">
                     <i class="fa-solid fa-user"></i>

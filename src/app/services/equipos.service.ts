@@ -9,31 +9,30 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class EquiposService {
-  private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Equipo';
+  private apiUrl = 'http://localhost:8080/api/Equipo';
+  //private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Equipo';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  // Obtener todos los equipos
   getEquipos(): Observable<Equipo[]> {
     const headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
 
     return this.http.get(this.apiUrl, { headers, responseType: 'text' }).pipe(
-         map(text => {
-           try {
-             return JSON.parse(text) as Equipo[];
-           } catch (e) {
-             console.error('Respuesta no JSON desde API Partido:', text);
-             throw new Error('Respuesta inválida del servidor al obtener partidos');
-           }
-         }),
-         catchError(err => {
-           console.error('Error en getPartidos:', err);
-           return throwError(() => err);
-         })
-       );
+      map(text => {
+        try {
+          return JSON.parse(text) as Equipo[];
+        } catch (e) {
+          console.error('Respuesta no JSON desde API Partido:', text);
+          throw new Error('Respuesta inválida del servidor al obtener partidos');
+        }
+      }),
+      catchError(err => {
+        console.error('Error en getPartidos:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
-  // Obtener equipo por ID
   getEquipoById(id: string): Observable<Equipo> {
     const headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
     return this.http.get<Equipo>(`${this.apiUrl}/${id}`);
@@ -43,5 +42,4 @@ export class EquiposService {
     const headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
     return this.http.get<Jugador[]>(`${this.apiUrl}/${equipoId}/jugadores`);
   }
-
 }

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../services/usuario.service';
 import { Usuario } from '../models/usuario.model';
 import { PartidoService } from '../services/partidos.service'; // Si necesitas este servicio
 import { EquiposService } from '../services/equipos.service'; // Si necesitas este servicio
+import { Equipo } from '../models/equipo.model';
 
 @Component({
   selector: 'app-info-usuario',
@@ -19,30 +20,27 @@ export class InfoUsuarioComponent implements OnInit {
   perfilForm: FormGroup;
   partidoForm: FormGroup;
   equipoForm: FormGroup;
-  
+
   isEditando: boolean = false;
   mensajeExito: string = '';
   mensajeError: string = '';
-  
-  // Estados para modales
+
   mostrarModalPartido: boolean = false;
   mostrarModalEquipo: boolean = false;
-  
-  // Listas para selects
-  equiposDisponibles: any[] = []; // Cambia 'any' por tu tipo de equipo
+
+  equiposDisponibles: Equipo[] = [];
   public fases = ['FASE_GRUPOS', 'OCTAVOS', 'CUARTOS', 'SEMIFINAL', 'FINAL'];
   grupos = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-  estados = ['Programado'];
   posiciones = ['Portero', 'Defensa', 'Medio', 'Delantero'];
 
   constructor(
     private usuarioService: UsuarioService,
     private fb: FormBuilder,
     private router: Router,
-    private partidoService: PartidoService, // Inyecta si necesitas
-    private equipoService: EquiposService // Inyecta si necesitas
+    private partidoService: PartidoService,
+    private equipoService: EquiposService
   ) {
-    // Formulario de perfil
+
     this.perfilForm = this.fb.group({
       nombre: ['', [Validators.required, this.specialChars]],
       apellido: ['', [Validators.required, this.specialChars]],
@@ -50,23 +48,20 @@ export class InfoUsuarioComponent implements OnInit {
       correo: [{ value: '', disabled: true }, Validators.required]
     });
 
-    // Formulario para nuevo partido
     this.partidoForm = this.fb.group({
-      fecha: ['', Validators.required],
-      hora: ['', Validators.required],
+      fechaPartido: ['', [Validators.required, this.fechaProximaValidator]],
+      horaPartido: ['', Validators.required],
       estadio: ['', Validators.required],
       ciudad: ['', Validators.required],
-      fase: ['', Validators.required],
-      grupo: [''],
-      arbitroPrincipal: [''],
-      estado: ['Programado', Validators.required],
       equipoA: ['', Validators.required],
       equipoB: ['', Validators.required],
-      golesEquipoA: [0, [Validators.required, Validators.min(0)]],
-      golesEquipoB: [0, [Validators.required, Validators.min(0)]]
-    });
+      fase: ['', Validators.required],
+      grupo: [''],
+      arbitroPrincipal: ['']
+    }, {
+      validators: [this.validarHoraSiEsHoy, this.validarEquipoRepetido]
+    })
 
-    // Formulario para nuevo equipo
     this.equipoForm = this.fb.group({
       nombre: ['', Validators.required],
       nombreCompletoPais: ['', Validators.required],
@@ -85,17 +80,14 @@ export class InfoUsuarioComponent implements OnInit {
       },
       error: (err) => this.mostrarMensajeError('Error al obtener usuario.')
     });
-
-    // Cargar equipos disponibles para el formulario de partidos
     this.cargarEquiposDisponibles();
+    this.configurarLogicaGrupoAutomatico();
   }
 
-  // Getter para jugadores (FormArray)
   get jugadoresArray(): FormArray {
     return this.equipoForm.get('jugadores') as FormArray;
   }
 
-  // Métodos para modales
   abrirModalPartido(): void {
     this.mostrarModalPartido = true;
     document.body.style.overflow = 'hidden';
@@ -127,53 +119,89 @@ export class InfoUsuarioComponent implements OnInit {
     event.stopPropagation();
   }
 
-  // Cargar equipos disponibles
   cargarEquiposDisponibles(): void {
-    // Aquí deberías cargar los equipos existentes
-    // Por ahora, uso datos de ejemplo
-    this.equiposDisponibles = [
-      { id: 1, nombre: 'Argentina' },
-      { id: 2, nombre: 'Brasil' },
-      { id: 3, nombre: 'España' },
-      { id: 4, nombre: 'Francia' },
-      { id: 5, nombre: 'Alemania' },
-      { id: 6, nombre: 'Italia' }
-    ];
+    this.equipoService.getEquipos().subscribe({
+      next: (data: Equipo[]) => {
+        this.equiposDisponibles = data;
+        this.equiposDisponibles.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      },
+      error: (error) => {
+        this.mostrarMensajeError('No se pudieron cargar los equipos. Intente más tarde.');
+      }
+    });
   }
 
-  // Métodos para formulario de partido
+  configurarLogicaGrupoAutomatico(): void {
+    const faseControl = this.partidoForm.get('fase');
+    const equipoAControl = this.partidoForm.get('equipoA');
+    const grupoControl = this.partidoForm.get('grupo');
+    faseControl?.valueChanges.subscribe(faseSeleccionada => {
+      if (faseSeleccionada === 'FASE_GRUPOS') {
+        this.actualizarGrupoDesdeEquipoA();
+        grupoControl?.disable();
+      } else {
+        grupoControl?.enable();
+        grupoControl?.setValue('');
+      }
+    });
+    equipoAControl?.valueChanges.subscribe(() => {
+      if (faseControl?.value === 'FASE_GRUPOS') {
+        this.actualizarGrupoDesdeEquipoA();
+      }
+    });
+  }
+
+  private actualizarGrupoDesdeEquipoA(): void {
+    const equipoAId = this.partidoForm.get('equipoA')?.value;
+    const grupoControl = this.partidoForm.get('grupo');
+    if (equipoAId) {
+      const equipoEncontrado = this.equiposDisponibles.find(e => e.id === equipoAId);
+      if (equipoEncontrado && equipoEncontrado.grupo) {
+        grupoControl?.setValue(equipoEncontrado.grupo);
+      }
+    }
+  }
+
   guardarPartido(): void {
     if (this.partidoForm.invalid) {
       this.partidoForm.markAllAsTouched();
       this.mostrarMensajeError('Por favor, complete todos los campos requeridos.');
       return;
     }
+    const formValue = this.partidoForm.getRawValue();
+    try {
+      const fechaString = `${formValue.fechaPartido}T${formValue.horaPartido}:00`;
+      const fechaLocal = new Date(fechaString);
+      const offset = fechaLocal.getTimezoneOffset() * 60000;
+      const fechaAjustada = new Date(fechaLocal.getTime() - offset);
+      const nuevoPartido = {
+        equipoAId: formValue.equipoA,
+        equipoBId: formValue.equipoB,
+        fecha: fechaAjustada.toISOString(),
+        estadio: formValue.estadio,
+        ciudad: formValue.ciudad,
+        estado: 'PROGRAMADO',
+        fase: formValue.fase,
+        grupo: formValue.grupo || "",
+        arbitroPrincipal: formValue.arbitroPrincipal,
+      };
+      this.partidoService.crearPartido(nuevoPartido, this.usuarioActual?.token || "").subscribe({
+        next: (res) => {
+          this.mostrarMensajeExito('¡Partido creado exitosamente!');
+          this.cerrarModalPartido();
+        },
+        error: (err) => {
+          console.error('Error creando partido:', err);
+          this.mostrarMensajeError(err.error || 'Error al crear el partido. Intente más tarde.');
+        }
+      });
 
-    const partidoData = this.partidoForm.value;
-    
-    // Combinar fecha y hora
-    const fechaCompleta = new Date(partidoData.fecha);
-    const [horas, minutos] = partidoData.hora.split(':');
-    fechaCompleta.setHours(horas, minutos);
-
-    const partidoCompleto = {
-      ...partidoData,
-      fecha: fechaCompleta.toISOString(),
-      // Aquí necesitarías buscar los objetos completos de equipoA y equipoB
-      equipoA: this.equiposDisponibles.find(e => e.id === partidoData.equipoA),
-      equipoB: this.equiposDisponibles.find(e => e.id === partidoData.equipoB)
-    };
-
-    console.log('Partido a guardar:', partidoCompleto);
-    
-    // Aquí llamarías al servicio para guardar el partido
-    // this.partidoService.crearPartido(partidoCompleto).subscribe(...)
-    
-    this.mostrarMensajeExito('Partido creado exitosamente!');
-    this.cerrarModalPartido();
+    } catch (error) {
+      console.error('Error al procesar fechas:', error);
+      this.mostrarMensajeError('Error interno procesando la fecha del partido.');
+    }
   }
 
-  // Métodos para formulario de equipo
   agregarJugador(): void {
     const jugadorForm = this.fb.group({
       nombre: ['', Validators.required],
@@ -197,22 +225,17 @@ export class InfoUsuarioComponent implements OnInit {
       this.mostrarMensajeError('Por favor, complete todos los campos requeridos.');
       return;
     }
-
     const equipoData = this.equipoForm.value;
-    
-    // Convertir siglas a mayúsculas
     equipoData.siglasEquipo = equipoData.siglasEquipo.toUpperCase();
-
     console.log('Equipo a guardar:', equipoData);
-    
+
     // Aquí llamarías al servicio para guardar el equipo
     // this.equipoService.crearEquipo(equipoData).subscribe(...)
-    
+
     this.mostrarMensajeExito('Equipo creado exitosamente!');
     this.cerrarModalEquipo();
   }
 
-  // Validaciones
   specialChars(control: AbstractControl): { [key: string]: boolean } | null {
     const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]/;
     if (control.value && nameRegexp.test(control.value)) {
@@ -234,7 +257,70 @@ export class InfoUsuarioComponent implements OnInit {
     return null;
   }
 
-  // Métodos existentes (sin cambios)
+  fechaProximaValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    if (!control.value) {
+      return null;
+    }
+    const inputDate = new Date(control.value + 'T00:00:00');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (inputDate < today) {
+      return { fechaAnterior: true };
+    }
+    return null;
+  }
+
+  validarHoraSiEsHoy: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const fechaControl = control.get('fechaPartido');
+    const horaControl = control.get('horaPartido');
+    if (!fechaControl?.value || !horaControl?.value) {
+      return null;
+    }
+    const inputDate = new Date(fechaControl.value + 'T00:00:00');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (inputDate.getTime() === today.getTime()) {
+      const now = new Date();
+      const [hours, minutes] = horaControl.value.split(':');
+      const inputDateTime = new Date();
+      inputDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      if (inputDateTime <= now) {
+        horaControl.setErrors({ ...horaControl.errors, horaFutura: true });
+        return { horaFutura: true };
+      }
+    }
+    if (horaControl.errors && horaControl.errors['horaFutura']) {
+      delete horaControl.errors['horaFutura'];
+      if (Object.keys(horaControl.errors).length === 0) {
+        horaControl.setErrors(null);
+      } else {
+        horaControl.setErrors(horaControl.errors);
+      }
+    }
+    return null;
+  };
+
+  validarEquipoRepetido: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const equipoA = control.get('equipoA');
+    const equipoB = control.get('equipoB');
+    if (!equipoA?.value || !equipoB?.value) {
+      return null;
+    }
+    if (equipoA.value === equipoB.value) {
+      equipoB.setErrors({ ...equipoB.errors, repetido: true });
+      return { repetido: true };
+    }
+    if (equipoB.hasError('repetido')) {
+      delete equipoB.errors?.['repetido'];
+      if (equipoB.errors && Object.keys(equipoB.errors).length === 0) {
+        equipoB.setErrors(null);
+      } else {
+        equipoB.setErrors(equipoB.errors);
+      }
+    }
+    return null;
+  };
+
   activarEdicion(): void {
     if (this.usuarioActual) {
       let fechaFormatoInput = '';
@@ -259,15 +345,55 @@ export class InfoUsuarioComponent implements OnInit {
   }
 
   guardarCambios(): void {
-    // ... (código existente)
+    if (this.perfilForm.invalid || !this.usuarioActual) {
+      this.mostrarMensajeError('Error verifica tu información.');
+      return;
+    }
+    const datosActualizados = {
+      correo: this.usuarioActual.usuario.correo,
+      nombre: this.perfilForm.get('nombre')?.value,
+      apellido: this.perfilForm.get('apellido')?.value,
+      fechaNacimiento: new Date(this.perfilForm.get('fechaNacimiento')?.value).toISOString(),
+      activo: true,
+      favoritos: {
+        partidos: [],
+        equipos: []
+      }
+    };
+    this.usuarioService.actualizarUsuario(datosActualizados).subscribe({
+      next: (usuarioRespuesta) => {
+        this.mostrarMensajeExito('Información actualizada correctamente.');
+        this.isEditando = false;
+      },
+      error: (err) => {
+        if (err.error.message === "Usuario no encontrado") {
+          this.mostrarMensajeError('Error Usuario no encontrado.');
+        } else {
+          this.mostrarMensajeError('Error no se pudo actualizar la información, intentelo más tarde.');
+        }
+      }
+    });
   }
 
   confirmarEliminacion(): void {
-    // ... (código existente)
+    if (!this.usuarioActual) return;
+    const confirmacion = window.confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');
+    if (confirmacion) {
+      this.usuarioService.eliminarUsuario(this.usuarioActual.usuario.id).subscribe({
+        next: () => {
+          alert('Cuenta eliminada correctamente.');
+          this.cerrarSesion();
+        },
+        error: (err) => {
+          this.mostrarMensajeError('No se pudo eliminar la cuenta. Intentelo mas tarde.');
+        }
+      });
+    }
   }
 
   cerrarSesion(): void {
-    // ... (código existente)
+    this.usuarioService.logout();
+    this.router.navigate(['/']);
   }
 
   mostrarMensajeError(mensaje: string): void {

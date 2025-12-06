@@ -2,21 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { Partido } from '../models/partido.model';
+import { Partido, PartidoCreate } from '../models/partido.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PartidoService {
-  //private apiUrl = 'http://localhost:8080/api/Partido';
-  private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Partido';
+  private apiUrl = 'http://localhost:8080/api/Partido';
+  //private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Partido';
 
   constructor(private http: HttpClient) { }
 
   getPartidos(): Observable<Partido[]> {
     const headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
-
-    // pedimos como texto y parseamos para evitar el fallo de parseo si llega HTML
     return this.http.get(this.apiUrl, { headers, responseType: 'text' }).pipe(
       map(text => {
         try {
@@ -31,5 +29,11 @@ export class PartidoService {
         return throwError(() => err);
       })
     );
+  }
+
+  crearPartido(partido: PartidoCreate, token: string): Observable<Partido> {
+    let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.post<Partido>(this.apiUrl, partido, { headers });
   }
 }

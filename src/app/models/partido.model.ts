@@ -37,6 +37,18 @@ export interface Partido {
   fechaActualizacion?: string;
 }
 
+export interface PartidoCreate {
+  equipoAId: string;
+  equipoBId: string;
+  fecha: string;
+  estadio: string;
+  ciudad: string;
+  estado: string;
+  fase: string;
+  grupo: string;
+  arbitroPrincipal: string;
+}
+
 export interface PartidoEdit {
   id: string;
   equipoA?: Equipo;

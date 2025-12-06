@@ -5,13 +5,14 @@
     >
       <h3 class="mb-0"><i class="fa-solid fa-id-card me-2"></i> Mi Perfil</h3>
       <div>
-        <!-- Botones para agregar contenido -->
+        @if (usuarioActual?.usuario?.rol === 'admin') {
         <button class="btn btn-info btn-sm me-2" (click)="abrirModalPartido()">
           <i class="fa-solid fa-plus"></i> Nuevo Partido
         </button>
         <button class="btn btn-info btn-sm me-2" (click)="abrirModalEquipo()">
           <i class="fa-solid fa-plus"></i> Nuevo Equipo
         </button>
+        }
         <button class="btn btn-danger btn-sm" (click)="cerrarSesion()">
           <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
         </button>
@@ -19,8 +20,7 @@
     </div>
 
     <div class="card-body p-4">
-      <!-- Mensajes de éxito/error -->
-      @if (mensajeExito) {
+      @if (!(mostrarModalPartido || mostrarModalEquipo)) { @if (mensajeExito) {
       <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ mensajeExito }}
         <button
@@ -29,8 +29,7 @@
           (click)="mensajeExito = ''"
         ></button>
       </div>
-      } 
-      @if (mensajeError) {
+      } @if (mensajeError) {
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
         {{ mensajeError }}
         <button
@@ -39,8 +38,8 @@
           (click)="mensajeError = ''"
         ></button>
       </div>
-      } 
-      
+      } }
+
       <!-- Contenido principal -->
       @if (!isEditando) {
       <div class="row info-lectura">
@@ -101,8 +100,7 @@
           </div>
         </div>
       </div>
-      } 
-      @else {
+      } @else {
       <!-- Formulario de edición de perfil -->
       <form [formGroup]="perfilForm" (ngSubmit)="guardarCambios()">
         <h5 class="mb-4 text-primary">Editar Información</h5>
@@ -209,112 +207,270 @@
   </div>
 </div>
 
-<!-- ==================== MODAL PARA NUEVO PARTIDO ==================== -->
-<div class="modal-overlay" *ngIf="mostrarModalPartido" (click)="cerrarModalPartido()">
-  <div class="modal-content" (click)="prevenirCierre($event)" [formGroup]="partidoForm">
+@if (mostrarModalPartido){
+<div class="modal-overlay" (click)="cerrarModalPartido()">
+  <div
+    class="modal-content"
+    (click)="prevenirCierre($event)"
+    [formGroup]="partidoForm"
+  >
     <div class="modal-header">
       <h2><i class="fa-solid fa-futbol me-2"></i> Nuevo Partido</h2>
       <button class="close-button" (click)="cerrarModalPartido()">
         <i class="fa-solid fa-times"></i>
       </button>
     </div>
-    
+
+    @if (mensajeExito) {
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ mensajeExito }}
+      <button
+        type="button"
+        class="btn-close"
+        (click)="mensajeExito = ''"
+      ></button>
+    </div>
+    } @if (mensajeError) {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ mensajeError }}
+      <button
+        type="button"
+        class="btn-close"
+        (click)="mensajeError = ''"
+      ></button>
+    </div>
+    }
+
     <div class="modal-body">
       <div class="form-grid">
-        <!-- Fecha y Hora -->
+        <!-- Fecha -->
         <div class="form-group">
           <label for="fechaPartido">
             <i class="fa-solid fa-calendar"></i> Fecha *
           </label>
-          <input type="date" id="fechaPartido" formControlName="fecha" 
-                 class="form-input">
+          <input
+            type="date"
+            id="fechaPartido"
+            formControlName="fechaPartido"
+            class="form-input"
+            [class.is-invalid]="
+              partidoForm.get('fechaPartido')?.invalid &&
+              partidoForm.get('fechaPartido')?.touched
+            "
+          />
+          @if(partidoForm.get('fechaPartido')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> La fecha del partido
+            es obligatoria.
+          </label>
+          }@else if(partidoForm.get('fechaPartido')?.hasError('fechaAnterior'))
+          {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> La fecha del partido
+            debe ser mayor o igual a la fecha actual.
+          </label>
+          }
         </div>
-                
+
+        <!-- Hora -->
+        <div class="form-group">
+          <label for="HoraPartido">
+            <i class="fa-solid fa-clock-o"></i> Hora *
+          </label>
+          <input
+            type="time"
+            id="horaPartido"
+            formControlName="horaPartido"
+            class="form-input"
+            [class.is-invalid]="
+              partidoForm.get('horaPartido')?.invalid &&
+              partidoForm.get('horaPartido')?.touched
+            "
+          />
+          @if(partidoForm.get('horaPartido')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> La hora del partido
+            es obligatoria.
+          </label>
+          }@else if(partidoForm.get('horaPartido')?.hasError('horaFutura')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> La hora del partido
+            debe ser mayor a la hora actual.
+          </label>
+          }
+        </div>
+
         <!-- Estadio y Ciudad -->
         <div class="form-group">
           <label for="estadio">
             <i class="fa-solid fa-location-dot"></i> Estadio *
           </label>
-          <input type="text" id="estadio" formControlName="estadio" 
-                 class="form-input" placeholder="Nombre del estadio">
+          <input
+            type="text"
+            id="estadio"
+            formControlName="estadio"
+            class="form-input"
+            placeholder="Nombre del estadio"
+            [class.is-invalid]="
+              partidoForm.get('estadio')?.invalid &&
+              partidoForm.get('estadio')?.touched
+            "
+          />
+          @if(partidoForm.get('estadio')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> El nombre del Estadio
+            es obligatorio.
+          </label>
+          }
         </div>
-        
+
         <div class="form-group">
           <label for="ciudad">
             <i class="fa-solid fa-city"></i> Ciudad *
           </label>
-          <input type="text" id="ciudad" formControlName="ciudad" 
-                 class="form-input" placeholder="Ciudad">
+          <input
+            type="text"
+            id="ciudad"
+            formControlName="ciudad"
+            class="form-input"
+            placeholder="Ciudad"
+            [class.is-invalid]="
+              partidoForm.get('ciudad')?.invalid &&
+              partidoForm.get('ciudad')?.touched
+            "
+          />
+          @if(partidoForm.get('ciudad')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> El nombre de la
+            Ciudad es obligatorio.
+          </label>
+          }
         </div>
-        
+
         <!-- Equipos -->
         <div class="form-group">
           <label for="equipoA">
             <i class="fa-solid fa-flag"></i> EquipoA *
           </label>
-          <select id="equipoA" formControlName="equipoA" class="form-select">
+          <select
+            id="equipoA"
+            formControlName="equipoA"
+            class="form-select"
+            [class.is-invalid]="
+              partidoForm.get('equipoA')?.invalid &&
+              partidoForm.get('equipoA')?.touched
+            "
+          >
             <option value="">Seleccionar equipo</option>
-            <option *ngFor="let equipo of equiposDisponibles" [value]="equipo.id">
+            <option
+              *ngFor="let equipo of equiposDisponibles"
+              [value]="equipo.id"
+            >
               {{ equipo.nombre }}
             </option>
           </select>
+          @if(partidoForm.get('equipoA')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Seleccione el Equipo
+            A.
+          </label>
+          }
         </div>
-        
+
         <div class="form-group">
           <label for="equipoB">
             <i class="fa-solid fa-flag"></i> EquipoB *
           </label>
-          <select id="equipoB" formControlName="equipoB" class="form-select">
+          <select
+            id="equipoB"
+            formControlName="equipoB"
+            class="form-select"
+            [class.is-invalid]="
+              partidoForm.get('equipoB')?.invalid &&
+              partidoForm.get('equipoB')?.touched
+            "
+          >
             <option value="">Seleccionar equipo</option>
-            <option *ngFor="let equipo of equiposDisponibles" [value]="equipo.id">
+            <option
+              *ngFor="let equipo of equiposDisponibles"
+              [value]="equipo.id"
+            >
               {{ equipo.nombre }}
             </option>
           </select>
+          @if(partidoForm.get('equipoB')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Seleccione el Equipo
+            B.
+          </label>
+          }@else if(partidoForm.get('equipoB')?.hasError('repetido')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> El Equipo no se debe
+            repetir.
+          </label>
+          }
         </div>
-  
+
         <!-- Fase y Grupo -->
         <div class="form-group">
           <label for="fase">
             <i class="fa-solid fa-diagram-project"></i> Fase *
           </label>
-          <select id="fase" formControlName="fase" class="form-select">
+          <select
+            id="fase"
+            formControlName="fase"
+            class="form-select"
+            [class.is-invalid]="
+              partidoForm.get('fase')?.invalid &&
+              partidoForm.get('fase')?.touched
+            "
+          >
             <option value="">Seleccionar fase</option>
-            <option *ngFor="let fase of fases" [value]="fase">{{ fase }}</option>
+            <option *ngFor="let fase of fases" [value]="fase">
+              {{ fase }}
+            </option>
           </select>
+          @if(partidoForm.get('fase')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Seleccione la Fase.
+          </label>
+          }
         </div>
-        
+
         <div class="form-group">
           <label for="grupo">
             <i class="fa-solid fa-people-group"></i> Grupo
           </label>
           <select id="grupo" formControlName="grupo" class="form-select">
             <option value="">Sin grupo</option>
-            <option *ngFor="let grupo of grupos" [value]="grupo">Grupo {{ grupo }}</option>
+            <option *ngFor="let grupo of grupos" [value]="grupo">
+              Grupo {{ grupo }}
+            </option>
           </select>
         </div>
-        
+
         <!-- Árbitro y Estado -->
         <div class="form-group">
-          <label for="arbitro">
+          <label for="arbitroPrincipal">
             <i class="fa-solid fa-whistle"></i> Árbitro Principal
           </label>
-          <input type="text" id="arbitro" formControlName="arbitroPrincipal" 
-                 class="form-input" placeholder="Nombre del árbitro">
-        </div>
-        
-        <div class="form-group">
-          <label for="estado">
-            <i class="fa-solid fa-flag"></i> Estado *
-          </label>
-          <select id="estado" formControlName="estado" class="form-select">
-            <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
-          </select>
+          <input
+            type="text"
+            id="arbitroPrincipal"
+            formControlName="arbitroPrincipal"
+            class="form-input"
+            placeholder="Nombre del árbitro"
+          />
         </div>
       </div>
-      
+
       <!-- Botones de acción -->
       <div class="modal-actions">
-        <button type="button" class="btn-cancelar" (click)="cerrarModalPartido()">
+        <button
+          type="button"
+          class="btn-cancelar"
+          (click)="cerrarModalPartido()"
+        >
           <i class="fa-solid fa-times"></i> Cancelar
         </button>
         <button type="button" class="btn-guardar" (click)="guardarPartido()">
@@ -324,17 +480,40 @@
     </div>
   </div>
 </div>
-
-<!-- ==================== MODAL PARA NUEVO EQUIPO ==================== -->
-<div class="modal-overlay" *ngIf="mostrarModalEquipo" (click)="cerrarModalEquipo()">
-  <div class="modal-content" (click)="prevenirCierre($event)" [formGroup]="equipoForm">
+} @if (mostrarModalEquipo){
+<div class="modal-overlay" (click)="cerrarModalEquipo()">
+  <div
+    class="modal-content"
+    (click)="prevenirCierre($event)"
+    [formGroup]="equipoForm"
+  >
     <div class="modal-header">
       <h2><i class="fa-solid fa-users me-2"></i> Nuevo Equipo</h2>
       <button class="close-button" (click)="cerrarModalEquipo()">
         <i class="fa-solid fa-times"></i>
       </button>
     </div>
-    
+
+    @if (mensajeExito) {
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ mensajeExito }}
+      <button
+        type="button"
+        class="btn-close"
+        (click)="mensajeExito = ''"
+      ></button>
+    </div>
+    } @if (mensajeError) {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ mensajeError }}
+      <button
+        type="button"
+        class="btn-close"
+        (click)="mensajeError = ''"
+      ></button>
+    </div>
+    }
+
     <div class="modal-body">
       <!-- Información básica del equipo -->
       <div class="form-grid">
@@ -342,54 +521,82 @@
           <label for="nombreEquipo">
             <i class="fa-solid fa-flag"></i> Nombre *
           </label>
-          <input type="text" id="nombreEquipo" formControlName="nombre" 
-                 class="form-input" placeholder="Ej: Argentina">
+          <input
+            type="text"
+            id="nombreEquipo"
+            formControlName="nombre"
+            class="form-input"
+            placeholder="Ej: Argentina"
+          />
         </div>
-        
+
         <div class="form-group">
           <label for="nombreCompleto">
             <i class="fa-solid fa-globe"></i> País Completo *
           </label>
-          <input type="text" id="nombreCompleto" formControlName="nombreCompletoPais" 
-                 class="form-input" placeholder="Ej: República Argentina">
+          <input
+            type="text"
+            id="nombreCompleto"
+            formControlName="nombreCompletoPais"
+            class="form-input"
+            placeholder="Ej: República Argentina"
+          />
         </div>
-        
+
         <div class="form-group">
           <label for="siglas">
             <i class="fa-solid fa-font"></i> Siglas (3 letras) *
           </label>
-          <input type="text" id="siglas" formControlName="siglasEquipo" 
-                 class="form-input" maxlength="3" placeholder="Ej: ARG">
+          <input
+            type="text"
+            id="siglas"
+            formControlName="siglasEquipo"
+            class="form-input"
+            maxlength="3"
+            placeholder="Ej: ARG"
+          />
         </div>
-        
+
         <div class="form-group">
           <label for="grupoEquipo">
             <i class="fa-solid fa-people-group"></i> Grupo *
           </label>
           <select id="grupoEquipo" formControlName="grupo" class="form-select">
             <option value="">Seleccionar grupo</option>
-            <option *ngFor="let grupo of grupos" [value]="grupo">Grupo {{ grupo }}</option>
+            <option *ngFor="let grupo of grupos" [value]="grupo">
+              Grupo {{ grupo }}
+            </option>
           </select>
         </div>
-        
+
         <div class="form-group">
           <label for="ranking">
             <i class="fa-solid fa-ranking-star"></i> Ranking FIFA *
           </label>
-          <input type="number" id="ranking" formControlName="rankingFifa" 
-                 class="form-input" min="0" placeholder="Ej: 1">
+          <input
+            type="number"
+            id="ranking"
+            formControlName="rankingFifa"
+            class="form-input"
+            min="0"
+            placeholder="Ej: 1"
+          />
         </div>
-        
+
         <div class="form-group full-width">
           <label for="informacion">
             <i class="fa-solid fa-info-circle"></i> Información Adicional
           </label>
-          <textarea id="informacion" formControlName="informacion" 
-                    class="form-textarea" rows="3" 
-                    placeholder="Historia, logros, datos interesantes..."></textarea>
+          <textarea
+            id="informacion"
+            formControlName="informacion"
+            class="form-textarea"
+            rows="3"
+            placeholder="Historia, logros, datos interesantes..."
+          ></textarea>
         </div>
       </div>
-      
+
       <!-- Jugadores -->
       <div class="seccion-jugadores">
         <h3>
@@ -398,54 +605,73 @@
             <i class="fa-solid fa-plus"></i> Agregar Jugador
           </button>
         </h3>
-        
-       <div formArrayName="jugadores" class="jugadores-lista">
-    <div *ngFor="let jugador of jugadoresArray.controls; let i = index" 
-         [formGroupName]="i" class="jugador-formulario">
-        
-        <div class="form-grid-jugador">
-            <div class="form-group">
+
+        <div formArrayName="jugadores" class="jugadores-lista">
+          <div
+            *ngFor="let jugador of jugadoresArray.controls; let i = index"
+            [formGroupName]="i"
+            class="jugador-formulario"
+          >
+            <div class="form-grid-jugador">
+              <div class="form-group">
                 <label>Nombre</label>
-                <input type="text" formControlName="nombre" 
-                       class="form-input" placeholder="Nombre">
-            </div>
-            
-            <div class="form-group">
+                <input
+                  type="text"
+                  formControlName="nombre"
+                  class="form-input"
+                  placeholder="Nombre"
+                />
+              </div>
+
+              <div class="form-group">
                 <label>Apellido</label>
-                <input type="text" formControlName="apellido" 
-                       class="form-input" placeholder="Apellido">
-            </div>
-            
-            <div class="form-group">
+                <input
+                  type="text"
+                  formControlName="apellido"
+                  class="form-input"
+                  placeholder="Apellido"
+                />
+              </div>
+
+              <div class="form-group">
                 <label>Número</label>
-                <input type="number" formControlName="numeroCamiseta" 
-                       class="form-input" min="1" max="99" placeholder="#">
-            </div>
-            
-            <div class="form-group">
+                <input
+                  type="number"
+                  formControlName="numeroCamiseta"
+                  class="form-input"
+                  min="1"
+                  max="99"
+                  placeholder="#"
+                />
+              </div>
+
+              <div class="form-group">
                 <label>Posición</label>
                 <select formControlName="posicion" class="form-select">
-                    <option value="">Seleccionar</option>
-                    <option *ngFor="let posicion of posiciones" [value]="posicion">
-                        {{ posicion }}
-                    </option>
+                  <option value="">Seleccionar</option>
+                  <option
+                    *ngFor="let posicion of posiciones"
+                    [value]="posicion"
+                  >
+                    {{ posicion }}
+                  </option>
                 </select>
+              </div>
             </div>
+          </div>
         </div>
-        
-    </div>
-</div>
-    </div>
-</div>
-      
-      <!-- Botones de acción -->
-      <div class="modal-actions">
-        <button type="button" class="btn-cancelar" (click)="cerrarModalEquipo()">
-          <i class="fa-solid fa-times"></i> Cancelar
-        </button>
-        <button type="button" class="btn-guardar" (click)="guardarEquipo()">
-          <i class="fa-solid fa-save"></i> Crear Equipo
-        </button>
       </div>
     </div>
+
+    <!-- Botones de acción -->
+    <div class="modal-actions">
+      <button type="button" class="btn-cancelar" (click)="cerrarModalEquipo()">
+        <i class="fa-solid fa-times"></i> Cancelar
+      </button>
+      <button type="button" class="btn-guardar" (click)="guardarEquipo()">
+        <i class="fa-solid fa-save"></i> Crear Equipo
+      </button>
+    </div>
+  </div>
 </div>
+}
