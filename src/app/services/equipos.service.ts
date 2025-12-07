@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Equipo, Jugador } from '../models/equipo.model';
+import { Equipo, Jugador, EquipoCreate } from '../models/equipo.model';
 import { map, catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
@@ -41,5 +41,11 @@ export class EquiposService {
   getJugadoresByEquipo(equipoId: string): Observable<Jugador[]> {
     const headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
     return this.http.get<Jugador[]>(`${this.apiUrl}/${equipoId}/jugadores`);
+  }
+
+  crearEquipo(equipo: EquipoCreate, token: string): Observable<Equipo> {
+    let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.post<Equipo>(this.apiUrl, equipo, { headers });
   }
 }

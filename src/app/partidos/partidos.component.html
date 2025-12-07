@@ -157,7 +157,7 @@
             ><i class="fa-solid fa-calendar"></i> Fecha:</span
           >
           <span class="info-value">{{
-            partidoSeleccionado.fecha | date : "fullDate"
+            partidoSeleccionado.fecha | date : "fullDate" : "UTC"
           }}</span>
         </div>
         <div class="info-item">
@@ -165,7 +165,7 @@
             ><i class="fa-solid fa-clock"></i> Hora:</span
           >
           <span class="info-value">{{
-            partidoSeleccionado.fecha | date : "shortTime"
+            partidoSeleccionado.fecha | date : "shortTime" : "UTC"
           }}</span>
         </div>
         <div class="info-item">

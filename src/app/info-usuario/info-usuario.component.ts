@@ -4,8 +4,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractContro
 import { Router } from '@angular/router';
 import { UsuarioService } from '../services/usuario.service';
 import { Usuario } from '../models/usuario.model';
-import { PartidoService } from '../services/partidos.service'; // Si necesitas este servicio
-import { EquiposService } from '../services/equipos.service'; // Si necesitas este servicio
+import { PartidoService } from '../services/partidos.service';
+import { EquiposService } from '../services/equipos.service';
 import { Equipo } from '../models/equipo.model';
 
 @Component({
@@ -31,7 +31,21 @@ export class InfoUsuarioComponent implements OnInit {
   equiposDisponibles: Equipo[] = [];
   public fases = ['FASE_GRUPOS', 'OCTAVOS', 'CUARTOS', 'SEMIFINAL', 'FINAL'];
   grupos = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-  posiciones = ['Portero', 'Defensa', 'Medio', 'Delantero'];
+  posiciones = [
+    'Portero',
+    'Defensa Central',
+    'Lateral Derecho',
+    'Lateral Izquierdo',
+    'Carrilero',
+    'Pivote (MCD)',
+    'Mediocentro (MC)',
+    'Volante',
+    'Mediapunta (MCO)',
+    'Extremo Derecho',
+    'Extremo Izquierdo',
+    'Segundo Delantero',
+    'Delantero Centro'
+  ];
 
   constructor(
     private usuarioService: UsuarioService,
@@ -63,14 +77,26 @@ export class InfoUsuarioComponent implements OnInit {
     })
 
     this.equipoForm = this.fb.group({
-      nombre: ['', Validators.required],
-      nombreCompletoPais: ['', Validators.required],
-      siglasEquipo: ['', [Validators.required, Validators.maxLength(3)]],
-      grupo: ['', Validators.required],
-      rankingFifa: [0, [Validators.required, Validators.min(0)]],
-      informacion: [''],
+      nombreEquipo: ['', [Validators.required, Validators.pattern('^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$')]],
+      nombreCompleto: ['', [Validators.required, Validators.pattern('^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$')]],
+      siglasEquipo: ['', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(3),
+        Validators.pattern('^[A-Z]+$')
+      ]],
+      bandera: ['https://flagcdn.com/', [Validators.required, Validators.pattern('https://flagcdn.com/.+')]],
+      grupoEquipo: ['', Validators.required],
+      rankingFifa: [0, [Validators.required, Validators.min(1), Validators.max(211)]],
+      informacion: ['', Validators.maxLength(500)],
       jugadores: this.fb.array([])
     });
+  }
+
+  onSiglasInput(event: any): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.toUpperCase();
+    this.equipoForm.get('siglasEquipo')?.setValue(input.value, { emitEvent: false });
   }
 
   ngOnInit(): void {
@@ -202,38 +228,64 @@ export class InfoUsuarioComponent implements OnInit {
     }
   }
 
-  agregarJugador(): void {
-    const jugadorForm = this.fb.group({
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
-      numeroCamiseta: ['', [Validators.required, Validators.min(1), Validators.max(99)]],
-      posicion: ['', Validators.required],
-      fechaNacimiento: [''],
-      clubActual: ['']
-    });
-
-    this.jugadoresArray.push(jugadorForm);
-  }
-
-  removerJugador(index: number): void {
-    this.jugadoresArray.removeAt(index);
-  }
-
   guardarEquipo(): void {
     if (this.equipoForm.invalid) {
       this.equipoForm.markAllAsTouched();
       this.mostrarMensajeError('Por favor, complete todos los campos requeridos.');
       return;
     }
-    const equipoData = this.equipoForm.value;
-    equipoData.siglasEquipo = equipoData.siglasEquipo.toUpperCase();
-    console.log('Equipo a guardar:', equipoData);
+    const formValue = this.equipoForm.getRawValue();
+    try {
+      const jugadoresProcesados = formValue.jugadores.map((jugador: any) => {
+        const fechaNac = jugador.fechaNacimiento ? new Date(jugador.fechaNacimiento).toISOString() : new Date().toISOString();
+        return {
+          id: "",
+          nombre: jugador.nombre,
+          apellido: jugador.apellido,
+          fechaNacimiento: fechaNac,
+          numeroCamiseta: Number(jugador.numeroCamiseta),
+          posicion: jugador.posicion
+        };
+      });
+      const nuevoEquipo = {
+        nombre: formValue.nombreEquipo,
+        nombreCompletoPais: formValue.nombreCompleto,
+        bandera: formValue.bandera,
+        informacion: formValue.informacion || "",
+        siglasEquipo: formValue.siglasEquipo,
+        grupo: formValue.grupoEquipo,
+        rankingFifa: formValue.rankingFifa,
+        jugadores: jugadoresProcesados
+      };
+      this.equipoService.crearEquipo(nuevoEquipo, this.usuarioActual?.token || "").subscribe({
+        next: (res) => {
+          this.mostrarMensajeExito('¡Equipo creado exitosamente!');
+          this.cerrarModalEquipo();
+        },
+        error: (err) => {
+          console.error('Error creando equipo:', err);
+          this.mostrarMensajeError(err.error || 'Error al crear el equipo. Intente más tarde.');
+        }
+      });
 
-    // Aquí llamarías al servicio para guardar el equipo
-    // this.equipoService.crearEquipo(equipoData).subscribe(...)
+    } catch (error) {
+      this.mostrarMensajeError('Error procesando los datos del formulario.');
+    }
+  }
 
-    this.mostrarMensajeExito('Equipo creado exitosamente!');
-    this.cerrarModalEquipo();
+  agregarJugador(): void {
+    const jugadorForm = this.fb.group({
+      nombre: ['', [Validators.required, Validators.pattern('^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$')]],
+      apellido: ['', [Validators.required, Validators.pattern('^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$')]],
+      numeroCamiseta: ['', [Validators.required, Validators.min(1), Validators.max(999)]],
+      posicion: ['', Validators.required],
+      fechaNacimiento: ['', [Validators.required, this.fechaPasadaValidator]]
+    });
+    this.jugadoresArray.push(jugadorForm);
+  }
+
+  removerJugador(index: number): void {
+    this.jugadoresArray.removeAt(index);
   }
 
   specialChars(control: AbstractControl): { [key: string]: boolean } | null {

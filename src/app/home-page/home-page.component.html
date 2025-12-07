@@ -1,175 +1,160 @@
-
-
 <div class="container-navbar">
-    <nav class="navbar contenedorMenu">
-     <i class="fa-solid fa-bars"></i>
-         <ul class="menu">
-             <li><a [routerLink]="['/equipos']">Equipos</a></li>
-             <li><a [routerLink]="['/partidos']">Partidos</a></li>
-         </ul>
-     </nav>
+  <nav class="navbar contenedorMenu">
+    <i class="fa-solid fa-bars"></i>
+    <ul class="menu">
+      <li><a [routerLink]="['/equipos']">Equipos</a></li>
+      <li><a [routerLink]="['/partidos']">Partidos</a></li>
+    </ul>
+  </nav>
+</div>
+<section class="banner">
+  <div class="content-banner">
+    <h2>¡Sige todos tus partidos desde aquí!</h2>
+    <p>En vivo y en directo</p>
+    <a [routerLink]="['/partidos']">Encuentralos Aquí</a>
   </div>
-  <section class="banner">
-    <div class="content-banner">
-        <h2>¡Sige todos tus partidos desde aquí!</h2>
-        <p>En vivo y en directo</p>
-        <a [routerLink]="['/partidos']">Encuentralos Aquí</a>
+</section>
+
+<main class="main-content">
+  <!-- <section class="container">
+    <div class="subscribe page-footer">
+      <div class="info-boletin">
+        <div class="contenido-boletin">
+          <span>Registrate a nuestra página</span>
+          <p>Enterate de todos los eventos</p>
+        </div>
+      </div>
+      <div class="input-boletin">
+        <div class="input-Control item1">
+          <label>Nombre Completo</label>
+          <input
+            name="fullname"
+            type="text"
+            id="boletin-fullname"
+            placeholder="Ingresa nombre completo"
+          />
+        </div>
+        <div class="input-Control">
+          <label>Correo Electrónico</label>
+          <input
+            name="correo"
+            type="text"
+            id="boletin-correo"
+            placeholder="Ingresa correo electrónico"
+          />
+        </div>
+        <a href="#">Registrarse</a>
+      </div>
+    </div>
+  </section> -->
+  <section class="container top-categories">
+    <h1 class="header-1">Los Partidos Más Esperados</h1>
+    <div class="container-categories">
+      <div class="dashboard-seinen">
+        <div class="card-category category-artbooks">
+          <p>Jugadores</p>
+        </div>
+      </div>
+      <div class="dashboard-shonen">
+        <div class="card-category category-manga">
+          <p>Estádisticas</p>
+        </div>
+      </div>
+      <div class="dashboard-shojo">
+        <div class="card-category category-revistas">
+          <p>GOOOL</p>
+        </div>
+      </div>
     </div>
   </section>
-  
-  
-  <main class="main-content">
-    <section class="container">
-        <div class="subscribe page-footer">
-            <div class="info-boletin">
-                <div class="contenido-boletin">
-                    <span>Registrate a nuestra página</span>
-                    <p>Enterate de todos los eventos</p>
-                </div>
-            </div>
-            <div class="input-boletin">
-                <div class="input-Control item1">
-                    <label>Nombre Completo</label>
-                    <input name="fullname" type="text" id="boletin-fullname" placeholder="Ingresa nombre completo">
-                </div>
-                <div class="input-Control">
-                    <label>Correo Electrónico</label>
-                    <input name="correo" type="text" id="boletin-correo" placeholder="Ingresa correo electrónico">
-                </div>
-                <a href="#">Registrarse</a>
-            </div>
-        </div>
-    </section>
-    <section class="container top-categories">
-        <h1 class="header-1">Los Partidos Más Esperados</h1>
-        <div class="container-categories">
-            <div class="dashboard-seinen">
-                <div class="card-category category-artbooks">
-                    <p>Jugadores</p>
-                </div>
-                <app-dashboard-shonen></app-dashboard-shonen>
-            </div>
-            <div class="dashboard-shonen">    
-                <div class="card-category category-manga">
-                    <p>Estádisticas</p>
-                </div>
-                <app-dashboard-shonen></app-dashboard-shonen>
-            </div>
-            <div class="dashboard-shojo">
-                <div class="card-category category-revistas">
-                    <p>GOOOL</p>
-                </div>
-                <app-dashboard-shonen></app-dashboard-shonen>
-             </div>
-           
-        </div>
-        
-    </section>
 
-     <section class="container">
-        <div>
-            <div class="orden-info">
-                <div class="carrusel-info">
-                    <i class="fa-solid fa-user-secret"></i>
-                    <div class="feature-content">
-                        <span>Políticas de Privacidad</span>
-                    </div>
-                </div>
-                <div class="carrusel-info">
-                    <i class="fa-solid fa-shield-heart"></i>
-                    <div class="feature-content">
-                        <span>Condiciones para el uso</span>
-                    </div>
-                </div>
-                <div class="carrusel-info">
-                    <i class="fa-solid fa-address-card"></i>
-                    <div class="feature-content">
-                        <span>Anuncios </span>                        
-                    </div>
-                </div>
-                <div class="carrusel-info">
-                    <i class="fa-solid fa-cookie"></i>
-                    <div class="feature-content">
-                        <span>Políticas de cookies</span>
-                    </div>
-                </div>
-            </div>
-     </div>
-    </section>
-    
-
-        
-       
-    
-      
- </main>
-  
-  <footer class="footer">
-      <div class="container container-footer">
-          <div class="menu-footer">
-              <div class="contact-info">
-                  <p class="title-footer">Contáctanos</p>
-                  <ul>
-                      <li>
-                          Teléfono: (+52) 55.5208.35.50 / (+52) 55.89.95.22.77 / (+52) 55.89.95.22.78
-                      </li>
-                      <li>
-                          Fáx: 555555300
-                      </li>
-                      <li>
-                          Correo: atencionarrobapanini.com.mx.
-                      </li>
-                  </ul>
-                  <div class="social-icons">
-                      <span class="facebook">
-                          <i class="fa-brands fa-facebook"></i>
-                      </span>
-                      <span class="twitter">
-                          <i class="fa-brands fa-x-twitter"></i>
-                      </span>
-                      <span class="instagram">
-                          <i class="fa-brands fa-instagram"></i>
-                      </span>
-                      <span class="tiktok">
-                          <i class="fa-brands fa-tiktok"></i>
-                      </span>
-                      <span class="youtube">
-                          <i class="fa-brands fa-youtube"></i>
-                      </span>
-                  </div>
-              </div>
-  
-              <div class="information">
-                  <p class="title-footer">Información</p>
-                  <ul>
-                      <li><a href="#">Acerca de Nosotros</a></li>
-                      <li><a href="#">Información de Envíos</a></li>   
-                      <li><a href="#"></a>Políticas de Privacidad</li>
-                      <li><a href="#"></a>Términos y Condiciones</li>
-                      <li><a href="#"></a>Distribuidores</li>
-                  </ul>
-              </div>
-  
-              <div class="my-account">
-                  <p class="title-footer">Tu Cuenta</p>
-  
-                  <ul>
-                      <li><a href="#">Mi Cuenta</a></li>
-                      <li><a href="#">Historial de Pedidos</a></li>
-                      <li><a href="#">Lista de Descuentos</a></li>
-                      <li><a href="#">Boletín</a></li>
-                      <li><a href="#">Reembolsos</a></li>
-                  </ul>
-              </div>
+  <section class="container">
+    <div>
+      <div class="orden-info">
+        <div class="carrusel-info">
+          <i class="fa-solid fa-user-secret"></i>
+          <div class="feature-content">
+            <span>Políticas de Privacidad</span>
           </div>
-  
-          <div class="copyright">
-              <p>
-                  Desarrollado por Constanza Montiel y Miguel Moreno &copy; 2025
-              </p>
-  
-              
+        </div>
+        <div class="carrusel-info">
+          <i class="fa-solid fa-shield-heart"></i>
+          <div class="feature-content">
+            <span>Condiciones para el uso</span>
           </div>
+        </div>
+        <div class="carrusel-info">
+          <i class="fa-solid fa-address-card"></i>
+          <div class="feature-content">
+            <span>Anuncios </span>
+          </div>
+        </div>
+        <div class="carrusel-info">
+          <i class="fa-solid fa-cookie"></i>
+          <div class="feature-content">
+            <span>Políticas de cookies</span>
+          </div>
+        </div>
       </div>
-  </footer>
-  
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container container-footer">
+    <div class="menu-footer">
+      <div class="contact-info">
+        <p class="title-footer">Contáctanos</p>
+        <ul>
+          <li>Teléfono: (+52) 55.5208.35.50</li>
+          <li>Fáx: 555555300</li>
+          <li>Correo: atencionarrobabetwarrior.com.mx.</li>
+        </ul>
+        <div class="social-icons">
+          <span class="facebook">
+            <i class="fa-brands fa-facebook"></i>
+          </span>
+          <span class="twitter">
+            <i class="fa-brands fa-x-twitter"></i>
+          </span>
+          <span class="instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </span>
+          <span class="tiktok">
+            <i class="fa-brands fa-tiktok"></i>
+          </span>
+          <span class="youtube">
+            <i class="fa-brands fa-youtube"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="information">
+        <p class="title-footer">Información</p>
+        <ul>
+          <li><a href="#">Acerca de Nosotros</a></li>
+          <li><a href="#">Políticas de Privacidad</a></li>
+          <li><a href="#">Términos y Condiciones</a></li>
+        </ul>
+      </div>
+
+      <div class="my-account">
+        <p class="title-footer">Tu Cuenta</p>
+
+        @if (usuarioActual) {
+        <ul>
+          <li><a href="/info-usuario">Mi Cuenta</a></li>
+        </ul>
+        } @else {
+        <ul>
+          <li><a href="/inicio-de-sesion-registro">Registrarse</a></li>
+        </ul>
+        }
+      </div>
+    </div>
+
+    <div class="copyright">
+      <p>Desarrollado por Constanza Montiel y Miguel Moreno &copy; 2025</p>
+    </div>
+  </div>
+</footer>

@@ -524,23 +524,53 @@
           <input
             type="text"
             id="nombreEquipo"
-            formControlName="nombre"
+            formControlName="nombreEquipo"
             class="form-input"
             placeholder="Ej: Argentina"
+            [class.is-invalid]="
+              equipoForm.get('nombreEquipo')?.invalid &&
+              equipoForm.get('nombreEquipo')?.touched
+            "
           />
+          @if(equipoForm.get('nombreEquipo')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Ingrese el Nombre del
+            Equipo.
+          </label>
+          } @else if(equipoForm.get('nombreEquipo')?.hasError('pattern')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Solo se permiten
+            letras.
+          </label>
+          }
         </div>
 
         <div class="form-group">
           <label for="nombreCompleto">
-            <i class="fa-solid fa-globe"></i> País Completo *
+            <i class="fa-solid fa-globe"></i> Nombre País Completo *
           </label>
           <input
             type="text"
             id="nombreCompleto"
-            formControlName="nombreCompletoPais"
+            formControlName="nombreCompleto"
             class="form-input"
             placeholder="Ej: República Argentina"
+            [class.is-invalid]="
+              equipoForm.get('nombreCompleto')?.invalid &&
+              equipoForm.get('nombreCompleto')?.touched
+            "
           />
+          @if(equipoForm.get('nombreCompleto')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Ingrese el Nombre del
+            del Páis Completo.
+          </label>
+          } @else if(equipoForm.get('nombreCompleto')?.hasError('pattern')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Solo se permiten
+            letras.
+          </label>
+          }
         </div>
 
         <div class="form-group">
@@ -549,24 +579,90 @@
           </label>
           <input
             type="text"
-            id="siglas"
+            id="siglasEquipo"
             formControlName="siglasEquipo"
             class="form-input"
             maxlength="3"
             placeholder="Ej: ARG"
+            (input)="onSiglasInput($event)"
+            [class.is-invalid]="
+              equipoForm.get('siglasEquipo')?.invalid &&
+              equipoForm.get('siglasEquipo')?.touched
+            "
           />
+          @if(equipoForm.get('siglasEquipo')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Ingrese las Siglas
+            del Equipo.
+          </label>
+          } @else if(equipoForm.get('siglasEquipo')?.hasError('minlength') ||
+          equipoForm.get('siglasEquipo')?.hasError('maxlength')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Deben ser Exactamente
+            3 letras.
+          </label>
+          } @else if(equipoForm.get('siglasEquipo')?.hasError('pattern')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Solo se permiten
+            letras (A-Z).
+          </label>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="bandera">
+            <a href="https://flagpedia.net/index" target="_blank"
+              ><i class="fa-solid fa-globe"></i> URL Bandera *</a
+            >
+          </label>
+          <input
+            type="url"
+            id="bandera"
+            formControlName="bandera"
+            class="form-input"
+            placeholder="https://flagcdn.com/us.svg"
+            [class.is-invalid]="
+              equipoForm.get('bandera')?.invalid &&
+              equipoForm.get('bandera')?.touched
+            "
+          />
+          @if(equipoForm.get('bandera')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Ingrese la URL de la
+            Bandera.
+          </label>
+          } @else if(equipoForm.get('bandera')?.hasError('pattern')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Se requiere una URL
+            válida de imagen (https://flagcdn.com/...).
+          </label>
+          }
         </div>
 
         <div class="form-group">
           <label for="grupoEquipo">
             <i class="fa-solid fa-people-group"></i> Grupo *
           </label>
-          <select id="grupoEquipo" formControlName="grupo" class="form-select">
+          <select
+            id="grupoEquipo"
+            formControlName="grupoEquipo"
+            class="form-select"
+            [class.is-invalid]="
+              equipoForm.get('grupoEquipo')?.invalid &&
+              equipoForm.get('grupoEquipo')?.touched
+            "
+          >
             <option value="">Seleccionar grupo</option>
             <option *ngFor="let grupo of grupos" [value]="grupo">
               Grupo {{ grupo }}
             </option>
           </select>
+          @if(equipoForm.get('grupoEquipo')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Selecione el Grupo
+            del Equipo.
+          </label>
+          }
         </div>
 
         <div class="form-group">
@@ -575,12 +671,26 @@
           </label>
           <input
             type="number"
-            id="ranking"
+            id="rankingFifa"
             formControlName="rankingFifa"
             class="form-input"
-            min="0"
-            placeholder="Ej: 1"
+            [class.is-invalid]="
+              equipoForm.get('rankingFifa')?.invalid &&
+              equipoForm.get('rankingFifa')?.touched
+            "
           />
+          @if(equipoForm.get('rankingFifa')?.hasError('required')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Ingrese el numero de
+            Ranking.
+          </label>
+          } @if(equipoForm.get('rankingFifa')?.hasError('min') ||
+          equipoForm.get('rankingFifa')?.hasError('max')) {
+          <label>
+            <i class="fa-solid fa-exclamation-circle"></i> Debe ser un número
+            entre 1 y 211.
+          </label>
+          }
         </div>
 
         <div class="form-group full-width">
@@ -612,42 +722,108 @@
             [formGroupName]="i"
             class="jugador-formulario"
           >
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="text-warning m-0">Jugador #{{ i + 1 }}</h6>
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm"
+                (click)="removerJugador(i)"
+              >
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+
             <div class="form-grid-jugador">
               <div class="form-group">
-                <label>Nombre</label>
+                <label>Nombre *</label>
                 <input
                   type="text"
                   formControlName="nombre"
+                  id="nombre"
                   class="form-input"
                   placeholder="Nombre"
+                  [class.is-invalid]="
+                    jugador.get('nombre')?.invalid &&
+                    jugador.get('nombre')?.touched
+                  "
                 />
+                @if(jugador.get('nombre')?.hasError('required')) {
+                <label>
+                  <i class="fa-solid fa-exclamation-circle"></i> Ingrese el
+                  Nombre del Jugador.
+                </label>
+                } @else if(jugador.get('nombre')?.hasError('pattern')) {
+                <label>
+                  <i class="fa-solid fa-exclamation-circle"></i> Solo se
+                  permiten letras.
+                </label>
+                }
               </div>
 
               <div class="form-group">
-                <label>Apellido</label>
+                <label>Apellido *</label>
                 <input
                   type="text"
                   formControlName="apellido"
+                  id="apellido"
                   class="form-input"
                   placeholder="Apellido"
+                  [class.is-invalid]="
+                    jugador.get('apellido')?.invalid &&
+                    jugador.get('apellido')?.touched
+                  "
                 />
+                @if(jugador.get('apellido')?.hasError('required')) {
+                <label>
+                  <i class="fa-solid fa-exclamation-circle"></i> Ingrese el
+                  Apellido del Jugador.
+                </label>
+                } @else if(jugador.get('apellido')?.hasError('pattern')) {
+                <label>
+                  <i class="fa-solid fa-exclamation-circle"></i> Solo se
+                  permiten letras.
+                </label>
+                }
               </div>
 
               <div class="form-group">
-                <label>Número</label>
+                <label>Número *</label>
                 <input
                   type="number"
                   formControlName="numeroCamiseta"
+                  id="numeroCamiseta"
                   class="form-input"
-                  min="1"
-                  max="99"
                   placeholder="#"
+                  [class.is-invalid]="
+                    jugador.get('numeroCamiseta')?.invalid &&
+                    jugador.get('numeroCamiseta')?.touched
+                  "
                 />
+                @if(jugador.get('numeroCamiseta')?.hasError('required')) {
+                <label>
+                  <i class="fa-solid fa-exclamation-circle"></i> Ingrese el
+                  Numero del Jugador.
+                </label>
+                }@else if(jugador.get('numeroCamiseta')?.hasError('min') ||
+                jugador.get('numeroCamiseta')?.hasError('max')) {
+                <label>
+                  <i class="fa-solid fa-exclamation-circle"></i> Solo se
+                  permiten numero entre 1 y 999.
+                </label>
+                }
               </div>
 
               <div class="form-group">
-                <label>Posición</label>
-                <select formControlName="posicion" class="form-select">
+                <label>Posición *</label>
+                <select
+                  formControlName="posicion"
+                  id="posicion"
+                  class="form-select"
+                  [class.is-invalid]="
+                    jugador.get('posicion')?.invalid &&
+                    jugador.get('posicion')?.touched
+                  "
+                >
                   <option value="">Seleccionar</option>
                   <option
                     *ngFor="let posicion of posiciones"
@@ -656,6 +832,37 @@
                     {{ posicion }}
                   </option>
                 </select>
+                @if(jugador.get('posicion')?.hasError('required')) {
+                <label>
+                  <i class="fa-solid fa-exclamation-circle"></i> Ingrese la
+                  posicion del Jugador.
+                </label>
+                }
+              </div>
+
+              <div class="form-group">
+                <label>Fecha de Nacimiento *</label>
+                <input
+                  type="date"
+                  formControlName="fechaNacimiento"
+                  id="fechaNacimiento"
+                  class="form-input"
+                  [class.is-invalid]="
+                    jugador.get('fechaNacimiento')?.invalid &&
+                    jugador.get('fechaNacimiento')?.touched
+                  "
+                />
+                @if(jugador.get('fechaNacimiento')?.hasError('required')) {
+                <label>
+                  <i class="fa-solid fa-exclamation-circle"></i>La fecha de
+                  nacimiento es obligatoria.
+                </label>
+                } @if(jugador.get('fechaNacimiento')?.hasError('fechaFutura')) {
+                <label>
+                  <i class="fa-solid fa-exclamation-circle"></i>La fecha de
+                  nacimiento debe ser menor a la fecha actual.
+                </label>
+                }
               </div>
             </div>
           </div>
