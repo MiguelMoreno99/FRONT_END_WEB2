@@ -8,8 +8,8 @@ import { Partido, PartidoCreate } from '../models/partido.model';
   providedIn: 'root'
 })
 export class PartidoService {
-  private apiUrl = 'http://localhost:8080/api/Partido';
-  //private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Partido';
+  //private apiUrl = 'http://localhost:8080/api/Partido';
+  private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Partido';
 
   constructor(private http: HttpClient) { }
 

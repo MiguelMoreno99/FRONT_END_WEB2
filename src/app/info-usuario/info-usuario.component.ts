@@ -47,6 +47,8 @@ export class InfoUsuarioComponent implements OnInit {
     'Delantero Centro'
   ];
 
+  // En el componente, agrega estas propiedades
+
   constructor(
     private usuarioService: UsuarioService,
     private fb: FormBuilder,
