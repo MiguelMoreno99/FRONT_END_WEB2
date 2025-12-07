@@ -19,15 +19,16 @@ export class PartidosComponent implements OnInit {
   public partidoSeleccionado: Partido | null = null;
   public mostrarModal: boolean = false;
   public userId: string | null = null;
+  public userToken: string | null = null;
   public favoritosIds: string[] = [];
   public mensajeExito: string = '';
   public mensajeError: string = '';
   public mostrarModalEdicion: boolean = false;
   public partidoEditando: Partido | null = null;
-  
+
   // Formulario para edición
   public formularioEdicion: FormGroup;
-  
+
   // Opciones para los selects
   public estados = ['PROGRAMADO', 'EN_JUEGO', 'FINALIZADO', 'SUSPENDIDO'];
   public fases = ['FASE_GRUPOS', 'OCTAVOS', 'CUARTOS', 'SEMIFINAL', 'FINAL'];
@@ -43,8 +44,8 @@ export class PartidosComponent implements OnInit {
   public partidosFiltrados: Array<Partido & { stadiumImage: string }> = [];
   public filtroActual: 'todos' | 'favoritos' = 'todos';
 
-  constructor(private partidoService: PartidoService, private favoritosService: FavoritosService, private usuarioService: UsuarioService, private fb: FormBuilder) { 
-  // Inicializar formulario
+  constructor(private partidoService: PartidoService, private favoritosService: FavoritosService, private usuarioService: UsuarioService, private fb: FormBuilder) {
+    // Inicializar formulario
     this.formularioEdicion = this.fb.group({
       fecha: ['', Validators.required],
       estadio: ['', Validators.required],
@@ -84,6 +85,11 @@ export class PartidosComponent implements OnInit {
       if (usuario && usuario.usuario) {
         this.userId = usuario.usuario.id;
         this.favoritosIds = usuario.usuario.favoritos?.partidos || [];
+        if (usuario.token) {
+          this.userToken = usuario.token;
+        } else {
+          this.userToken = null;
+        }
       } else {
         this.userId = null;
         this.favoritosIds = [];
@@ -97,7 +103,6 @@ export class PartidosComponent implements OnInit {
     return this.stadiumImages[i];
   }
 
-  // Métodos para el modal de visualización
   abrirModal(partido: Partido) {
     this.partidoSeleccionado = partido;
     this.mostrarModal = true;
@@ -183,7 +188,6 @@ export class PartidosComponent implements OnInit {
     }
   }
 
-  // Métodos para el modal de edición
   abrirModalEdicion(partido: Partido) {
     this.partidoEditando = { ...partido }; // Crear copia para editar
     this.cargarDatosEnFormulario();
@@ -200,10 +204,9 @@ export class PartidosComponent implements OnInit {
 
   cargarDatosEnFormulario() {
     if (this.partidoEditando) {
-      // Convertir fecha a formato compatible con input date
       const fechaObj = new Date(this.partidoEditando.fecha);
       const fechaFormateada = fechaObj.toISOString().split('T')[0];
-      
+
       this.formularioEdicion.patchValue({
         fecha: fechaFormateada,
         estadio: this.partidoEditando.estadio,
@@ -221,7 +224,7 @@ export class PartidosComponent implements OnInit {
   guardarCambios() {
     if (this.formularioEdicion.valid && this.partidoEditando) {
       const datosActualizados = this.formularioEdicion.value;
-      
+
       // Convertir fecha de vuelta a Date object
       const fechaActualizada = new Date(datosActualizados.fecha);
       var fechaActualizadaString = fechaActualizada.toDateString()
@@ -241,19 +244,19 @@ export class PartidosComponent implements OnInit {
 
       // Aquí normalmente harías una llamada al servicio para actualizar en el backend
       console.log('Guardando cambios:', partidoActualizado);
-      
+
       // Actualizar en la vista localmente
       const index = this.partidosView.findIndex(p => p.id === partidoActualizado.id);
       if (index !== -1) {
-        this.partidosView[index] = { 
-          ...partidoActualizado, 
-          stadiumImage: this.partidosView[index].stadiumImage 
+        this.partidosView[index] = {
+          ...partidoActualizado,
+          stadiumImage: this.partidosView[index].stadiumImage
         };
       }
 
       // Mostrar mensaje de éxito (puedes implementar un toast o alert)
       alert('¡Cambios guardados exitosamente!');
-      
+
       this.cerrarModalEdicion();
     } else {
       // Marcar todos los campos como tocados para mostrar errores

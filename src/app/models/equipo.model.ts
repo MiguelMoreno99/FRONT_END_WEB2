@@ -20,3 +20,14 @@ export interface Equipo {
   fechaCreacion: string;
   jugadores: Jugador[];
 }
+
+export interface EquipoCreate {
+  nombre: string;
+  nombreCompletoPais: string;
+  bandera: string;
+  informacion: string;
+  siglasEquipo: string;
+  grupo: string;
+  rankingFifa: number;
+  jugadores: Jugador[];
+}
