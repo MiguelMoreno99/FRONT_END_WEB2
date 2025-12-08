@@ -247,7 +247,9 @@ input[readonly] {
     gap: 0.5rem;
 }
 
-.form-input, .form-select, .form-textarea {
+.form-input,
+.form-select,
+.form-textarea {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 215, 0, 0.3);
     border-radius: 8px;
@@ -257,7 +259,9 @@ input[readonly] {
     transition: all 0.3s ease;
 }
 
-.form-input:focus, .form-select:focus, .form-textarea:focus {
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
     outline: none;
     border-color: goldenrod;
     box-shadow: 0 0 0 2px rgba(218, 165, 32, 0.2);
@@ -279,8 +283,11 @@ input[readonly] {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.btn-guardar, .btn-cancelar {
-    padding: 0.8rem;}
+.btn-guardar,
+.btn-cancelar {
+    padding: 0.8rem;
+}
+
 /* Cuando el select está enfocado */
 .form-select:focus {
     outline: none !important;
@@ -466,7 +473,8 @@ select#grupo option:not(:first-child) {
 }
 
 /* Estilos para los botones de acción (completar) */
-.btn-guardar, .btn-cancelar {
+.btn-guardar,
+.btn-cancelar {
     padding: 0.8rem 2rem;
     border-radius: 8px;
     font-size: 1rem;
@@ -549,20 +557,21 @@ select#grupo option:not(:first-child) {
     .form-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .form-grid-jugador {
         grid-template-columns: 1fr;
     }
-    
+
     .modal-actions {
         flex-direction: column;
     }
-    
-    .btn-guardar, .btn-cancelar {
+
+    .btn-guardar,
+    .btn-cancelar {
         width: 100%;
         justify-content: center;
     }
-    
+
     .modal-content {
         margin: 10px;
         max-height: 95vh;
@@ -618,7 +627,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 /* Validación visual */
-.form-input.is-invalid, 
+.form-input.is-invalid,
 .form-select.is-invalid {
     border-color: #f44336 !important;
     background: rgba(244, 67, 54, 0.1) !important;

@@ -82,6 +82,13 @@
                   <i class="fa-regular fa-edit"></i>
                 </span>
                 }
+                <span
+                  (click)="eliminarPartido(p, $event)"
+                  class="btn-delete"
+                  title="Eliminar"
+                >
+                  <i class="fa-regular fa-trash-can"></i>
+                </span>
               </div>
             </div>
             <div class="content-card-product">
@@ -258,177 +265,289 @@
 
     <div class="modal-body">
       <!-- Información de equipos (solo lectura) -->
-      <div class="modal-equipos" style="margin-bottom: 2rem">
-        <div class="modal-equipo">
-          <div class="modal-equipo-nombre">
-            {{ partidoEditando?.equipoA?.nombre }}
-          </div>
-          <div class="modal-goles">
-            <input
-              type="number"
-              formControlName="golesEquipoA"
-              class="goles-input"
-              min="0"
-            />
-          </div>
+      <div class="marcador-visualizacion" style="margin-bottom: 2rem">
+        <div class="marcador-header">
+          <h3 style="color: goldenrod; text-align: center; margin-bottom: 20px">
+            <i class="fa-solid fa-scoreboard me-2"></i> Marcador
+          </h3>
         </div>
-        <div class="modal-vs">VS</div>
-        <div class="modal-equipo">
-          <div class="modal-equipo-nombre">
-            {{ partidoEditando?.equipoB?.nombre }}
-          </div>
-          <div class="modal-goles">
-            <input
-              type="number"
-              formControlName="golesEquipoB"
-              class="goles-input"
-              min="0"
-            />
-          </div>
-        </div>
-      </div>
 
-      <!-- Formulario de edición -->
-      <div class="formulario-edicion">
-        <div class="form-grid">
-          <!-- Columna 1 -->
-          <div class="form-group">
-            <label for="fecha">
-              <i class="fa-solid fa-calendar"></i> Fecha *
-            </label>
-            <input
-              type="date"
-              id="fecha"
-              formControlName="fecha"
-              class="form-input"
-              [class.is-invalid]="tieneError('fecha', 'required')"
-            />
-            @if (tieneError('fecha', 'required')){
-            <div class="error-message">La fecha es requerida</div>
-            }
-          </div>
-
-          <div class="form-group">
-            <label for="estadio">
-              <i class="fa-solid fa-location-dot"></i> Estadio *
-            </label>
-            <input
-              type="text"
-              id="estadio"
-              formControlName="estadio"
-              class="form-input"
-              placeholder="Nombre del estadio"
-              [class.is-invalid]="tieneError('estadio', 'required')"
-            />
-            @if (tieneError('estadio', 'required')) {
-            <div class="error-message">El estadio es requerido</div>
-            }
-          </div>
-
-          <div class="form-group">
-            <label for="ciudad">
-              <i class="fa-solid fa-city"></i> Ciudad *
-            </label>
-            <input
-              type="text"
-              id="ciudad"
-              formControlName="ciudad"
-              class="form-input"
-              placeholder="Ciudad"
-              [class.is-invalid]="tieneError('ciudad', 'required')"
-            />
-            @if (tieneError('ciudad', 'required')){
-            <div class="error-message">La ciudad es requerida</div>
-            }
-          </div>
-
-          <!-- Columna 2 -->
-          <div class="form-group">
-            <label for="fase">
-              <i class="fa-solid fa-diagram-project"></i> Fase *
-            </label>
-            <select
-              id="fase"
-              formControlName="fase"
-              class="form-select"
-              [class.is-invalid]="tieneError('fase', 'required')"
-            >
-              <option value="">Seleccionar fase</option>
-              <option *ngFor="let fase of fases" [value]="fase">
-                {{ fase }}
-              </option>
-            </select>
-            @if (tieneError('fase', 'required')) {
-            <div class="error-message">La fase es requerida</div>
-            }
-          </div>
-
-          <div class="form-group">
-            <label for="grupo">
-              <i class="fa-solid fa-people-group"></i> Grupo
-            </label>
-            <select id="grupo" formControlName="grupo" class="form-select">
-              <option value="">Sin grupo</option>
-              <option *ngFor="let grupo of grupos" [value]="grupo">
-                Grupo {{ grupo }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="arbitro">
-              <i class="fa-solid fa-whistle"></i> Árbitro Principal
-            </label>
-            <input
-              type="text"
-              id="arbitro"
-              formControlName="arbitroPrincipal"
-              class="form-input"
-              placeholder="Nombre del árbitro"
-            />
-          </div>
-
-          <!-- Estado (full width) -->
-          <div class="form-group full-width">
-            <label for="estado">
-              <i class="fa-solid fa-flag"></i> Estado del Partido *
-            </label>
-            <div class="estado-options">
-              <label *ngFor="let estado of estados" class="estado-option">
-                <input type="radio" formControlName="estado" [value]="estado" />
-                <span
-                  class="estado-badge"
-                  [class.selected]="
-                    formularioEdicion.get('estado')?.value === estado
-                  "
-                >
-                  {{ estado }}
-                </span>
-              </label>
+        <div class="marcador-equipos">
+          <!-- Equipo A -->
+          <div class="equipo-info">
+            <div class="equipo-nombre">
+              <h4 style="color: #4caf50">
+                {{ partidoEditando?.equipoA?.nombre }}
+              </h4>
             </div>
-            @if (tieneError('estado', 'required')){
-            <div class="error-message">El estado es requerido</div>
-            }
+            <div class="equipo-goles">
+              <div class="goles-display">
+                <span class="goles-numero">
+                  {{ partidoEditando?.golesEquipoA || 0 }}
+                </span>
+              </div>
+              <button
+                class="btn-gol"
+                (click)="abrirRegistroGol('A')"
+                title="Anotar Gol Equipo A"
+              >
+                <i class="fa-solid fa-futbol"></i> +
+              </button>
+            </div>
+          </div>
+
+          <!-- Separador -->
+          <div class="marcador-separador">
+            <span style="color: goldenrod; font-size: 2rem; font-weight: bold"
+              >VS</span
+            >
+          </div>
+
+          <!-- Equipo B -->
+          <div class="equipo-info">
+            <div class="equipo-nombre">
+              <h4 style="color: #2196f3">
+                {{ partidoEditando?.equipoB?.nombre }}
+              </h4>
+            </div>
+            <div class="equipo-goles">
+              <div class="goles-display">
+                <span class="goles-numero">
+                  {{ partidoEditando?.golesEquipoB || 0 }}
+                </span>
+              </div>
+              <button
+                class="btn-gol"
+                (click)="abrirRegistroGol('B')"
+                title="Anotar Gol Equipo B"
+              >
+                <i class="fa-solid fa-futbol"></i> +
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Botones de acción -->
-        <div class="modal-actions">
-          <button
-            type="button"
-            class="btn-cancelar"
-            (click)="cerrarModalEdicion()"
-          >
-            <i class="fa-solid fa-times"></i> Cancelar
-          </button>
-          <button
-            type="button"
-            class="btn-guardar"
-            (click)="guardarCambios()"
-            [disabled]="formularioEdicion.invalid"
-          >
-            <i class="fa-solid fa-save"></i> Guardar Cambios
-          </button>
+        @if (mostrarInputGol) {
+        <div class="gol-input-overlay">
+          <div class="gol-input-box">
+            <h4>
+              ¡Gol de
+              {{
+                equipoAnotador === "A"
+                  ? partidoEditando?.equipoA?.nombre
+                  : partidoEditando?.equipoB?.nombre
+              }}!
+            </h4>
+            <p>Ingresa el nombre del jugador o comentario:</p>
+            <input
+              type="text"
+              placeholder="Ej: Messi de tiro libre"
+              class="form-input"
+              autofocus
+            />
+            <div class="gol-actions">
+              <button class="btn-cancelar-sm" (click)="cancelarGol()">
+                Cancelar
+              </button>
+              <button class="btn-aceptar-sm" (click)="confirmarGol()">
+                Aceptar
+              </button>
+            </div>
+          </div>
+        </div>
+        }
+
+        <div class="formulario-edicion">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="fecha">
+                <i class="fa-solid fa-calendar"></i> Fecha
+              </label>
+              <input
+                type="date"
+                id="fecha"
+                formControlName="fecha"
+                class="form-input"
+                [class.is-invalid]="
+                  formularioEdicion.get('fecha')?.invalid &&
+                  formularioEdicion.get('fecha')?.touched
+                "
+              />
+              @if(formularioEdicion.get('fecha')?.hasError('required')) {
+              <label>
+                <i class="fa-solid fa-exclamation-circle"></i>La fecha es
+                requerida.
+              </label>
+              } @if(formularioEdicion.get('fecha')?.hasError('fechaAnterior')) {
+              <label>
+                <i class="fa-solid fa-exclamation-circle"></i> La fecha del
+                partido debe ser mayor o igual a la fecha actual.
+              </label>
+              }
+            </div>
+
+            <!-- Hora -->
+            <div class="form-group">
+              <label for="HoraPartido">
+                <i class="fa-solid fa-clock"></i> Hora
+              </label>
+              <input
+                type="time"
+                id="hora"
+                formControlName="hora"
+                class="form-input"
+                [class.is-invalid]="
+                  formularioEdicion.get('hora')?.invalid &&
+                  formularioEdicion.get('hora')?.touched
+                "
+              />
+              @if(formularioEdicion.get('hora')?.hasError('required')) {
+              <label>
+                <i class="fa-solid fa-exclamation-circle"></i> La hora del
+                partido es obligatoria.
+              </label>
+              }@else if(formularioEdicion.get('hora')?.hasError('horaFutura')) {
+              <label>
+                <i class="fa-solid fa-exclamation-circle"></i> La hora del
+                partido debe ser mayor a la hora actual.
+              </label>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="estadio">
+                <i class="fa-solid fa-location-dot"></i> Estadio
+              </label>
+              <input
+                type="text"
+                id="estadio"
+                formControlName="estadio"
+                class="form-input"
+                placeholder="Nombre del estadio"
+                [class.is-invalid]="
+                  formularioEdicion.get('estadio')?.invalid &&
+                  formularioEdicion.get('estadio')?.touched
+                "
+              />
+              @if (formularioEdicion.get('estadio')?.hasError('required')) {
+              <label>
+                <i class="fa-solid fa-exclamation-circle"></i> El estadio es
+                requerido.
+              </label>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="ciudad">
+                <i class="fa-solid fa-city"></i> Ciudad
+              </label>
+              <input
+                type="text"
+                id="ciudad"
+                formControlName="ciudad"
+                class="form-input"
+                placeholder="Ciudad"
+                [class.is-invalid]="
+                  formularioEdicion.get('ciudad')?.invalid &&
+                  formularioEdicion.get('ciudad')?.touched
+                "
+              />
+              @if (formularioEdicion.get('ciudad')?.hasError('required')){
+              <label>
+                <i class="fa-solid fa-exclamation-circle"></i> La ciudad es
+                requerida.
+              </label>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="arbitro">
+                <i class="fa-solid fa-whistle"></i> Árbitro Principal
+              </label>
+              <input
+                type="text"
+                id="arbitroPrincipal"
+                formControlName="arbitroPrincipal"
+                class="form-input"
+                placeholder="Nombre del árbitro"
+                [class.is-invalid]="
+                  formularioEdicion.get('arbitroPrincipal')?.invalid &&
+                  formularioEdicion.get('arbitroPrincipal')?.touched
+                "
+              />
+              @if
+              (formularioEdicion.get('arbitroPrincipal')?.hasError('pattern')){
+              <label>
+                <i class="fa-solid fa-exclamation-circle"></i> Ingrese un nombre
+                válido
+              </label>
+              }
+            </div>
+
+            <div class="form-group full-width">
+              <label for="estado">
+                <i class="fa-solid fa-flag"></i> Estado del Partido
+              </label>
+              <div class="estado-options">
+                <label *ngFor="let estado of estados" class="estado-option">
+                  <input
+                    type="radio"
+                    formControlName="estado"
+                    [value]="estado"
+                    [attr.disabled]="true"
+                  />
+                  <span
+                    class="estado-badge"
+                    [class.selected]="
+                      formularioEdicion.get('estado')?.value === estado
+                    "
+                  >
+                    {{ estado }}
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-actions-container">
+            <div class="estado-actions">
+              @if (partidoEditando?.estado === 'PROGRAMADO') {
+              <button
+                type="button"
+                class="btn-iniciar"
+                (click)="iniciarPartido()"
+              >
+                <i class="fa-solid fa-play"></i> Iniciar Partido
+              </button>
+              } @if (partidoEditando?.estado === 'EN_JUEGO') {
+              <button
+                type="button"
+                class="btn-finalizar"
+                (click)="finalizarPartido()"
+              >
+                <i class="fa-solid fa-flag-checkered"></i> Finalizar Partido
+              </button>
+              }
+            </div>
+
+            <div class="save-actions">
+              <button
+                type="button"
+                class="btn-cancelar"
+                (click)="cerrarModalEdicion()"
+              >
+                <i class="fa-solid fa-times"></i> Cancelar
+              </button>
+              <button
+                type="button"
+                class="btn-guardar"
+                (click)="guardarCambios()"
+                [disabled]="formularioEdicion.invalid"
+              >
+                <i class="fa-solid fa-save"></i> Guardar Cambios
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

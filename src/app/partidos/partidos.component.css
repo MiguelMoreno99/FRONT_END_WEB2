@@ -442,356 +442,566 @@ h3 {
 
 /* Responsive */
 @media (max-width: 768px) {
-    .modal-content {
-        margin: 10px;
-        max-height: 95vh;
-    }
-    
-    .modal-equipos {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .modal-vs {
-        padding: 0.5rem 0;
-    }
-    
-    .modal-info-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .equipos-detalle {
-        grid-template-columns: 1fr;
-    }
-    
-    .info-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.3rem;
-    }
+  .modal-content {
+    margin: 10px;
+    max-height: 95vh;
+  }
+
+  .modal-equipos {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .modal-vs {
+    padding: 0.5rem 0;
+  }
+
+  .modal-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .equipos-detalle {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
 }
 
 /* MODAL DE EDICIÓN - ESTILOS ESPECÍFICOS */
 .modal-edicion .modal-content {
-    max-width: 900px;
-    max-height: 85vh;
+  max-width: 900px;
+  max-height: 85vh;
 }
 
 .formulario-edicion {
-    padding: 1rem 0;
+  padding: 1rem 0;
 }
 
 .form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group.full-width {
-    grid-column: 1 / -1;
+  grid-column: 1 / -1;
 }
 
 .form-group label {
-    color: goldenrod;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  color: goldenrod;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.form-input, .form-select {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    border-radius: 8px;
-    padding: 0.8rem 1rem;
-    color: white;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+.form-input,
+.form-select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
-.form-input:focus, .form-select:focus {
-    outline: none;
-    border-color: goldenrod;
-    box-shadow: 0 0 0 2px rgba(218, 165, 32, 0.2);
-    background: rgba(255, 255, 255, 0.15);
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: goldenrod;
+  box-shadow: 0 0 0 2px rgba(218, 165, 32, 0.2);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .form-input::placeholder {
-    color: #777;
+  color: #777;
 }
 
 /* Input para goles */
 .goles-input {
-    width: 60px;
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 700;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid goldenrod;
-    border-radius: 8px;
-    color: goldenrod;
-    padding: 0.5rem;
+  width: 60px;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid goldenrod;
+  border-radius: 8px;
+  color: goldenrod;
+  padding: 0.5rem;
 }
 
 .goles-input:focus {
-    outline: none;
-    box-shadow: 0 0 10px rgba(218, 165, 32, 0.5);
+  outline: none;
+  box-shadow: 0 0 10px rgba(218, 165, 32, 0.5);
 }
 
 /* Estado del partido - opciones de radio */
 .estado-options {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .estado-option {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .estado-option input[type="radio"] {
-    display: none;
+  display: none;
 }
 
 .estado-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ccc;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ccc;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
 }
 
 .estado-badge.selected {
-    background: rgba(218, 165, 32, 0.3);
-    border-color: goldenrod;
-    color: goldenrod;
-    font-weight: 600;
-}
-
-.estado-option:hover .estado-badge:not(.selected) {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
+  background: rgba(218, 165, 32, 0.3);
+  border-color: goldenrod;
+  color: goldenrod;
+  font-weight: 600;
 }
 
 /* Botones de acción */
 .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.btn-guardar, .btn-cancelar {
-    padding: 0.8rem 2rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
-    border: none;
+.btn-guardar,
+.btn-cancelar {
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  border: none;
 }
 
 .btn-guardar {
-    background: goldenrod;
-    color: black;
+  background: goldenrod;
+  color: black;
 }
 
 .btn-guardar:hover:not(:disabled) {
-    background: #ffd700;
-    transform: translateY(-2px);
+  background: #ffd700;
+  transform: translateY(-2px);
 }
 
 .btn-guardar:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .btn-cancelar {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .btn-cancelar:hover {
-    background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* Mensajes de error */
 .error-message {
-    color: #ff6b6b;
-    font-size: 0.8rem;
-    margin-top: 0.3rem;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
-.form-input.is-invalid, .form-select.is-invalid {
-    border-color: #ff6b6b;
-    background: rgba(255, 107, 107, 0.1);
+.form-input.is-invalid,
+.form-select.is-invalid {
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
 }
 
 /* Select con icono */
 .combo-box-container {
-    position: relative;
+  position: relative;
 }
 
 .form-select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='goldenrod' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 16px 12px;
-    padding-right: 2.5rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='goldenrod' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 16px 12px;
+  padding-right: 2.5rem;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .estado-options {
-        justify-content: center;
-    }
-    
-    .modal-actions {
-        flex-direction: column;
-    }
-    
-    .btn-guardar, .btn-cancelar {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .modal-edicion .modal-content {
-        margin: 10px;
-        max-height: 95vh;
-    }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .estado-options {
+    justify-content: center;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .btn-guardar,
+  .btn-cancelar {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .modal-edicion .modal-content {
+    margin: 10px;
+    max-height: 95vh;
+  }
 }
 
 .form-select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 215, 0, 0.3) !important;
-    border-radius: 8px !important;
-    padding: 0.8rem 3rem 0.8rem 1rem !important;
-    color: white !important;
-    font-size: 1rem !important;
-    transition: all 0.3s ease !important;
-    width: 100% !important;
-    cursor: pointer !important;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 215, 0, 0.3) !important;
+  border-radius: 8px !important;
+  padding: 0.8rem 3rem 0.8rem 1rem !important;
+  color: white !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+  width: 100% !important;
+  cursor: pointer !important;
 }
 
 /* Flecha personalizada */
 .form-select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='goldenrod' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 1rem center !important;
-    background-size: 16px 12px !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='goldenrod' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 1rem center !important;
+  background-size: 16px 12px !important;
 }
 
 /* Cuando el select está enfocado */
 .form-select:focus {
-    outline: none !important;
-    border-color: goldenrod !important;
-    box-shadow: 0 0 0 2px rgba(218, 165, 32, 0.2) !important;
-    background: rgba(255, 255, 255, 0.15) !important;
+  outline: none !important;
+  border-color: goldenrod !important;
+  box-shadow: 0 0 0 2px rgba(218, 165, 32, 0.2) !important;
+  background: rgba(255, 255, 255, 0.15) !important;
 }
 
 /* Placeholder/opción por defecto */
 .form-select option:first-child {
-    color: #888 !important;
-    font-style: italic !important;
+  color: #888 !important;
+  font-style: italic !important;
 }
 
 /* Opciones dentro del select */
 .form-select option {
-    background-color: #1a1a1a !important;
-    color: white !important;
-    padding: 10px !important;
-    font-size: 1rem !important;
+  background-color: #1a1a1a !important;
+  color: white !important;
+  padding: 10px !important;
+  font-size: 1rem !important;
 }
 
 /* Opción seleccionada */
 .form-select option:checked {
-    background: goldenrod !important;
-    color: black !important;
-    font-weight: bold !important;
+  background: goldenrod !important;
+  color: black !important;
+  font-weight: bold !important;
 }
 
 /* Opción al pasar el mouse */
 .form-select option:hover {
-    background: rgba(218, 165, 32, 0.3) !important;
+  background: rgba(218, 165, 32, 0.3) !important;
 }
 
 /* Contenedor para mejor control */
-.combo-box-
-
-{
-    position: relative;
-    width: 100%;
+.combo-box- {
+  position: relative;
+  width: 100%;
 }
 
 /* Para cuando el select está vacío o sin selección */
 .form-select:invalid {
-    color: #aaa !important;
+  color: #aaa !important;
 }
 
 .form-select:valid {
-    color: white !important;
+  color: white !important;
 }
 
 select:not(:empty) {
-    color: white !important;
+  color: white !important;
 }
 
 
 select#grupo {
-    color: white !important;
+  color: white !important;
 }
 
 select#grupo option:first-child {
-    color: #aaa !important;
+  color: #aaa !important;
 }
 
 select#grupo option:not(:first-child) {
-    color: white !important;
+  color: white !important;
 }
 
 .form-select,
 .form-select option,
 .form-select optgroup {
-    color-scheme: dark !important;
-    color: white !important;
+  color-scheme: dark !important;
+  color: white !important;
 }
 
 
 
 /* Para Firefox */
 @-moz-document url-prefix() {
-    .form-select {
-        color: white !important;
-        text-shadow: 0 0 0 white !important;
-    }}
+  .form-select {
+    color: white !important;
+    text-shadow: 0 0 0 white !important;
+  }
+}
+
+.marcador-visualizacion {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.marcador-equipos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.equipo-info {
+  flex: 1;
+  text-align: center;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.equipo-nombre {
+  margin-bottom: 10px;
+}
+
+.goles-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.goles-numero {
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  min-width: 60px;
+  text-align: center;
+}
+
+.marcador-separador {
+  font-size: 2rem;
+  font-weight: bold;
+  color: goldenrod;
+  padding: 0 20px;
+}
+
+.btn-gol {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid goldenrod;
+  color: goldenrod;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-gol:hover {
+  background: goldenrod;
+  color: black;
+  transform: scale(1.1);
+}
+
+/* Overlay para el input del gol (Mini modal) */
+.gol-input-overlay {
+  position: absolute;
+  /* Absoluto respecto al modal content */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  backdrop-filter: blur(2px);
+}
+
+.gol-input-box {
+  background: #2d2d2d;
+  padding: 2rem;
+  border-radius: 10px;
+  border: 1px solid goldenrod;
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(218, 165, 32, 0.3);
+}
+
+.gol-input-box h4 {
+  color: goldenrod;
+  margin-bottom: 1rem;
+}
+
+.gol-input-box p {
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+.gol-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-aceptar-sm,
+.btn-cancelar-sm {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-aceptar-sm {
+  background: goldenrod;
+  color: black;
+}
+
+.btn-cancelar-sm {
+  background: #444;
+  color: white;
+}
+
+/* Contenedor de acciones del pie de página */
+.modal-actions-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.estado-actions,
+.save-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Botones de Iniciar/Finalizar */
+.btn-iniciar {
+  background: #28a745;
+  /* Verde */
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-iniciar:hover {
+  background: #218838;
+  box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
+}
+
+.btn-finalizar {
+  background: #dc3545;
+  /* Rojo */
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-finalizar:hover {
+  background: #c82333;
+  box-shadow: 0 0 10px rgba(220, 53, 69, 0.4);
+}
+
+/* Ajuste responsive */
+@media (max-width: 768px) {
+  .modal-actions-container {
+    flex-direction: column;
+  }
+
+  .estado-actions,
+  .save-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-iniciar,
+  .btn-finalizar {
+    width: 100%;
+    justify-content: center;
+  }
+}

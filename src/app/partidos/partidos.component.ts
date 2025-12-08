@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule, NgFor } from '@angular/common';
 import { PartidoService } from '../services/partidos.service';
-import { Partido } from '../models/partido.model';
+import { Partido, PartidoEdit } from '../models/partido.model';
 import { FavoritosService } from '../services/favoritos.service';
 import { UsuarioService } from '../services/usuario.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-partidos',
@@ -25,12 +25,15 @@ export class PartidosComponent implements OnInit {
   public mensajeError: string = '';
   public mostrarModalEdicion: boolean = false;
   public partidoEditando: Partido | null = null;
+  public mostrarInputGol: boolean = false;
+  public equipoAnotador: 'A' | 'B' | null = null;
+  public comentarioGol: string = '';
 
   // Formulario para edición
   public formularioEdicion: FormGroup;
 
   // Opciones para los selects
-  public estados = ['PROGRAMADO', 'EN_JUEGO', 'FINALIZADO', 'SUSPENDIDO'];
+  public estados = ['PROGRAMADO', 'EN_JUEGO', 'FINALIZADO'];
   public fases = ['FASE_GRUPOS', 'OCTAVOS', 'CUARTOS', 'SEMIFINAL', 'FINAL'];
   public grupos = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
@@ -45,19 +48,60 @@ export class PartidosComponent implements OnInit {
   public filtroActual: 'todos' | 'favoritos' = 'todos';
 
   constructor(private partidoService: PartidoService, private favoritosService: FavoritosService, private usuarioService: UsuarioService, private fb: FormBuilder) {
-    // Inicializar formulario
     this.formularioEdicion = this.fb.group({
-      fecha: ['', Validators.required],
-      estadio: ['', Validators.required],
-      ciudad: ['', Validators.required],
-      fase: ['', Validators.required],
-      grupo: [''],
-      arbitroPrincipal: [''],
-      estado: ['', Validators.required],
-      golesEquipoA: [0, [Validators.required, Validators.min(0)]],
-      golesEquipoB: [0, [Validators.required, Validators.min(0)]]
+      fecha: ['', [Validators.required, this.fechaProximaValidator]],
+      hora: ['', Validators.required],
+      estadio: ['', [Validators.required]],
+      ciudad: ['', [Validators.required]],
+      arbitroPrincipal: ['', [Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.]+$/)]],
+      estado: ['', [Validators.required]]
+    }, {
+      validators: [this.validarHoraSiEsHoy]
     });
   }
+
+  fechaProximaValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    if (!control.value) {
+      return null;
+    }
+    const inputDate = new Date(control.value + 'T00:00:00');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (inputDate < today) {
+      return { fechaAnterior: true };
+    }
+    return null;
+  }
+
+  validarHoraSiEsHoy: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const fechaControl = control.get('fecha');
+    const horaControl = control.get('hora');
+    if (!fechaControl?.value || !horaControl?.value) {
+      return null;
+    }
+    const inputDate = new Date(fechaControl.value + 'T00:00:00');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (inputDate.getTime() === today.getTime()) {
+      const now = new Date();
+      const [hours, minutes] = horaControl.value.split(':');
+      const inputDateTime = new Date();
+      inputDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      if (inputDateTime <= now) {
+        horaControl.setErrors({ ...horaControl.errors, horaFutura: true });
+        return { horaFutura: true };
+      }
+    }
+    if (horaControl.errors && horaControl.errors['horaFutura']) {
+      delete horaControl.errors['horaFutura'];
+      if (Object.keys(horaControl.errors).length === 0) {
+        horaControl.setErrors(null);
+      } else {
+        horaControl.setErrors(horaControl.errors);
+      }
+    }
+    return null;
+  };
 
   ngOnInit(): void {
     this.loadPartidos();
@@ -189,7 +233,7 @@ export class PartidosComponent implements OnInit {
   }
 
   abrirModalEdicion(partido: Partido) {
-    this.partidoEditando = { ...partido }; // Crear copia para editar
+    this.partidoEditando = { ...partido };
     this.cargarDatosEnFormulario();
     this.mostrarModalEdicion = true;
     document.body.style.overflow = 'hidden';
@@ -205,69 +249,174 @@ export class PartidosComponent implements OnInit {
   cargarDatosEnFormulario() {
     if (this.partidoEditando) {
       const fechaObj = new Date(this.partidoEditando.fecha);
-      const fechaFormateada = fechaObj.toISOString().split('T')[0];
-
+      const year = fechaObj.getFullYear();
+      const month = ('0' + (fechaObj.getMonth() + 1)).slice(-2);
+      const day = ('0' + fechaObj.getDate()).slice(-2);
+      const fechaFormateada = `${year}-${month}-${day}`;
+      const hours = ('0' + fechaObj.getUTCHours()).slice(-2);
+      const minutes = ('0' + fechaObj.getUTCMinutes()).slice(-2);
+      const horaFormateada = `${hours}:${minutes}`;
       this.formularioEdicion.patchValue({
         fecha: fechaFormateada,
+        hora: horaFormateada,
         estadio: this.partidoEditando.estadio,
         ciudad: this.partidoEditando.ciudad,
         fase: this.partidoEditando.fase,
         grupo: this.partidoEditando.grupo || '',
         arbitroPrincipal: this.partidoEditando.arbitroPrincipal || '',
-        estado: this.partidoEditando.estado,
-        golesEquipoA: this.partidoEditando.golesEquipoA,
-        golesEquipoB: this.partidoEditando.golesEquipoB
+        estado: this.partidoEditando.estado
       });
     }
   }
 
   guardarCambios() {
-    if (this.formularioEdicion.valid && this.partidoEditando) {
+    if (this.formularioEdicion.valid && this.partidoEditando && this.userToken) {
       const datosActualizados = this.formularioEdicion.value;
+      const fechaString = `${datosActualizados.fecha}T${datosActualizados.hora}:00`;
+      const fechaLocal = new Date(fechaString);
+      const offset = fechaLocal.getTimezoneOffset() * 60000;
+      const fechaAjustada = new Date(fechaLocal.getTime() - offset);
 
-      // Convertir fecha de vuelta a Date object
-      const fechaActualizada = new Date(datosActualizados.fecha);
-      var fechaActualizadaString = fechaActualizada.toDateString()
-      // Actualizar el partido
-      const partidoActualizado: Partido = {
-        ...this.partidoEditando,
-        fecha: fechaActualizadaString,
+      const partidoEdit: PartidoEdit = {
+        fecha: fechaAjustada.toISOString(),
         estadio: datosActualizados.estadio,
         ciudad: datosActualizados.ciudad,
+        estado: datosActualizados.estado,
         fase: datosActualizados.fase,
         grupo: datosActualizados.grupo,
-        arbitroPrincipal: datosActualizados.arbitroPrincipal,
-        estado: datosActualizados.estado,
-        golesEquipoA: datosActualizados.golesEquipoA,
-        golesEquipoB: datosActualizados.golesEquipoB
+        arbitroPrincipal: datosActualizados.arbitroPrincipal
       };
 
-      // Aquí normalmente harías una llamada al servicio para actualizar en el backend
-      console.log('Guardando cambios:', partidoActualizado);
+      console.log('Enviando al backend:', partidoEdit);
 
-      // Actualizar en la vista localmente
-      const index = this.partidosView.findIndex(p => p.id === partidoActualizado.id);
-      if (index !== -1) {
-        this.partidosView[index] = {
-          ...partidoActualizado,
-          stadiumImage: this.partidosView[index].stadiumImage
-        };
-      }
+      this.partidoService.editarPartido(
+        this.partidoEditando.id,
+        partidoEdit,
+        this.userToken!
+      ).subscribe({
+        next: (partidoActualizado: Partido) => {
+          console.log('Respuesta del backend:', partidoActualizado);
 
-      // Mostrar mensaje de éxito (puedes implementar un toast o alert)
-      alert('¡Cambios guardados exitosamente!');
 
-      this.cerrarModalEdicion();
+          const index = this.partidosView.findIndex(p => p.id === partidoActualizado.id);
+          if (index !== -1) {
+
+            const nuevosPartidos = [...this.partidosView];
+
+            nuevosPartidos[index] = {
+              ...partidoActualizado,
+              stadiumImage: this.partidosView[index].stadiumImage
+            };
+
+            this.partidosView = nuevosPartidos;
+          }
+
+          this.mostrarMensajeExito('Partido actualizado correctamente.');
+          this.loadPartidos()
+          this.cerrarModalEdicion();
+        },
+        error: (error) => {
+          console.error('Error al guardar cambios:', error);
+
+          this.mostrarMensajeError('Error al guardar cambios: ' + (error.error?.message || error.message || 'Error desconocido'));
+        }
+      });
     } else {
-      // Marcar todos los campos como tocados para mostrar errores
-      this.formularioEdicion.markAllAsTouched();
-      alert('Por favor, complete todos los campos requeridos correctamente.');
+      if (!this.userToken) {
+        this.mostrarMensajeError('Error: No estás autenticado');
+      } else {
+        this.mostrarMensajeError('Por favor complete todos los campos requeridos correctamente');
+      }
     }
   }
 
-  // Método auxiliar para verificar errores en el formulario
-  tieneError(controlName: string, errorType: string): boolean {
-    const control = this.formularioEdicion.get(controlName);
-    return control ? control.hasError(errorType) && (control.dirty || control.touched) : false;
+  abrirRegistroGol(equipo: 'A' | 'B') {
+    this.equipoAnotador = equipo;
+    this.comentarioGol = '';
+    this.mostrarInputGol = true;
+  }
+
+  cancelarGol() {
+    this.mostrarInputGol = false;
+    this.equipoAnotador = null;
+    this.comentarioGol = '';
+  }
+
+  confirmarGol() {
+    if (!this.partidoEditando || !this.equipoAnotador || !this.userToken) return;
+    const deltaGolA = this.equipoAnotador === 'A' ? 1 : 0;
+    const deltaGolB = this.equipoAnotador === 'B' ? 1 : 0;
+    const comentario = this.comentarioGol.trim() || `Gol de ${this.equipoAnotador === 'A' ? this.partidoEditando.equipoA.nombre : this.partidoEditando.equipoB.nombre}`;
+    this.partidoService.actualizarMarcador(
+      this.partidoEditando.id,
+      deltaGolA,
+      deltaGolB,
+      comentario,
+      this.userToken
+    ).subscribe({
+      next: (partidoActualizado) => {
+        this.mostrarMensajeExito(`¡Gol registrado correctamente!`);
+        this.loadPartidos();
+        this.cancelarGol();
+        this.cerrarModalEdicion();
+      },
+      error: (err) => {
+        console.error(err);
+        this.mostrarMensajeError('Error al registrar el gol en el servidor.');
+      }
+    });
+  }
+
+  iniciarPartido() {
+    if (!this.partidoEditando || !this.userToken) return;
+    if (confirm('¿Estás seguro de iniciar este partido? Pasará a estado EN_JUEGO.')) {
+      this.partidoService.iniciarPartido(this.partidoEditando.id, this.userToken).subscribe({
+        next: (partido) => {
+          this.loadPartidos();
+          this.mostrarMensajeExito('El partido ha comenzado.');
+          this.cerrarModalEdicion();
+        },
+        error: (err) => this.mostrarMensajeError('No se pudo iniciar el partido.')
+      });
+    }
+  }
+
+  finalizarPartido() {
+    if (!this.partidoEditando || !this.userToken) return;
+
+    if (confirm('¿Estás seguro de finalizar el partido? Pasará a estado FINALIZADO.')) {
+      this.partidoService.finalizarPartido(this.partidoEditando.id, this.userToken).subscribe({
+        next: (partido) => {
+          this.loadPartidos();
+          this.mostrarMensajeExito('El partido ha finalizado.');
+          this.cerrarModalEdicion();
+        },
+        error: (err) => this.mostrarMensajeError('No se pudo finalizar el partido.')
+      });
+    }
+  }
+
+  eliminarPartido(partido: Partido, event: Event) {
+    event.stopPropagation();
+
+    if (!this.userToken) return;
+
+    const confirmacion = confirm(
+      `¿Estás seguro de eliminar el partido: ${partido.equipoA.nombre} vs ${partido.equipoB.nombre}?\nEsta acción no se puede deshacer.`
+    );
+
+    if (confirmacion) {
+      this.partidoService.eliminarPartido(partido.id, this.userToken).subscribe({
+        next: () => {
+          this.partidosView = this.partidosView.filter(p => p.id !== partido.id);
+          this.aplicarFiltro();
+          this.mostrarMensajeExito('Partido eliminado correctamente.');
+        },
+        error: (err) => {
+          console.error(err);
+          this.mostrarMensajeError('No se pudo eliminar el partido.');
+        }
+      });
+    }
   }
 }

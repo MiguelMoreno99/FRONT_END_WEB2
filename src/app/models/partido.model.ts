@@ -50,11 +50,6 @@ export interface PartidoCreate {
 }
 
 export interface PartidoEdit {
-  id: string;
-  equipoA?: Equipo;
-  equipoB?: Equipo;
-  golesEquipoA?: number;
-  golesEquipoB?: number;
   fecha?: string;
   estadio?: string;
   ciudad?: string;
@@ -62,8 +57,6 @@ export interface PartidoEdit {
   fase?: string;
   grupo?: string;
   arbitroPrincipal?: string;
-  fechaCreacion?: string;
-  fechaActualizacion?: string;
 }
 
 export interface EquipoEdit {

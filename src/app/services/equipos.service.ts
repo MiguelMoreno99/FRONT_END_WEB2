@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Equipo, Jugador, EquipoCreate } from '../models/equipo.model';
+import { Equipo, Jugador, EquipoCreate, JugadorCreate, EquipoUpdate } from '../models/equipo.model';
 import { map, catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
@@ -9,8 +9,8 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class EquiposService {
-  private apiUrl = 'http://localhost:8080/api/Equipo';
-  //private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Equipo';
+  //private apiUrl = 'http://localhost:8080/api/Equipo';
+  private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Equipo';
 
   constructor(private http: HttpClient) { }
 
@@ -47,5 +47,29 @@ export class EquiposService {
     let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
     headers = headers.set('Authorization', `Bearer ${token}`);
     return this.http.post<Equipo>(this.apiUrl, equipo, { headers });
+  }
+
+  editarEquipo(equipoId: string, equipo: EquipoUpdate, token: string): Observable<Equipo> {
+    let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.put<Equipo>(`${this.apiUrl}/${equipoId}`, equipo, { headers });
+  }
+
+  agregarJugador(equipoId: string, jugador: JugadorCreate, token: string): Observable<Jugador> {
+    let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.post<Jugador>(`${this.apiUrl}/jugador/${equipoId}`, jugador, { headers });
+  }
+
+  eliminarJugador(equipoId: string, jugadorId: string, token: string): Observable<void> {
+    let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.delete<void>(`${this.apiUrl}/${equipoId}/jugadores/${jugadorId}`, { headers });
+  }
+
+  eliminarEquipo(id: string, token: string): Observable<any> {
+    let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers });
   }
 }
