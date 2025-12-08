@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormGroupDirective, FormsModule, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
 import { UsuarioService } from '../services/usuario.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-inicio-sesion-registro',
@@ -155,16 +156,25 @@ export class InicioSesionRegistroComponent {
   }
 
   mostrarMensajeError(mensaje: string): void {
-    this.mensajeError = mensaje;
-    setTimeout(() => {
-      this.mensajeError = '';
-    }, 3000);
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: mensaje,
+      background: '#1a1a1a', // Fondo oscuro
+      color: '#fff', // Texto blanco
+      confirmButtonColor: '#d33' // Botón rojo
+    });
   }
 
   mostrarMensajeExito(mensaje: string): void {
-    this.mensajeExito = mensaje;
-    setTimeout(() => {
-      this.mensajeExito = '';
-    }, 3000);
+    Swal.fire({
+      icon: 'success',
+      title: '¡Éxito!',
+      text: mensaje,
+      background: '#1a1a1a',
+      color: '#fff',
+      confirmButtonColor: 'gold',
+      confirmButtonText: '<span style="color:black">Continuar</span>'
+    });
   }
 }

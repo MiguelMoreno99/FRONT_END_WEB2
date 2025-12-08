@@ -1,6 +1,5 @@
 <div class="container-navbar">
   <nav class="navbar contenedorMenu">
-    <i class="fa-solid fa-bars"></i>
     <ul class="menu">
       <li><a [routerLink]="['/equipos']">Equipos</a></li>
       <li><a [routerLink]="['/partidos']">Partidos</a></li>
@@ -9,62 +8,36 @@
 </div>
 <section class="banner">
   <div class="content-banner">
-    <h2>¡Sige todos tus partidos desde aquí!</h2>
-    <p>En vivo y en directo</p>
-    <a [routerLink]="['/partidos']">Encuentralos Aquí</a>
+    <h2>¡Sige a tus equipos favoritos desde aquí!</h2>
+    <p>La informacion mas relevante aqui!</p>
+    <a [routerLink]="['/equipos']">Encuentralos Aquí</a>
   </div>
 </section>
 
 <main class="main-content">
-  <!-- <section class="container">
-    <div class="subscribe page-footer">
-      <div class="info-boletin">
-        <div class="contenido-boletin">
-          <span>Registrate a nuestra página</span>
-          <p>Enterate de todos los eventos</p>
-        </div>
-      </div>
-      <div class="input-boletin">
-        <div class="input-Control item1">
-          <label>Nombre Completo</label>
-          <input
-            name="fullname"
-            type="text"
-            id="boletin-fullname"
-            placeholder="Ingresa nombre completo"
-          />
-        </div>
-        <div class="input-Control">
-          <label>Correo Electrónico</label>
-          <input
-            name="correo"
-            type="text"
-            id="boletin-correo"
-            placeholder="Ingresa correo electrónico"
-          />
-        </div>
-        <a href="#">Registrarse</a>
-      </div>
-    </div>
-  </section> -->
   <section class="container top-categories">
-    <h1 class="header-1">Los Partidos Más Esperados</h1>
+    <h1 class="header-1">Próximos Encuentros</h1>
     <div class="container-categories">
-      <div class="dashboard-seinen">
-        <div class="card-category category-artbooks">
-          <p>Jugadores</p>
-        </div>
+      @for (partido of partidosDestacados; track partido.id) {
+      <div
+        class="card-category"
+        [ngStyle]="{
+          'background-image':
+            'linear-gradient(#00000080,#00000080), url(' +
+            'https://digitalhub.fifa.com/transform/418614b2-4dbb-4b1d-bc90-89acb051865b/Draw-flags-graphic-16x9' +
+            ')'
+        }"
+      >
+        <p style="font-size: 1.8rem">
+          {{ partido.equipoA.nombre }} vs {{ partido.equipoB.nombre }}
+        </p>
+        <span style="color: gold">{{
+          partido.fecha | date : "mediumDate" : "UTC"
+        }}</span>
+
+        <a [routerLink]="['/partidos']" class="btn-ver-mas">Ver Detalles</a>
       </div>
-      <div class="dashboard-shonen">
-        <div class="card-category category-manga">
-          <p>Estádisticas</p>
-        </div>
-      </div>
-      <div class="dashboard-shojo">
-        <div class="card-category category-revistas">
-          <p>GOOOL</p>
-        </div>
-      </div>
+      }
     </div>
   </section>
 

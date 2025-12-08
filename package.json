@@ -30,6 +30,7 @@
     "ngx-bootstrap": "^12.0.0",
     "ngx-ui-tour-md-menu": "^12.1.0",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.26.4",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },
