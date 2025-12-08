@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule,  ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
+import { FormsModule,  ValidationErrors, ValidatorFn, AbstractControl, FormGroup, Validators, FormBuilder, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { EquiposService } from '../services/equipos.service';
 import { Equipo, Jugador, EquipoUpdate, JugadorCreate } from '../models/equipo.model';
@@ -11,7 +11,7 @@ import { lastValueFrom } from 'rxjs';
 @Component({
   selector: 'app-equipos',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, ReactiveFormsModule],
   templateUrl: './equipos.component.html',
   styleUrls: ['./equipos.component.css']
 })
@@ -29,7 +29,8 @@ export class EquiposComponent implements OnInit {
   public favoritosIds: string[] = [];
   public equiposFiltrados: Array<Equipo & { equipoImage: string }> = [];
   public filtroActual: 'todos' | 'favoritos' = 'todos';
-
+  public equipoEditForm : FormGroup
+  public nuevoJugadorForm : FormGroup
   public searchTerm: string = '';
   public grupoFiltro: string = '';
 
@@ -65,7 +66,76 @@ export class EquiposComponent implements OnInit {
   public agregandoJugador: boolean = false;
 
   constructor(private equiposService: EquiposService, private usuarioService: UsuarioService,
-    private favoritosService: FavoritosService) { }
+    private favoritosService: FavoritosService, private fb: FormBuilder) { 
+
+       this.equipoEditForm = this.fb.group({
+        nombre: ['', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]],
+        nombreCompletoPais: ['', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),
+          Validators.minLength(4),
+          Validators.maxLength(100)
+        ]],
+        siglasEquipo: ['', [
+          Validators.required,
+          Validators.pattern(/^[A-Z]{3}$/),
+          Validators.minLength(3),
+          Validators.maxLength(3)
+        ]],
+        grupo: ['', [
+          Validators.required,
+          Validators.pattern(/^[A-H]$/)
+        ]],
+        rankingFifa: ['', [
+          Validators.required,
+          Validators.min(1),
+          Validators.max(211),
+          Validators.pattern(/^[0-9]+$/)
+        ]],
+        bandera: ['', [
+          Validators.pattern(/^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg|webp))$/i)
+        ]],
+        informacion: ['', [
+          Validators.maxLength(500)
+        ]],
+        jugadores: this.fb.array([]) 
+      });
+
+      // Formulario para nuevo jugador
+      this.nuevoJugadorForm = this.fb.group({
+        nombre: ['', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]],
+        apellido: ['', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]],
+        posicion: ['', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-]+$/)
+        ]],
+        numeroCamiseta: ['', [
+          Validators.required,
+          Validators.min(1),
+          Validators.max(999),
+          Validators.pattern(/^[0-9]+$/)
+        ]],
+        fechaNacimiento: ['', [
+          Validators.required,
+          this.fechaPasadaValidator.bind(this)
+        ]]
+      });
+    }
 
   ngOnInit(): void {
     this.cargarEquipos();
@@ -176,13 +246,68 @@ export class EquiposComponent implements OnInit {
   }
 
   abrirModalEdicion(equipo: Equipo) {
-    this.equipoSeleccionado = equipo;
-    this.equipoEditado = JSON.parse(JSON.stringify(equipo));
-    this.jugadoresAAgregar = [];
-    this.jugadoresAEliminar = [];
-    this.mostrarModalEdicion = true;
-    document.body.style.overflow = 'hidden';
+   this.equipoSeleccionado = equipo;
+  this.equipoEditado = JSON.parse(JSON.stringify(equipo));
+  this.jugadoresAAgregar = [];
+  this.jugadoresAEliminar = [];
+  
+  // Inicializar el formulario con los datos del equipo
+  this.inicializarFormularioConDatos();
+  
+  this.mostrarModalEdicion = true;
+  document.body.style.overflow = 'hidden';
   }
+
+  private inicializarFormularioConDatos() {
+  if (!this.equipoEditado) return;
+
+  this.equipoEditForm.patchValue({
+    nombre: this.equipoEditado.nombre || '',
+    nombreCompletoPais: this.equipoEditado.nombreCompletoPais || '',
+    siglasEquipo: this.equipoEditado.siglasEquipo || '',
+    grupo: this.equipoEditado.grupo || '',
+    rankingFifa: this.equipoEditado.rankingFifa || 0,
+    bandera: this.equipoEditado.bandera || '',
+    informacion: this.equipoEditado.informacion || ''
+  });
+
+  // Limpiar y cargar jugadores en el FormArray
+  this.jugadoresArray.clear();
+  if (this.equipoEditado.jugadores && this.equipoEditado.jugadores.length > 0) {
+    this.equipoEditado.jugadores.forEach(jugador => {
+      this.jugadoresArray.push(this.fb.group({
+        id: [jugador.id || ''],
+        nombre: [jugador.nombre || '', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]],
+        apellido: [jugador.apellido || '', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]],
+        posicion: [jugador.posicion || '', [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-]+$/)
+        ]],
+        numeroCamiseta: [jugador.numeroCamiseta || 0, [
+          Validators.required,
+          Validators.min(1),
+          Validators.max(999),
+          Validators.pattern(/^[0-9]+$/)
+        ]],
+        fechaNacimiento: [jugador.fechaNacimiento ? 
+          new Date(jugador.fechaNacimiento).toISOString().split('T')[0] : '', [
+          Validators.required,
+          this.fechaPasadaValidator.bind(this)
+        ]]
+      }));
+    });
+  }
+}
 
   cerrarModalEdicion() {
     this.equipoSeleccionado = null;
@@ -201,10 +326,15 @@ export class EquiposComponent implements OnInit {
     return;
   }
 
+  // Primero sincronizar equipoEditado con los valores actuales del formulario
+  this.sincronizarEquipoEditado();
+
   // Verificar si hay algo para guardar
   const equipoUpdate: EquipoUpdate = this.crearEquipoUpdate();
   const hayCambiosEquipo = Object.keys(equipoUpdate).length > 0;
   const hayCambiosJugadores = this.jugadoresAAgregar.length > 0 || this.jugadoresAEliminar.length > 0;
+
+  
 
   if (!hayCambiosEquipo && !hayCambiosJugadores) {
     this.mensajeError = 'No se detectaron cambios para guardar';
@@ -356,6 +486,35 @@ private agregarJugadoresSecuencialmente(index: number) {
       }`;
       this.guardando = false;
     }
+  });
+}
+// Agrega este método en tu componente
+sincronizarEquipoEditado() {
+  if (!this.equipoEditado) return;
+  
+  // Obtener valores del formulario
+  const formValues = this.equipoEditForm.value;
+  
+  // Actualizar equipoEditado con los valores del formulario
+  this.equipoEditado.nombre = formValues.nombre || '';
+  this.equipoEditado.nombreCompletoPais = formValues.nombreCompletoPais || '';
+  this.equipoEditado.siglasEquipo = formValues.siglasEquipo || '';
+  this.equipoEditado.grupo = formValues.grupo || '';
+  this.equipoEditado.rankingFifa = formValues.rankingFifa || 0;
+  this.equipoEditado.bandera = formValues.bandera || '';
+  this.equipoEditado.informacion = formValues.informacion || '';
+  
+  // También sincronizar jugadores del FormArray
+  this.equipoEditado.jugadores = this.jugadoresArray.controls.map(control => {
+    const jugadorValues = control.value;
+    return {
+      id: jugadorValues.id || '',
+      nombre: jugadorValues.nombre || '',
+      apellido: jugadorValues.apellido || '',
+      posicion: jugadorValues.posicion || '',
+      numeroCamiseta: jugadorValues.numeroCamiseta || 0,
+      fechaNacimiento: jugadorValues.fechaNacimiento || ''
+    };
   });
 }
 
@@ -620,4 +779,227 @@ private manejarErrorEquipo(err: any) {
       }
       return null;
     };
+
+    // En tu clase EquiposComponent, agrega estos métodos:
+
+// Getter para el FormArray de jugadores
+get jugadoresArray() {
+  return this.equipoEditForm.get('jugadores') as FormArray;
+}
+
+// Método para mostrar el formulario de nuevo jugador
+mostrarFormularioNuevoJugador() {
+  this.agregandoJugador = true;
+  this.nuevoJugadorForm.reset(); // Resetear formulario al abrir
+}
+
+// Método para agregar nuevo jugador usando Reactive Forms
+agregarNuevoJugador() {
+  if (this.nuevoJugadorForm.invalid) {
+    this.nuevoJugadorForm.markAllAsTouched();
+    this.mostrarMensajeError('Por favor, completa todos los campos correctamente');
+    return;
+  }
+
+  const valores = this.nuevoJugadorForm.value;
+
+  // Validar que el número no exista
+  const numeroExistente = this.jugadoresArray.controls.some(control => 
+    control.get('numeroCamiseta')?.value === parseInt(valores.numeroCamiseta)
+  );
+
+  if (numeroExistente) {
+    this.mostrarMensajeError('El número de camiseta ya está en uso');
+    return;
+  }
+
+  // Crear jugador para agregar a la lista temporal
+  const jugadorAAgregar: JugadorCreate = {
+    nombre: valores.nombre.trim(),
+    apellido: valores.apellido.trim(),
+    fechaNacimiento: new Date(valores.fechaNacimiento).toISOString(),
+    numeroCamiseta: parseInt(valores.numeroCamiseta),
+    posicion: valores.posicion
+  };
+
+  // Agregar a la lista temporal para enviar al backend
+  this.jugadoresAAgregar.push(jugadorAAgregar);
+
+  // También agregar al FormArray principal para mostrar en UI
+  this.jugadoresArray.push(this.fb.group({
+    id: [`temp_${Date.now()}`],
+    nombre: [valores.nombre, [
+      Validators.required,
+      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),
+      Validators.minLength(2),
+      Validators.maxLength(50)
+    ]],
+    apellido: [valores.apellido, [
+      Validators.required,
+      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),
+      Validators.minLength(2),
+      Validators.maxLength(50)
+    ]],
+    posicion: [valores.posicion, [
+      Validators.required,
+      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-]+$/)
+    ]],
+    numeroCamiseta: [parseInt(valores.numeroCamiseta), [
+      Validators.required,
+      Validators.min(1),
+      Validators.max(999),
+      Validators.pattern(/^[0-9]+$/)
+    ]],
+    fechaNacimiento: [valores.fechaNacimiento, [
+      Validators.required,
+      this.fechaPasadaValidator.bind(this)
+    ]]
+  }));
+
+  // Resetear y cerrar formulario
+  this.nuevoJugadorForm.reset();
+  this.agregandoJugador = false;
+}
+
+// Método para cancelar agregar jugador
+cancelarAgregarJugador() {
+  this.nuevoJugadorForm.reset();
+  this.agregandoJugador = false;
+}
+
+// Método para eliminar jugador del FormArray
+eliminarJugadorFormulario(index: number) {
+  const jugador = this.jugadoresArray.at(index);
+  const jugadorId = jugador.get('id')?.value;
+  
+  // Si es un jugador temporal (agregado en esta sesión)
+  if (jugadorId && jugadorId.startsWith('temp_')) {
+    // Encontrar el índice en jugadoresAAgregar
+    const tempIndex = this.jugadoresAAgregar.findIndex((_, i) => {
+      const tempId = `temp_${Date.now() - i}`;
+      return tempId === jugadorId;
+    });
+    if (tempIndex !== -1) {
+      this.jugadoresAAgregar.splice(tempIndex, 1);
+    }
+  } else if (jugadorId) {
+    // Si es un jugador existente, agregar a la lista de eliminación
+    this.jugadoresAEliminar.push(jugadorId);
+  }
+  
+  // Remover del FormArray
+  this.jugadoresArray.removeAt(index);
+}
+
+// Métodos de validación para el formulario principal
+tieneError(controlName: string, errorType?: string): boolean {
+  const control = this.equipoEditForm.get(controlName);
+  
+  if (!control) return false;
+  
+  // Si el formulario ha sido enviado o el campo fue tocado, mostrar errores
+  const formEnviado = this.equipoEditForm.get('_submitted')?.value;
+  
+  if (errorType) {
+    return control.hasError(errorType) && (control.dirty || control.touched || formEnviado);
+  }
+  
+  return control.invalid && (control.dirty || control.touched || formEnviado);
+}
+
+// Mejora el método getMensajeError() en tu componente:
+getMensajeError(controlName: string): string {
+  const control = this.equipoEditForm.get(controlName);
+  
+  if (!control || !control.errors || !control.touched) return '';
+  
+  const errores = control.errors;
+  const valor = control.value;
+  
+  if (errores['required']) return 'Este campo es obligatorio';
+  
+  if (errores['pattern']) {
+    switch(controlName) {
+      case 'nombre':
+      case 'nombreCompletoPais':
+        return 'Solo se permiten letras y espacios';
+      case 'siglasEquipo':
+        if (!/^[A-Z]*$/.test(valor)) {
+          return 'Solo se permiten letras mayúsculas';
+        }
+        if (valor.length !== 3) {
+          return 'Deben ser exactamente 3 caracteres';
+        }
+        return 'Formato inválido. Ejemplo: ARG';
+      case 'grupo':
+        return 'Debe ser una letra de la A a la H';
+      case 'rankingFifa':
+        return 'Solo se permiten números enteros';
+      case 'bandera':
+        return 'URL de imagen inválida (ej: https://ejemplo.com/imagen.jpg)';
+      default:
+        return 'Formato inválido';
+    }
+  }
+  
+  if (errores['minlength']) {
+    const min = errores['minlength'].requiredLength;
+    return `Mínimo ${min} caracteres (actual: ${valor?.length || 0})`;
+  }
+  
+  if (errores['maxlength']) {
+    const max = errores['maxlength'].requiredLength;
+    return `Máximo ${max} caracteres (actual: ${valor?.length || 0})`;
+  }
+  
+  if (errores['min']) {
+    const min = errores['min'].min;
+    return `El valor mínimo es ${min} (actual: ${valor})`;
+  }
+  
+  if (errores['max']) {
+    const max = errores['max'].max;
+    return `El valor máximo es ${max} (actual: ${valor})`;
+  }
+  
+  return 'Valor inválido';
+}
+
+
+
+// Métodos de validación para el formulario de nuevo jugador
+tieneErrorNuevoJugador(controlName: string, errorType?: string): boolean {
+  const control = this.nuevoJugadorForm.get(controlName);
+  
+  if (!control) return false;
+  
+  if (errorType) {
+    return control.hasError(errorType) && (control.dirty || control.touched);
+  }
+  
+  return control.invalid && (control.dirty || control.touched);
+}
+
+getMensajeErrorNuevoJugador(controlName: string): string {
+  const control = this.nuevoJugadorForm.get(controlName);
+  
+  if (!control || !control.errors || !control.touched) return '';
+  
+  const errores = control.errors;
+  
+  if (errores['required']) return 'Este campo es requerido';
+  if (errores['pattern']) return 'Solo letras y espacios';
+  if (errores['min']) return `El valor mínimo es ${errores['min'].min}`;
+  if (errores['max']) return `El valor máximo es ${errores['max'].max}`;
+  if (errores['fechaFutura']) return 'La fecha no puede ser futura';
+  
+  return 'Error de validación';
+}
+
+// Método para convertir siglas a mayúsculas
+onSiglasInput(event: Event) {
+  const input = event.target as HTMLInputElement;
+  input.value = input.value.toUpperCase().replace(/[^A-Z]/g, '');
+  this.equipoEditForm.get('siglasEquipo')?.setValue(input.value);
+}
 }

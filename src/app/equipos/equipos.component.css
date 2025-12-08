@@ -907,3 +907,30 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     white-space: normal;
     word-wrap: break-word;
 }
+
+/* En tu archivo CSS */
+.form-group {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.form-input.is-invalid,
+.form-select.is-invalid,
+.form-textarea.is-invalid {
+  border-color: #dc3545;
+  
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.error-message::before {
+  content: "⚠️";
+  font-size: 0.75rem;
+}
