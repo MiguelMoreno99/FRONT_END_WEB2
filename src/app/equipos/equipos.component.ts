@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,  ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { EquiposService } from '../services/equipos.service';
 import { Equipo, Jugador, EquipoUpdate, JugadorCreate } from '../models/equipo.model';
@@ -556,4 +556,68 @@ private manejarErrorEquipo(err: any) {
     this.mensajeError = msg;
     setTimeout(() => this.mensajeError = '', 3000);
   }
+
+  specialChars(control: AbstractControl): { [key: string]: boolean } | null {
+      const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]/;
+      if (control.value && nameRegexp.test(control.value)) {
+        return { invalidName: true };
+      }
+      return null;
+    }
+  
+    fechaPasadaValidator(control: AbstractControl): { [key: string]: boolean } | null {
+      if (!control.value) {
+        return null;
+      }
+      const inputDate = new Date(control.value + 'T00:00:00');
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (inputDate >= today) {
+        return { fechaFutura: true };
+      }
+      return null;
+    }
+  
+    fechaProximaValidator(control: AbstractControl): { [key: string]: boolean } | null {
+      if (!control.value) {
+        return null;
+      }
+      const inputDate = new Date(control.value + 'T00:00:00');
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (inputDate < today) {
+        return { fechaAnterior: true };
+      }
+      return null;
+    }
+  
+    validarHoraSiEsHoy: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+      const fechaControl = control.get('fechaPartido');
+      const horaControl = control.get('horaPartido');
+      if (!fechaControl?.value || !horaControl?.value) {
+        return null;
+      }
+      const inputDate = new Date(fechaControl.value + 'T00:00:00');
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (inputDate.getTime() === today.getTime()) {
+        const now = new Date();
+        const [hours, minutes] = horaControl.value.split(':');
+        const inputDateTime = new Date();
+        inputDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+        if (inputDateTime <= now) {
+          horaControl.setErrors({ ...horaControl.errors, horaFutura: true });
+          return { horaFutura: true };
+        }
+      }
+      if (horaControl.errors && horaControl.errors['horaFutura']) {
+        delete horaControl.errors['horaFutura'];
+        if (Object.keys(horaControl.errors).length === 0) {
+          horaControl.setErrors(null);
+        } else {
+          horaControl.setErrors(horaControl.errors);
+        }
+      }
+      return null;
+    };
 }

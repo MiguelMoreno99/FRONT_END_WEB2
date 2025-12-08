@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule, NgFor } from '@angular/common';
 import { PartidoService } from '../services/partidos.service';
-import { Partido } from '../models/partido.model';
+import { Partido, PartidoEdit } from '../models/partido.model';
 import { FavoritosService } from '../services/favoritos.service';
 import { UsuarioService } from '../services/usuario.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -46,17 +46,28 @@ export class PartidosComponent implements OnInit {
 
   constructor(private partidoService: PartidoService, private favoritosService: FavoritosService, private usuarioService: UsuarioService, private fb: FormBuilder) {
     // Inicializar formulario
-    this.formularioEdicion = this.fb.group({
-      fecha: ['', Validators.required],
-      estadio: ['', Validators.required],
-      ciudad: ['', Validators.required],
-      fase: ['', Validators.required],
-      grupo: [''],
-      arbitroPrincipal: [''],
-      estado: ['', Validators.required],
-      golesEquipoA: [0, [Validators.required, Validators.min(0)]],
-      golesEquipoB: [0, [Validators.required, Validators.min(0)]]
-    });
+     this.formularioEdicion = this.fb.group({
+    fecha: ['', [Validators.required]], // Nota: fecha también debe tener array
+    estadio: ['', [
+      Validators.required,
+      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-.,()]+$/), 
+      Validators.minLength(3),
+      Validators.maxLength(100)
+    ]],
+    ciudad: ['', [
+      Validators.required,
+      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),
+      Validators.minLength(2),
+      Validators.maxLength(50)
+    ]],
+    fase: ['', [Validators.required]], // Array aquí también
+    grupo: ['', [Validators.pattern(/^[A-H]?$/)]], // Array aquí también
+    arbitroPrincipal: ['', [
+      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s.]+$/),
+      Validators.maxLength(100)
+    ]],
+    estado: ['', [Validators.required]] // Array aquí también
+  });
   }
 
   ngOnInit(): void {
@@ -189,7 +200,7 @@ export class PartidosComponent implements OnInit {
   }
 
   abrirModalEdicion(partido: Partido) {
-    this.partidoEditando = { ...partido }; // Crear copia para editar
+    this.partidoEditando = { ...partido }; 
     this.cargarDatosEnFormulario();
     this.mostrarModalEdicion = true;
     document.body.style.overflow = 'hidden';
@@ -214,58 +225,69 @@ export class PartidosComponent implements OnInit {
         fase: this.partidoEditando.fase,
         grupo: this.partidoEditando.grupo || '',
         arbitroPrincipal: this.partidoEditando.arbitroPrincipal || '',
-        estado: this.partidoEditando.estado,
-        golesEquipoA: this.partidoEditando.golesEquipoA,
-        golesEquipoB: this.partidoEditando.golesEquipoB
+        estado: this.partidoEditando.estado
       });
     }
   }
 
   guardarCambios() {
-    if (this.formularioEdicion.valid && this.partidoEditando) {
-      const datosActualizados = this.formularioEdicion.value;
+  if (this.formularioEdicion.valid && this.partidoEditando && this.userToken) {
+    
+    const datosActualizados = this.formularioEdicion.value;
+    const partidoEdit: PartidoEdit = {
+      fecha: datosActualizados.fecha,
+      estadio: datosActualizados.estadio,
+      ciudad: datosActualizados.ciudad,
+      estado: datosActualizados.estado,
+      fase: datosActualizados.fase,
+      grupo: datosActualizados.grupo,
+      arbitroPrincipal: datosActualizados.arbitroPrincipal
+    };
 
-      // Convertir fecha de vuelta a Date object
-      const fechaActualizada = new Date(datosActualizados.fecha);
-      var fechaActualizadaString = fechaActualizada.toDateString()
-      // Actualizar el partido
-      const partidoActualizado: Partido = {
-        ...this.partidoEditando,
-        fecha: fechaActualizadaString,
-        estadio: datosActualizados.estadio,
-        ciudad: datosActualizados.ciudad,
-        fase: datosActualizados.fase,
-        grupo: datosActualizados.grupo,
-        arbitroPrincipal: datosActualizados.arbitroPrincipal,
-        estado: datosActualizados.estado,
-        golesEquipoA: datosActualizados.golesEquipoA,
-        golesEquipoB: datosActualizados.golesEquipoB
-      };
+    console.log('Enviando al backend:', partidoEdit);
 
-      // Aquí normalmente harías una llamada al servicio para actualizar en el backend
-      console.log('Guardando cambios:', partidoActualizado);
-
-      // Actualizar en la vista localmente
-      const index = this.partidosView.findIndex(p => p.id === partidoActualizado.id);
-      if (index !== -1) {
-        this.partidosView[index] = {
+    this.partidoService.editarPartido(
+      this.partidoEditando.id, 
+      partidoEdit, 
+      this.userToken!
+    ).subscribe({
+      next: (partidoActualizado: Partido) => {
+        console.log('Respuesta del backend:', partidoActualizado);
+        
+        
+        const index = this.partidosView.findIndex(p => p.id === partidoActualizado.id);
+       if (index !== -1) {
+        
+        const nuevosPartidos = [...this.partidosView];
+        
+        nuevosPartidos[index] = {
           ...partidoActualizado,
           stadiumImage: this.partidosView[index].stadiumImage
         };
+        
+        this.partidosView = nuevosPartidos;
       }
 
-      // Mostrar mensaje de éxito (puedes implementar un toast o alert)
-      alert('¡Cambios guardados exitosamente!');
+        this.mostrarMensajeExito('Partido actualizado correctamente.');
+        
 
-      this.cerrarModalEdicion();
+        this.cerrarModalEdicion();
+      },
+      error: (error) => {
+        console.error('Error al guardar cambios:', error);
+        
+        this.mostrarMensajeError('Error al guardar cambios: ' + (error.error?.message || error.message || 'Error desconocido'));
+      }
+    });
+  } else {
+    if (!this.userToken ) {
+      this.mostrarMensajeError('Error: No estás autenticado');
     } else {
-      // Marcar todos los campos como tocados para mostrar errores
-      this.formularioEdicion.markAllAsTouched();
-      alert('Por favor, complete todos los campos requeridos correctamente.');
+      this.mostrarMensajeError('Por favor complete todos los campos requeridos correctamente');
     }
   }
+}
 
-  // Método auxiliar para verificar errores en el formulario
   tieneError(controlName: string, errorType: string): boolean {
     const control = this.formularioEdicion.get(controlName);
     return control ? control.hasError(errorType) && (control.dirty || control.touched) : false;

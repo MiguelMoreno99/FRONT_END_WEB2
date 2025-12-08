@@ -795,3 +795,50 @@ select#grupo option:not(:first-child) {
         color: white !important;
         text-shadow: 0 0 0 white !important;
     }}
+
+.marcador-visualizacion {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.marcador-equipos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.equipo-info {
+  flex: 1;
+  text-align: center;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.equipo-nombre {
+  margin-bottom: 10px;
+}
+
+.goles-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.goles-numero {
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  min-width: 60px;
+  text-align: center;
+}
+
+.marcador-separador {
+  font-size: 2rem;
+  font-weight: bold;
+  color: goldenrod;
+  padding: 0 20px;
+}

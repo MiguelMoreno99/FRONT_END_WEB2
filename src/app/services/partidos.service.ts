@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { Partido, PartidoCreate } from '../models/partido.model';
+import { Partido, PartidoCreate, PartidoEdit } from '../models/partido.model';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +37,7 @@ export class PartidoService {
     return this.http.post<Partido>(this.apiUrl, partido, { headers });
   }
 
-  editarPartido(partidoId: string, partido: PartidoCreate, token: string): Observable<Partido> {
+  editarPartido(partidoId: string, partido: PartidoEdit, token: string): Observable<Partido> {
     let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
     headers = headers.set('Authorization', `Bearer ${token}`);
     return this.http.put<Partido>(`${this.apiUrl}/${partidoId}`, partido, { headers });
