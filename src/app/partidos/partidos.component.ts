@@ -45,7 +45,7 @@ export class PartidosComponent implements OnInit {
     'assets/img/estadios/estadio4.jpg'
   ];
   public partidosFiltrados: Array<Partido & { stadiumImage: string }> = [];
-  public filtroActual: 'todos' | 'favoritos' = 'todos';
+  public filtroActual: 'todos' | 'favoritos' | 'en_vivo' = 'todos';
 
   constructor(private partidoService: PartidoService, private favoritosService: FavoritosService, private usuarioService: UsuarioService, private fb: FormBuilder) {
     this.formularioEdicion = this.fb.group({
@@ -217,7 +217,7 @@ export class PartidosComponent implements OnInit {
     setTimeout(() => this.mensajeError = '', 3000);
   }
 
-  cambiarFiltro(opcion: 'todos' | 'favoritos') {
+  cambiarFiltro(opcion: 'todos' | 'favoritos' | 'en_vivo') {
     this.filtroActual = opcion;
     this.aplicarFiltro();
   }
@@ -226,6 +226,10 @@ export class PartidosComponent implements OnInit {
     if (this.filtroActual === 'favoritos') {
       this.partidosFiltrados = this.partidosView.filter(p =>
         this.favoritosIds.includes(p.id)
+      );
+    } else if (this.filtroActual === 'en_vivo') {
+      this.partidosFiltrados = this.partidosView.filter(p =>
+        p.estado === 'EN_JUEGO'
       );
     } else {
       this.partidosFiltrados = [...this.partidosView];

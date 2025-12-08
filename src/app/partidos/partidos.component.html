@@ -38,6 +38,12 @@
           >
             Todos
           </span>
+          <span
+            [class.active]="filtroActual === 'en_vivo'"
+            (click)="cambiarFiltro('en_vivo')"
+          >
+            En Vivo
+          </span>
           @if (userId) {
           <span
             [class.active]="filtroActual === 'favoritos'"
@@ -120,6 +126,16 @@
             <h3>
               No tienes partidos favoritos aún
               <i class="fa-regular fa-face-sad-tear"></i>
+            </h3>
+          </div>
+          } @if (filtroActual === 'en_vivo' && partidosFiltrados.length === 0){
+          <div
+            class="text-center w-100"
+            style="grid-column: 1/-1; color: white"
+          >
+            <h3>
+              No hay partidos en juego en este momento
+              <i class="fa-regular fa-futbol"></i>
             </h3>
           </div>
           }

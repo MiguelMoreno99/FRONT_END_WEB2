@@ -16,7 +16,8 @@ import { Usuario } from '../models/usuario.model';
 export class HomePageComponent implements OnInit {
 
   usuarioActual: Usuario | null = null;
-  partidosDestacados: Partido[] = [];
+  public partidosEnJuego: Array<Partido & { stadiumImage: string }> = [];
+  public partidosProximos: Array<Partido & { stadiumImage: string }> = [];
 
   constructor(
     private usuarioService: UsuarioService,
@@ -25,7 +26,7 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.traerUsuarioActual();
-    this.traerPartidosDestacados();
+    this.cargarPartidos();
   }
 
   private traerUsuarioActual(): void {
@@ -35,10 +36,18 @@ export class HomePageComponent implements OnInit {
     });
   }
 
-  private traerPartidosDestacados(): void {
+  private cargarPartidos(): void {
     this.partidoService.getPartidos().subscribe({
-      next: (partidos) => this.partidosDestacados = partidos.slice(0, 3),
-      error: (err) => console.error('Error cargando partidos destacados', err)
+      next: (partidos) => {
+        this.partidosEnJuego = partidos
+          .filter(p => p.estado === 'EN_JUEGO')
+          .map(p => ({ ...p, stadiumImage: '' }));
+        this.partidosProximos = partidos
+          .filter(p => p.estado === 'PROGRAMADO')
+          .slice(0, 3)
+          .map(p => ({ ...p, stadiumImage: '' }));
+      },
+      error: (err) => console.error('Error cargando partidos', err)
     });
   }
 }

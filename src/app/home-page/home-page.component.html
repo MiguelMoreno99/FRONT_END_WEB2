@@ -15,10 +15,45 @@
 </section>
 
 <main class="main-content">
+  @if (partidosEnJuego.length > 0) {
   <section class="container top-categories">
+    <h1 class="header-1 vivo">
+      <i
+        class="fa-solid fa-circle fa-fade"
+        style="font-size: 0.6em; vertical-align: middle"
+      ></i>
+      En Vivo
+    </h1>
+    <div class="container-categories">
+      @for (partido of partidosEnJuego; track partido.id) {
+      <div
+        class="card-category card-vivo"
+        [ngStyle]="{
+          'background-image':
+            'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(' +
+            'https://digitalhub.fifa.com/transform/418614b2-4dbb-4b1d-bc90-89acb051865b/Draw-flags-graphic-16x9' +
+            ')'
+        }"
+      >
+        <p style="font-size: 1.8rem">
+          {{ partido.equipoA.nombre }}
+          <span style="color: #ff4444">{{ partido.golesEquipoA }}</span>
+          -
+          <span style="color: #ff4444">{{ partido.golesEquipoB }}</span>
+          {{ partido.equipoB.nombre }}
+        </p>
+        <a [routerLink]="['/partidos']" class="btn-ver-mas btn-vivo"
+          >Ir al Partido</a
+        >
+      </div>
+      }
+    </div>
+  </section>
+  } @if (partidosProximos.length > 0) {
+  <section class="container top-categories" style="margin-top: 2rem">
     <h1 class="header-1">Próximos Encuentros</h1>
     <div class="container-categories">
-      @for (partido of partidosDestacados; track partido.id) {
+      @for (partido of partidosProximos; track partido.id) {
       <div
         class="card-category"
         [ngStyle]="{
@@ -37,9 +72,14 @@
 
         <a [routerLink]="['/partidos']" class="btn-ver-mas">Ver Detalles</a>
       </div>
+      } @if (partidosProximos.length === 0) {
+      <p style="text-align: center; color: gray; grid-column: 1/-1">
+        No hay partidos programados próximamente.
+      </p>
       }
     </div>
   </section>
+  }
 
   <section class="container">
     <div>
