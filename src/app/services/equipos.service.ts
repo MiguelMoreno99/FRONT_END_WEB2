@@ -66,4 +66,10 @@ export class EquiposService {
     headers = headers.set('Authorization', `Bearer ${token}`);
     return this.http.delete<void>(`${this.apiUrl}/${equipoId}/jugadores/${jugadorId}`, { headers });
   }
+
+  eliminarEquipo(id: string, token: string): Observable<any> {
+    let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers });
+  }
 }

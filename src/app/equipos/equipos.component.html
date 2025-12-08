@@ -81,6 +81,14 @@
                     <i class="fa-solid fa-pencil"></i>
                   </a>
                 </span>
+                <span
+                  (click)="eliminarEquipo(e, $event)"
+                  class="btn-delete"
+                  style="cursor: pointer"
+                  title="Eliminar Equipo"
+                >
+                  <i class="fa-regular fa-trash-can"></i>
+                </span>
                 }
               </div>
             </div>
@@ -238,9 +246,12 @@
   </div>
 </div>
 <!-- Modal de edición -->
-<div class="modal-overlay" *ngIf="mostrarModalEdicion" (click)="cerrarModalEdicion()">
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModalEdicion"
+  (click)="cerrarModalEdicion()"
+>
   <div class="modal-content" (click)="$event.stopPropagation()">
-    
     <div class="modal-header">
       <h2>
         <i class="fa-solid fa-pen-to-square"></i>
@@ -261,155 +272,146 @@
       </div>
 
       <!-- Formulario principal -->
-      <div [formGroup]="equipoEditForm"> <!--  MOVER formGroup AQUÍ -->
-        
+      <div [formGroup]="equipoEditForm">
+        <!--  MOVER formGroup AQUÍ -->
+
         <div class="form-grid">
           <!-- Nombre -->
-              <div class="form-group">
-                <label for="nombre">
-                  <i class="fa-solid fa-signature"></i> Nombre *
-                </label>
-                <input
-                  type="text"
-                  id="nombre"
-                  formControlName="nombre"
-                  class="form-input"
-                  placeholder="Ej: Argentina"
-                  [class.is-invalid]="tieneError('nombre')"
-                />
-                @if (tieneError('nombre')) {
-                  <div class="error-message">{{ getMensajeError('nombre') }}</div>
-                }
-              </div>
+          <div class="form-group">
+            <label for="nombre">
+              <i class="fa-solid fa-signature"></i> Nombre *
+            </label>
+            <input
+              type="text"
+              id="nombre"
+              formControlName="nombre"
+              class="form-input"
+              placeholder="Ej: Argentina"
+              [class.is-invalid]="tieneError('nombre')"
+            />
+            @if (tieneError('nombre')) {
+            <div class="error-message">{{ getMensajeError("nombre") }}</div>
+            }
+          </div>
 
-              <!-- País completo -->
-              <div class="form-group">
-                <label for="nombreCompletoPais">
-                  <i class="fa-solid fa-earth-americas"></i> País Completo *
-                </label>
-                <input
-                  type="text"
-                  id="nombreCompletoPais"
-                  formControlName="nombreCompletoPais"
-                  class="form-input"
-                  placeholder="Ej: República Argentina"
-                  [class.is-invalid]="tieneError('nombreCompletoPais')"
-                />
-                @if (tieneError('nombreCompletoPais')) {
-                  <div class="error-message">{{ getMensajeError('nombreCompletoPais') }}</div>
-                }
-              </div>
+          <!-- País completo -->
+          <div class="form-group">
+            <label for="nombreCompletoPais">
+              <i class="fa-solid fa-earth-americas"></i> País Completo *
+            </label>
+            <input
+              type="text"
+              id="nombreCompletoPais"
+              formControlName="nombreCompletoPais"
+              class="form-input"
+              placeholder="Ej: República Argentina"
+              [class.is-invalid]="tieneError('nombreCompletoPais')"
+            />
+            @if (tieneError('nombreCompletoPais')) {
+            <div class="error-message">
+              {{ getMensajeError("nombreCompletoPais") }}
+            </div>
+            }
+          </div>
 
-              <!-- Siglas -->
-              <div class="form-group">
-                <label for="siglasEquipo">
-                  <i class="fa-solid fa-flag"></i> Siglas (3 letras) *
-                </label>
-                <input
-                  type="text"
-                  id="siglasEquipo"
-                  formControlName="siglasEquipo"
-                  maxlength="3"
-                  class="form-input"
-                  placeholder="ARG"
-                  (input)="onSiglasInput($event)"
-                  [class.is-invalid]="tieneError('siglasEquipo')"
-                />
-                @if (tieneError('siglasEquipo')) {
-                  <div class="error-message">{{ getMensajeError('siglasEquipo') }}</div>
-                }
-              </div>
+          <!-- Grupo -->
+          <div class="form-group">
+            <label for="grupo">
+              <i class="fa-solid fa-layer-group"></i> Grupo *
+            </label>
+            <select
+              id="grupo"
+              formControlName="grupo"
+              class="form-select"
+              [class.is-invalid]="tieneError('grupo')"
+            >
+              <option value="">-- Seleccionar grupo --</option>
+              <option *ngFor="let grupo of ordenarGrupos()" [value]="grupo">
+                {{ grupo }}
+              </option>
+            </select>
+            @if (tieneError('grupo')) {
+            <div class="error-message">{{ getMensajeError("grupo") }}</div>
+            }
+          </div>
 
-              <!-- Grupo -->
-              <div class="form-group">
-                <label for="grupo">
-                  <i class="fa-solid fa-layer-group"></i> Grupo *
-                </label>
-                <select
-                  id="grupo"
-                  formControlName="grupo"
-                  class="form-select"
-                  [class.is-invalid]="tieneError('grupo')"
-                >
-                  <option value="">-- Seleccionar grupo --</option>
-                  <option *ngFor="let grupo of ordenarGrupos()" [value]="grupo">
-                    {{ grupo }}
-                  </option>
-                </select>
-                @if (tieneError('grupo')) {
-                  <div class="error-message">{{ getMensajeError('grupo') }}</div>
-                }
-              </div>
+          <!-- Ranking FIFA -->
+          <div class="form-group">
+            <label for="rankingFifa">
+              <i class="fa-solid fa-ranking-star"></i> Ranking FIFA *
+            </label>
+            <input
+              type="number"
+              id="rankingFifa"
+              formControlName="rankingFifa"
+              min="1"
+              max="211"
+              class="form-input"
+              placeholder="1"
+              [class.is-invalid]="tieneError('rankingFifa')"
+            />
+            @if (tieneError('rankingFifa')) {
+            <div class="error-message">
+              {{ getMensajeError("rankingFifa") }}
+            </div>
+            }
+          </div>
 
-              <!-- Ranking FIFA -->
-              <div class="form-group">
-                <label for="rankingFifa">
-                  <i class="fa-solid fa-ranking-star"></i> Ranking FIFA *
-                </label>
-                <input
-                  type="number"
-                  id="rankingFifa"
-                  formControlName="rankingFifa"
-                  min="1"
-                  max="211"
-                  class="form-input"
-                  placeholder="1"
-                  [class.is-invalid]="tieneError('rankingFifa')"
-                />
-                @if (tieneError('rankingFifa')) {
-                  <div class="error-message">{{ getMensajeError('rankingFifa') }}</div>
-                }
-              </div>
+          <!-- Bandera -->
+          <div class="form-group">
+            <label for="bandera">
+              <i class="fa-solid fa-image"></i> URL de la Bandera
+            </label>
+            <input
+              type="text"
+              id="bandera"
+              formControlName="bandera"
+              class="form-input"
+              placeholder="assets/img/equipos/argentina.jpg"
+              [class.is-invalid]="tieneError('bandera')"
+            />
+            @if (tieneError('bandera')) {
+            <div class="error-message">{{ getMensajeError("bandera") }}</div>
+            }
+          </div>
 
-              <!-- Bandera -->
-              <div class="form-group">
-                <label for="bandera">
-                  <i class="fa-solid fa-image"></i> URL de la Bandera
-                </label>
-                <input
-                  type="text"
-                  id="bandera"
-                  formControlName="bandera"
-                  class="form-input"
-                  placeholder="assets/img/equipos/argentina.jpg"
-                  [class.is-invalid]="tieneError('bandera')"
-                />
-                @if (tieneError('bandera')) {
-                  <div class="error-message">{{ getMensajeError('bandera') }}</div>
-                }
-              </div>
-
-              <!-- Información -->
-              <div class="form-group full-width">
-                <label for="informacion">
-                  <i class="fa-solid fa-circle-info"></i> Información
-                </label>
-                <textarea
-                  id="informacion"
-                  formControlName="informacion"
-                  rows="4"
-                  class="form-textarea"
-                  placeholder="Información sobre el equipo..."
-                  [class.is-invalid]="tieneError('informacion')"
-                ></textarea>
-                @if (tieneError('informacion')) {
-                  <div class="error-message">{{ getMensajeError('informacion') }}</div>
-                }
-              </div>
+          <!-- Información -->
+          <div class="form-group full-width">
+            <label for="informacion">
+              <i class="fa-solid fa-circle-info"></i> Información
+            </label>
+            <textarea
+              id="informacion"
+              formControlName="informacion"
+              rows="4"
+              class="form-textarea"
+              placeholder="Información sobre el equipo..."
+              [class.is-invalid]="tieneError('informacion')"
+            ></textarea>
+            @if (tieneError('informacion')) {
+            <div class="error-message">
+              {{ getMensajeError("informacion") }}
+            </div>
+            }
+          </div>
         </div>
 
         <!-- Jugadores -->
         <div class="seccion-jugadores">
           <h3>
             <i class="fa-solid fa-users"></i> Jugadores
-            <button type="button" class="btn-agregar" (click)="mostrarFormularioNuevoJugador()">
+            <button
+              type="button"
+              class="btn-agregar"
+              (click)="mostrarFormularioNuevoJugador()"
+            >
               <i class="fa-solid fa-plus"></i> Agregar Jugador
             </button>
           </h3>
 
           <div class="formulario-nuevo-jugador" *ngIf="agregandoJugador">
             <h4>Nuevo Jugador</h4>
-            <div class="form-grid-jugador" [formGroup]="nuevoJugadorForm"> 
+            <div class="form-grid-jugador" [formGroup]="nuevoJugadorForm">
               <div class="form-group">
                 <label>Nombre *</label>
                 <input
@@ -420,7 +422,9 @@
                   [class.is-invalid]="tieneErrorNuevoJugador('nombre')"
                 />
                 @if (tieneErrorNuevoJugador('nombre')) {
-                  <div class="error-message">{{ getMensajeErrorNuevoJugador('nombre') }}</div>
+                <div class="error-message">
+                  {{ getMensajeErrorNuevoJugador("nombre") }}
+                </div>
                 }
               </div>
               <div class="form-group">
@@ -433,7 +437,9 @@
                   [class.is-invalid]="tieneErrorNuevoJugador('apellido')"
                 />
                 @if (tieneErrorNuevoJugador('apellido')) {
-                  <div class="error-message">{{ getMensajeErrorNuevoJugador('apellido') }}</div>
+                <div class="error-message">
+                  {{ getMensajeErrorNuevoJugador("apellido") }}
+                </div>
                 }
               </div>
               <div class="form-group">
@@ -444,12 +450,17 @@
                   [class.is-invalid]="tieneErrorNuevoJugador('posicion')"
                 >
                   <option value="">-- Seleccionar posición --</option>
-                  <option *ngFor="let posicion of ordenarPosiciones()" [value]="posicion">
+                  <option
+                    *ngFor="let posicion of ordenarPosiciones()"
+                    [value]="posicion"
+                  >
                     {{ posicion }}
                   </option>
                 </select>
                 @if (tieneErrorNuevoJugador('posicion')) {
-                  <div class="error-message">{{ getMensajeErrorNuevoJugador('posicion') }}</div>
+                <div class="error-message">
+                  {{ getMensajeErrorNuevoJugador("posicion") }}
+                </div>
                 }
               </div>
               <div class="form-group">
@@ -464,7 +475,9 @@
                   [class.is-invalid]="tieneErrorNuevoJugador('numeroCamiseta')"
                 />
                 @if (tieneErrorNuevoJugador('numeroCamiseta')) {
-                  <div class="error-message">{{ getMensajeErrorNuevoJugador('numeroCamiseta') }}</div>
+                <div class="error-message">
+                  {{ getMensajeErrorNuevoJugador("numeroCamiseta") }}
+                </div>
                 }
               </div>
               <div class="form-group">
@@ -476,21 +489,23 @@
                   [class.is-invalid]="tieneErrorNuevoJugador('fechaNacimiento')"
                 />
                 @if (tieneErrorNuevoJugador('fechaNacimiento')) {
-                  <div class="error-message">{{ getMensajeErrorNuevoJugador('fechaNacimiento') }}</div>
+                <div class="error-message">
+                  {{ getMensajeErrorNuevoJugador("fechaNacimiento") }}
+                </div>
                 }
               </div>
               <div class="form-group acciones">
-                <button 
-                  type="button" 
-                  class="btn-guardar-jugador" 
+                <button
+                  type="button"
+                  class="btn-guardar-jugador"
                   (click)="agregarNuevoJugador()"
                   [disabled]="nuevoJugadorForm.invalid"
                 >
                   <i class="fa-solid fa-save"></i> Guardar
                 </button>
-                <button 
-                  type="button" 
-                  class="btn-cancelar" 
+                <button
+                  type="button"
+                  class="btn-cancelar"
                   (click)="cancelarAgregarJugador()"
                 >
                   <i class="fa-solid fa-times"></i> Cancelar
@@ -501,67 +516,74 @@
 
           <!-- Lista de jugadores existentes (dentro del formGroup principal) -->
           <div formArrayName="jugadores">
-            @for (jugador of jugadoresArray.controls; track jugador; let i = $index) {
-              <div [formGroupName]="i" class="jugador-item-editable">
-                <div class="jugador-info">
-                  <span class="jugador-numero">
-                    #{{ jugador.get('numeroCamiseta')?.value || '?' }}
-                  </span>
-                  <div class="jugador-datos">
-                    <div class="jugador-nombre">
-                      {{ jugador.get('nombre')?.value }} {{ jugador.get('apellido')?.value }}
-                    </div>
-                    <div class="jugador-detalle">
-                      <span class="posicion-badge">{{ jugador.get('posicion')?.value }}</span>
-                    </div>
-                    @if (jugador.get('fechaNacimiento')?.value) {
-                      <div class="jugador-detalle">
-                        {{ jugador.get('fechaNacimiento')?.value | date:'dd/MM/yyyy' }}
-                      </div>
-                    }
+            @for (jugador of jugadoresArray.controls; track jugador; let i =
+            $index) {
+            <div [formGroupName]="i" class="jugador-item-editable">
+              <div class="jugador-info">
+                <span class="jugador-numero">
+                  #{{ jugador.get("numeroCamiseta")?.value || "?" }}
+                </span>
+                <div class="jugador-datos">
+                  <div class="jugador-nombre">
+                    {{ jugador.get("nombre")?.value }}
+                    {{ jugador.get("apellido")?.value }}
                   </div>
+                  <div class="jugador-detalle">
+                    <span class="posicion-badge">{{
+                      jugador.get("posicion")?.value
+                    }}</span>
+                  </div>
+                  @if (jugador.get('fechaNacimiento')?.value) {
+                  <div class="jugador-detalle">
+                    {{
+                      jugador.get("fechaNacimiento")?.value
+                        | date : "dd/MM/yyyy"
+                    }}
+                  </div>
+                  }
                 </div>
-                <button
-                  type="button"
-                  class="btn-eliminar"
-                  (click)="eliminarJugadorFormulario(i)"
-                  title="Eliminar jugador"
-                >
-                  <i class="fa-solid fa-trash"></i>
-                </button>
               </div>
+              <button
+                type="button"
+                class="btn-eliminar"
+                (click)="eliminarJugadorFormulario(i)"
+                title="Eliminar jugador"
+              >
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
             }
           </div>
 
           @if (jugadoresArray.length === 0) {
-            <div class="sin-jugadores">
-              <i class="fa-solid fa-user-slash"></i>
-              <p>No hay jugadores registrados</p>
-            </div>
+          <div class="sin-jugadores">
+            <i class="fa-solid fa-user-slash"></i>
+            <p>No hay jugadores registrados</p>
+          </div>
           }
         </div>
 
         <!-- Botones de acción -->
         <div class="modal-actions">
-          <button type="button" class="btn-cancelar" (click)="cerrarModalEdicion()">
+          <button
+            type="button"
+            class="btn-cancelar"
+            (click)="cerrarModalEdicion()"
+          >
             <i class="fa-solid fa-times"></i> Cancelar
           </button>
-          <button 
-            type="button" 
-            class="btn-guardar" 
+          <button
+            type="button"
+            class="btn-guardar"
             (click)="guardarCambios()"
             [disabled]="guardando"
           >
             @if (guardando) {
-              <i class="fa-solid fa-spinner fa-spin"></i> Guardando...
-            } @else {
-              <i class="fa-solid fa-save"></i> Guardar Cambios
-            }
+            <i class="fa-solid fa-spinner fa-spin"></i> Guardando... } @else {
+            <i class="fa-solid fa-save"></i> Guardar Cambios }
           </button>
         </div>
-        
       </div>
-      
     </div>
   </div>
 </div>

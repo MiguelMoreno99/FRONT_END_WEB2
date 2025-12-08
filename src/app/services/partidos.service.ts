@@ -43,10 +43,28 @@ export class PartidoService {
     return this.http.put<Partido>(`${this.apiUrl}/${partidoId}`, partido, { headers });
   }
 
-  actualizarMarcador(partidoId: string, golesEquipoA: number, golesEquipoB: number ,token: string): Observable<Partido> {
+  actualizarMarcador(partidoId: string, golesEquipoA: number, golesEquipoB: number, jugador: string, token: string): Observable<Partido> {
     let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
     headers = headers.set('Authorization', `Bearer ${token}`);
-    const body = { golesEquipoA, golesEquipoB};
+    const body = { golesEquipoA, golesEquipoB, jugador };
     return this.http.patch<Partido>(`${this.apiUrl}/${partidoId}/marcador`, body, { headers });
+  }
+
+  iniciarPartido(partidoId: string, token: string): Observable<Partido> {
+    let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.patch<Partido>(`${this.apiUrl}/${partidoId}/iniciar`, {}, { headers });
+  }
+
+  finalizarPartido(partidoId: string, token: string): Observable<Partido> {
+    let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.patch<Partido>(`${this.apiUrl}/${partidoId}/finalizar`, {}, { headers });
+  }
+
+  eliminarPartido(partidoId: string, token: string): Observable<any> {
+    let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.delete(`${this.apiUrl}/${partidoId}`, { headers });
   }
 }
