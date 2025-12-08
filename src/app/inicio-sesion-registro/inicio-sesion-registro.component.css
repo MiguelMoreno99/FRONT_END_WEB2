@@ -1,29 +1,24 @@
-/* =========================================
-   ESTRUCTURA GENERAL Y CENTRADO
-   ========================================= */
 :host {
   display: block;
-  /* Fondo oscuro general */
   background-color: #0b0b0b;
   background-image: linear-gradient(to bottom, #000000, #1a1a1a);
-  min-height: 100vh;
+  min-height: 50vh;
   font-family: 'Roboto', sans-serif;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 20px;
+  align-items: flex-start;
+  padding-top: 10vh;
 }
 
 .contenedor__todo {
   width: 100%;
   max-width: 800px;
+  height: 100%;
+  min-height: 1000px;
   margin: auto;
   position: relative;
 }
 
-/* =========================================
-   CAJA TRASERA (FONDO ESTÁTICO)
-   ========================================= */
 .caja__trasera {
   width: 100%;
   padding: 40px 20px;
@@ -31,7 +26,6 @@
   justify-content: center;
   align-items: center;
   background-color: #1a1a1a;
-  /* Gris oscuro elegante */
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
   border: 1px solid #333;
@@ -45,7 +39,6 @@
   transition: all 0.5s;
   text-align: center;
   width: 50%;
-  /* Dividimos el espacio en dos */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,7 +58,6 @@
   color: #ccc;
 }
 
-/* Botones de la caja trasera (Transparentes) */
 .caja__trasera button {
   padding: 10px 40px;
   border: 2px solid white;
@@ -86,36 +78,25 @@
   transform: scale(1.05);
 }
 
-/* =========================================
-   CONTENEDOR FLOTANTE (FORMULARIOS)
-   ========================================= */
 .contenedor__login-register {
   display: flex;
   align-items: center;
   width: 100%;
   max-width: 380px;
   position: absolute;
-  /* Flota sobre la caja trasera */
   top: -30px;
-  /* Un poco más arriba para efecto 3D */
   left: 10px;
-  /* Posición inicial */
-
-  /* Transición suave del deslizamiento */
   transition: left 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275);
   z-index: 2;
 }
 
-/* Estilo de los formularios (La tarjeta blanca/negra) */
 .contenedor__login-register form {
   width: 100%;
   padding: 60px 30px;
-  /* Fondo Negro Profundo con borde dorado */
   background: #000000;
   border: 2px solid gold;
   border-radius: 20px;
   box-shadow: 0 15px 30px rgba(255, 215, 0, 0.15);
-  /* Resplandor dorado sutil */
   text-align: center;
 }
 
@@ -124,23 +105,17 @@
   text-align: center;
   margin-bottom: 30px;
   color: #FF3901;
-  /* Título Naranja */
   text-transform: uppercase;
   font-weight: 800;
 }
 
-/* =========================================
-   INPUTS (Entradas de texto)
-   ========================================= */
 .contenedor__login-register form input {
   width: 100%;
   margin-top: 20px;
   padding: 14px;
   border: none;
   border-bottom: 2px solid #555;
-  /* Línea sutil */
   background: #1a1a1a;
-  /* Fondo gris oscuro para input */
   color: white;
   font-size: 16px;
   outline: none;
@@ -154,20 +129,15 @@
 
 .contenedor__login-register form input:focus {
   border-bottom: 2px solid gold;
-  /* Brilla dorado al escribir */
   background: #222;
 }
 
-/* =========================================
-   BOTÓN PRINCIPAL (ENTRAR/REGISTRARSE)
-   ========================================= */
 .contenedor__login-register form button {
   padding: 14px 40px;
   margin-top: 40px;
   border: none;
   font-size: 16px;
   background: gold;
-  /* Fondo Dorado */
   color: black;
   font-weight: 800;
   text-transform: uppercase;
@@ -181,15 +151,11 @@
 
 .contenedor__login-register form button:hover {
   background-color: #FF3901;
-  /* Naranja al hover */
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(255, 57, 1, 0.4);
 }
 
-/* =========================================
-   UTILIDADES Y ERRORES
-   ========================================= */
 .formulario__login {
   opacity: 1;
   display: block;
@@ -199,7 +165,6 @@
   display: none;
 }
 
-/* Estilo de validaciones */
 .error div {
   text-align: left;
   margin-top: 5px;
@@ -208,11 +173,9 @@
 
 .error span {
   color: #ff4444;
-  /* Rojo brillante para errores */
   font-weight: 500;
 }
 
-/* Ajuste del label de fecha */
 label[for="fecha"] {
   display: block;
   text-align: left;
@@ -220,7 +183,6 @@ label[for="fecha"] {
   color: #aaa !important;
 }
 
-/* Media Query para móviles: Quitamos el efecto deslizante y ponemos uno debajo de otro */
 @media screen and (max-width: 850px) {
   .caja__trasera {
     height: auto;
@@ -236,8 +198,6 @@ label[for="fecha"] {
   .contenedor__login-register {
     position: relative;
     top: 0;
-    left: 0 !important;
-    /* Forzamos que no se mueva horizontalmente */
     width: 100%;
     max-width: 100%;
     margin-top: 20px;
