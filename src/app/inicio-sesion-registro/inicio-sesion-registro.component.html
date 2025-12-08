@@ -2,6 +2,7 @@
 <div
   class="alert alert-success alert-dismissible fade show mensajes"
   role="alert"
+  style="position: absolute; top: 20px; z-index: 1000; width: 90%"
 >
   {{ mensajeExito }}
   <button type="button" class="btn-close" (click)="mensajeExito = ''"></button>
@@ -10,183 +11,173 @@
 <div
   class="alert alert-danger alert-dismissible fade show mensajes"
   role="alert"
+  style="position: absolute; top: 20px; z-index: 1000; width: 90%"
 >
   {{ mensajeError }}
   <button type="button" class="btn-close" (click)="mensajeError = ''"></button>
 </div>
 }
 
-<div class="container contenedor__todo">
-  <div class="row">
-    <div class="col-12 col-md-6 caja__trasera">
-      <div
-        class="caja__trasera-login"
-        [ngStyle]="{ opacity: isRegistroVisible ? '1' : '0' }"
-      >
-        <h3>Inicia Sesión Aquí</h3>
-        <p>Inicia Sesión</p>
-        <button (click)="mostrarRegistro()">Inicia Sesión</button>
-      </div>
-      <div
-        class="caja__trasera-register"
-        [ngStyle]="{ opacity: isRegistroVisible ? '0' : '1' }"
-      >
-        <h3>Crea tu cuenta</h3>
-        <button id="btn__register" (click)="mostrarRegistro()">
-          Registrarse
-        </button>
-      </div>
-    </div>
-
+<div class="contenedor__todo">
+  <div class="caja__trasera">
     <div
-      class="col-12 col-md-6 contenedor__login-register"
-      [ngStyle]="{ left: isRegistroVisible ? '420px' : '0px' }"
+      class="caja__trasera-login"
+      [ngStyle]="{ opacity: isRegistroVisible ? '1' : '0' }"
     >
-      <form
-        action=""
-        class="formulario__login error"
-        [formGroup]="inicioSesionForm"
-      >
-        <h2>Inicia Sesión</h2>
-        <input
-          type="text"
-          placeholder="Correo Electronico"
-          formControlName="correo"
-        />
-
-        @if (inicioSesionForm.controls['correo'].invalid &&
-        (inicioSesionForm.controls['correo'].touched || isFormFalla)) {
-        <div>
-          @if (inicioSesionForm.controls['correo'].errors?.['required']) {
-          <span>Campo obligatorio</span>
-          } @if (inicioSesionForm.controls['correo'].errors?.['invalidEmail']) {
-          <span>Correo inválido</span>
-          }
-        </div>
-        }
-
-        <input
-          type="password"
-          placeholder="Contraseña"
-          formControlName="contra"
-        />
-
-        @if (inicioSesionForm.controls['contra'].invalid &&
-        (inicioSesionForm.controls['contra'].touched || isFormFalla)) {
-        <div>
-          @if (inicioSesionForm.controls['contra'].errors?.['required']) {
-          <span>Campo obligatorio</span>
-          }
-        </div>
-        }
-
-        <button class="boton_Entrar" (click)="logIn()">Entrar</button>
-      </form>
-
-      <form
-        action=""
-        class="formulario__register error"
-        [ngStyle]="{ display: isRegistroVisible ? 'block' : 'none' }"
-        [formGroup]="registroForm"
-      >
-        <h2>Registrarse</h2>
-
-        <input type="text" placeholder="Nombre" formControlName="nombre" />
-        @if (registroForm.controls['nombre'].invalid &&
-        (registroForm.controls['nombre'].touched || isFormFalla)) {
-        <div>
-          @if (registroForm.controls['nombre'].errors?.['required']) {
-          <span>Campo obligatorio</span>
-          } @if (registroForm.controls['nombre'].errors?.['invalidName']) {
-          <span>Sin caracteres especiales ni numeros</span>
-          }
-        </div>
-        }
-
-        <input type="text" placeholder="Apellido" formControlName="apellido" />
-        @if (registroForm.controls['apellido'].invalid &&
-        (registroForm.controls['apellido'].touched || isFormFalla)) {
-        <div>
-          @if (registroForm.controls['apellido'].errors?.['required']) {
-          <span>Campo obligatorio</span>
-          } @if (registroForm.controls['apellido'].errors?.['invalidName']) {
-          <span>Sin caracteres especiales ni numeros</span>
-          }
-        </div>
-        }
-
-        <input id="fecha" type="date" formControlName="fechaNacimiento" />
-        <label
-          for="fecha"
-          style="font-size: 12px; color: gray; margin-left: 5px"
-          >Fecha de Nacimiento</label
-        >
-
-        @if (registroForm.controls['fechaNacimiento'].invalid &&
-        (registroForm.controls['fechaNacimiento'].touched || isFormFalla)) {
-        <div>
-          @if (registroForm.controls['fechaNacimiento'].errors?.['fechaFutura'])
-          {
-          <span>Fecha debe ser menor a la fecha actual</span>
-          } @if (registroForm.controls['fechaNacimiento'].errors?.['required'])
-          {
-          <span>Selecciona una fecha</span>
-          }
-        </div>
-        }
-
-        <input type="text" placeholder="Correo" formControlName="correo" />
-        @if (registroForm.controls['correo'].invalid &&
-        (registroForm.controls['correo'].touched || isFormFalla)) {
-        <div>
-          @if (registroForm.controls['correo'].errors?.['required']) {
-          <span>Campo obligatorio</span>
-          } @if (registroForm.controls['correo'].errors?.['invalidEmail']) {
-          <span>Correo inválido</span>
-          }
-        </div>
-        }
-
-        <input
-          type="password"
-          placeholder="Contraseña"
-          formControlName="contra"
-        />
-        @if (registroForm.controls['contra'].invalid &&
-        (registroForm.controls['contra'].touched || isFormFalla)) {
-        <div>
-          @if (registroForm.controls['contra'].errors?.['required']) {
-          <span>Campo obligatorio</span>
-          } @if (registroForm.controls['contra'].errors?.['weakPassword']) {
-          <span
-            >Debe contener por lo menos 8 caracteres, 1 mayuscula, 1 minuscula,
-            1 numero y 1 caracter especial</span
-          >
-          }
-        </div>
-        }
-
-        <input
-          type="password"
-          placeholder="Confirmar contraseña"
-          formControlName="confirmarContra"
-        />
-        @if (registroForm.controls['confirmarContra'].invalid &&
-        (registroForm.controls['confirmarContra'].touched || isFormFalla)) {
-        <div>
-          @if (registroForm.controls['confirmarContra'].errors?.['required']) {
-          <span>Campo obligatorio</span>
-          }
-          <br />
-          @if
-          (registroForm.controls['confirmarContra'].errors?.['passwordMatch']) {
-          <span>Las contraseñas no coinciden</span>
-          }
-        </div>
-        }
-
-        <button (click)="registrarUsuario()">Registrarse</button>
-      </form>
+      <h3>¿Ya tienes una cuenta?</h3>
+      <p>Inicia sesión para entrar en la acción</p>
+      <button (click)="mostrarRegistro()">Iniciar Sesión</button>
     </div>
+    <div
+      class="caja__trasera-register"
+      [ngStyle]="{ opacity: isRegistroVisible ? '0' : '1' }"
+    >
+      <h3>¿Aún no tienes cuenta?</h3>
+      <p>Regístrate para apostar y ganar</p>
+      <button id="btn__register" (click)="mostrarRegistro()">
+        Registrarse
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="contenedor__login-register"
+    [ngStyle]="{ left: isRegistroVisible ? '410px' : '10px' }"
+  >
+    <form
+      class="formulario__login error"
+      [formGroup]="inicioSesionForm"
+      [ngStyle]="{ display: isRegistroVisible ? 'none' : 'block' }"
+    >
+      <h2>Iniciar Sesión</h2>
+
+      <input
+        type="text"
+        placeholder="Correo Electrónico"
+        formControlName="correo"
+      />
+      @if (inicioSesionForm.controls['correo'].invalid &&
+      (inicioSesionForm.controls['correo'].touched || isFormFalla)) {
+      <div>
+        @if (inicioSesionForm.controls['correo'].errors?.['required']) {
+        <span>Campo obligatorio</span> } @if
+        (inicioSesionForm.controls['correo'].errors?.['invalidEmail']) {
+        <span>Correo inválido</span> }
+      </div>
+      }
+
+      <input
+        type="password"
+        placeholder="Contraseña"
+        formControlName="contra"
+      />
+      @if (inicioSesionForm.controls['contra'].invalid &&
+      (inicioSesionForm.controls['contra'].touched || isFormFalla)) {
+      <div>
+        @if (inicioSesionForm.controls['contra'].errors?.['required']) {
+        <span>Campo obligatorio</span> }
+      </div>
+      }
+
+      <button class="boton_Entrar" (click)="logIn()">Entrar</button>
+    </form>
+
+    <form
+      class="formulario__register error"
+      [formGroup]="registroForm"
+      [ngStyle]="{ display: isRegistroVisible ? 'block' : 'none' }"
+    >
+      <h2>Registrarse</h2>
+
+      <input type="text" placeholder="Nombre" formControlName="nombre" />
+      @if (registroForm.controls['nombre'].invalid &&
+      (registroForm.controls['nombre'].touched || isFormFalla)) {
+      <div>
+        @if (registroForm.controls['nombre'].errors?.['required']) {
+        <span>Campo obligatorio</span> } @if
+        (registroForm.controls['nombre'].errors?.['invalidName']) {
+        <span>Sin caracteres especiales</span> }
+      </div>
+      }
+
+      <input type="text" placeholder="Apellido" formControlName="apellido" />
+      @if (registroForm.controls['apellido'].invalid &&
+      (registroForm.controls['apellido'].touched || isFormFalla)) {
+      <div>
+        @if (registroForm.controls['apellido'].errors?.['required']) {
+        <span>Campo obligatorio</span> } @if
+        (registroForm.controls['apellido'].errors?.['invalidName']) {
+        <span>Sin caracteres especiales</span> }
+      </div>
+      }
+
+      <input
+        type="text"
+        placeholder="Correo Electrónico"
+        formControlName="correo"
+      />
+      @if (registroForm.controls['correo'].invalid &&
+      (registroForm.controls['correo'].touched || isFormFalla)) {
+      <div>
+        @if (registroForm.controls['correo'].errors?.['required']) {
+        <span>Campo obligatorio</span> } @if
+        (registroForm.controls['correo'].errors?.['invalidEmail']) {
+        <span>Correo inválido</span> }
+      </div>
+      }
+
+      <label
+        for="fecha"
+        style="font-size: 12px; margin-left: 5px; margin-top: 15px"
+        >Fecha de Nacimiento</label
+      >
+      <input
+        id="fecha"
+        type="date"
+        formControlName="fechaNacimiento"
+        style="margin-top: 5px"
+      />
+      @if (registroForm.controls['fechaNacimiento'].invalid &&
+      (registroForm.controls['fechaNacimiento'].touched || isFormFalla)) {
+      <div>
+        @if (registroForm.controls['fechaNacimiento'].errors?.['fechaFutura']) {
+        <span>Fecha inválida</span> } @if
+        (registroForm.controls['fechaNacimiento'].errors?.['required']) {
+        <span>Selecciona una fecha</span> }
+      </div>
+      }
+
+      <input
+        type="password"
+        placeholder="Contraseña"
+        formControlName="contra"
+      />
+      @if (registroForm.controls['contra'].invalid &&
+      (registroForm.controls['contra'].touched || isFormFalla)) {
+      <div>
+        @if (registroForm.controls['contra'].errors?.['required']) {
+        <span>Campo obligatorio</span> } @if
+        (registroForm.controls['contra'].errors?.['weakPassword']) {
+        <span>Mínimo 8 caracteres, mayúscula, número y símbolo.</span> }
+      </div>
+      }
+
+      <input
+        type="password"
+        placeholder="Confirmar contraseña"
+        formControlName="confirmarContra"
+      />
+      @if (registroForm.controls['confirmarContra'].invalid &&
+      (registroForm.controls['confirmarContra'].touched || isFormFalla)) {
+      <div>
+        @if (registroForm.controls['confirmarContra'].errors?.['required']) {
+        <span>Campo obligatorio</span> } @if
+        (registroForm.controls['confirmarContra'].errors?.['passwordMatch']) {
+        <span>Las contraseñas no coinciden</span> }
+      </div>
+      }
+
+      <button (click)="registrarUsuario()">Crear Cuenta</button>
+    </form>
   </div>
 </div>
