@@ -260,6 +260,7 @@ export class InfoUsuarioComponent implements OnInit {
       this.equipoService.crearEquipo(nuevoEquipo, this.usuarioActual?.token || "").subscribe({
         next: (res) => {
           this.mostrarMensajeExito('¡Equipo creado exitosamente!');
+          this.cargarEquiposDisponibles();
           this.cerrarModalEquipo();
         },
         error: (err) => {
