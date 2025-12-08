@@ -6,12 +6,14 @@ import { UsuarioService } from '../services/usuario.service';
 import { Usuario } from '../models/usuario.model';
 import { PartidoService } from '../services/partidos.service';
 import { EquiposService } from '../services/equipos.service';
-import { Equipo } from '../models/equipo.model';
+import { Equipo} from '../models/equipo.model';
+import { Partido } from '../models/partido.model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-info-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './info-usuario.component.html',
   styleUrl: './info-usuario.component.css'
 })
@@ -27,6 +29,20 @@ export class InfoUsuarioComponent implements OnInit {
 
   mostrarModalPartido: boolean = false;
   mostrarModalEquipo: boolean = false;
+
+  mostrarModalMarcador: boolean = false;
+  partidosDisponibles: Partido[] = [];
+  partidoSeleccionado: Partido | null = null;
+  marcadorForm: FormGroup;
+  editandoMarcador: boolean = false;
+  unGolA: boolean = true;
+  unGolB: boolean = true;
+  golesEquipoA: number = 0;
+  golesEquipoB: number = 0;
+  jugadoresEquipoA: any[] = [];  
+  jugadoresEquipoB: any[] = [];  
+  jugadorAnotoGolA: string = ''; 
+  jugadorAnotoGolB: string = ''; 
 
   equiposDisponibles: Equipo[] = [];
   public fases = ['FASE_GRUPOS', 'OCTAVOS', 'CUARTOS', 'SEMIFINAL', 'FINAL'];
@@ -93,8 +109,17 @@ export class InfoUsuarioComponent implements OnInit {
       informacion: ['', Validators.maxLength(500)],
       jugadores: this.fb.array([])
     });
+
+    this.marcadorForm = this.fb.group({
+    golesEquipoA: [0, [Validators.required, Validators.min(0), Validators.max(20)]],
+    golesEquipoB: [0, [Validators.required, Validators.min(0), Validators.max(20)]], 
+    jugadorAnotoGolA: [''],
+    jugadorAnotoGolB: ['']
+  });
+  
   }
 
+  
   onSiglasInput(event: any): void {
     const input = event.target as HTMLInputElement;
     input.value = input.value.toUpperCase();
@@ -110,7 +135,269 @@ export class InfoUsuarioComponent implements OnInit {
     });
     this.cargarEquiposDisponibles();
     this.configurarLogicaGrupoAutomatico();
+    this.cargarPartidosDisponibles();
   }
+
+    cargarPartidosDisponibles(): void {
+    this.partidoService.getPartidos().subscribe({
+      next: (partidos: Partido[]) => {
+        this.partidosDisponibles = partidos
+          .filter(p => p.estado === 'EN_JUEGO')
+          .sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
+      },
+      error: (error) => {
+        console.error('Error cargando partidos:', error);
+        this.mostrarMensajeError('No se pudieron cargar los partidos.');
+      }
+    });
+  }
+
+  abrirModalMarcador(): void {
+    this.mostrarModalMarcador = true;
+    this.partidoSeleccionado = null;
+    this.editandoMarcador = false;
+    this.marcadorForm.reset({ golesEquipoA: 0, golesEquipoB: 0 });
+    document.body.style.overflow = 'hidden';
+  }
+
+  cerrarModalMarcador(): void {
+    this.mostrarModalMarcador = false;
+    this.partidoSeleccionado = null;
+    this.editandoMarcador = false;
+    this.unGolA = true;
+    this.unGolB = true;
+    document.body.style.overflow = 'auto';
+}
+
+  // Seleccionar un partido para editar marcador
+  seleccionarPartido(partido: Partido): void {
+    this.partidoSeleccionado = partido;
+    this.editandoMarcador = true;
+    
+    // Cargar el marcador actual si existe
+    this.marcadorForm.patchValue({
+      golesEquipoA: partido.golesEquipoA || 0,
+      golesEquipoB: partido.golesEquipoB || 0
+    });
+
+    // this.cargarJugadoresEquipo(partido.equipoA.id, 'A');
+    // this.cargarJugadoresEquipo(partido.equipoB.id, 'B');
+  }
+
+  cargarJugadoresEquipo(equipoId: string, equipo: 'A' | 'B'): void {
+  this.equipoService.getEquipoById(equipoId).subscribe({
+    next: (equipoData: Equipo) => {
+      const jugadores = equipoData.jugadores || [];
+      
+      if (equipo === 'A') {
+        this.jugadoresEquipoA = jugadores.map(j => ({
+         id: j.id,
+          nombre: j.nombre,
+          apellido: j.apellido,
+          fechaNacimiento: j.fechaNacimiento,
+          numero: j.numeroCamiseta,
+          posicion: j.posicion
+        }));
+        console.log('Jugadores equipo A:', this.jugadoresEquipoA);
+      } else {
+        this.jugadoresEquipoB = jugadores.map(j => ({
+          id: j.id,
+          nombre: j.nombre,
+          apellido: j.apellido,
+          fechaNacimiento: j.fechaNacimiento,
+          numero: j.numeroCamiseta,
+          posicion: j.posicion
+        }));
+        console.log('Jugadores equipo B:', this.jugadoresEquipoB);
+      }
+    },
+    error: (err) => {
+      console.error(`Error cargando jugadores del equipo ${equipo}:`, err);
+    }
+  });
+}
+
+getNombreJugadorPorId(jugadorId: string, equipo: 'A' | 'B'): string {
+  const jugadores = equipo === 'A' ? this.jugadoresEquipoA : this.jugadoresEquipoB;
+  const jugador = jugadores.find(j => j.id === jugadorId);
+  
+  if (jugador) {
+    return jugador.nombreCompleto;
+  }
+  
+  // Si no encuentra el jugador, busca en ambos equipos por si acaso
+  const todosJugadores = [...this.jugadoresEquipoA, ...this.jugadoresEquipoB];
+  const jugadorEncontrado = todosJugadores.find(j => j.id === jugadorId);
+  
+  return jugadorEncontrado ? jugadorEncontrado.nombreCompleto : 'Jugador Desconocido';
+}
+
+// O versión más específica
+getNombreJugadorEquipoA(jugadorId: string): string {
+  const jugador = this.jugadoresEquipoA.find(j => j.id === jugadorId);
+  return jugador ? jugador.nombreCompleto : 'Jugador Desconocido';
+}
+
+getNombreJugadorEquipoB(jugadorId: string): string {
+  const jugador = this.jugadoresEquipoB.find(j => j.id === jugadorId);
+  return jugador ? jugador.nombreCompleto : 'Jugador Desconocido';
+}
+
+// Función para incrementar/decrementar goles
+incrementarGoles(equipo: 'equipoA' | 'equipoB'): void {
+  const control = equipo === 'equipoA' ? 'golesEquipoA' : 'golesEquipoB';
+  const currentValue = this.marcadorForm.get(control)?.value || 0;
+  if (equipo === 'equipoA'){
+    this.unGolA = false;
+    this.golesEquipoA = 1;
+  }else{
+    this.golesEquipoA = 0;
+  }
+  if(equipo==="equipoB"){
+    this.unGolB = false;
+    this.golesEquipoB = 1;
+  }else{
+    this.golesEquipoB = 0;
+  }
+
+  if (currentValue < 20) { // Límite máximo de 20
+    this.marcadorForm.get(control)?.setValue(currentValue + 1);
+  }
+  
+}
+
+decrementarGoles(equipo: 'equipoA' | 'equipoB'): void {
+  const control = equipo === 'equipoA' ? 'golesEquipoA' : 'golesEquipoB';
+  const currentValue = this.marcadorForm.get(control)?.value || 0;
+  
+  if (currentValue > 0) { // No puede ser negativo
+    this.marcadorForm.get(control)?.setValue(currentValue - 1);
+  }
+}
+
+// Guardar el marcador actualizado
+guardarMarcador(): void {
+  if (!this.partidoSeleccionado || !this.usuarioActual?.token) {
+    this.mostrarMensajeError('No hay partido seleccionado o no estás autenticado.');
+    return;
+  }
+
+  if (this.marcadorForm.invalid) {
+    this.marcadorForm.markAllAsTouched();
+    return;
+  }
+
+  //const { golesEquipoA, golesEquipoB } = this.marcadorForm.value;
+  
+  // Validar que al menos uno tenga goles si se está actualizando
+  if (this.golesEquipoA === 0 && this.golesEquipoB === 0) {
+    const confirmar = confirm('Ambos equipos tienen 0 goles. ¿Estás seguro de guardar este marcador?');
+    if (!confirmar) return;
+  }
+
+  // const nombreJugadorA = this.jugadorAnotoGolA 
+  //   ? this.getNombreJugadorEquipoA(this.jugadorAnotoGolA)
+  //   : '';
+  
+  // const nombreJugadorB = this.jugadorAnotoGolB 
+  //   ? this.getNombreJugadorEquipoB(this.jugadorAnotoGolB)
+  //   : '';
+
+  // Determinar qué jugador enviar (SOLO UNO)
+  // let jugadorSeleccionado = '';
+  
+  // if (this.golesEquipoA > 0 && this.golesEquipoB > 0) {
+  //   // Si ambos anotaron, elige uno (pregunta al usuario o usa lógica)
+  //   const opcion = confirm('Ambos equipos anotaron. ¿Enviar jugador del Equipo A?\n\n' +
+  //                         `Equipo A: ${nombreJugadorA}\n` +
+  //                         `Equipo B: ${nombreJugadorB}\n\n` +
+  //                         'Click OK para Equipo A, Cancel para Equipo B');
+    
+  //   jugadorSeleccionado = opcion ? nombreJugadorA : nombreJugadorB;
+    
+  // } else if (this.golesEquipoA > 0) {
+  //   // Solo equipo A anotó
+  //   if (!this.jugadorAnotoGolA) {
+  //     this.mostrarMensajeError('Debes seleccionar el jugador que anotó para el equipo A');
+  //     return;
+  //   }
+  //   jugadorSeleccionado = nombreJugadorA;
+    
+  // } else if (this.golesEquipoB > 0) {
+  //   // Solo equipo B anotó
+  //   if (!this.jugadorAnotoGolB) {
+  //     this.mostrarMensajeError('Debes seleccionar el jugador que anotó para el equipo B');
+  //     return;
+  //   }
+  //   jugadorSeleccionado = nombreJugadorB;
+  // }
+  
+  // Si no hay goles, jugadorSeleccionado queda vacío
+
+  // Validar que al menos uno tenga goles
+  if (this.golesEquipoA === 0 && this.golesEquipoB === 0) {
+    const confirmar = confirm('Ambos equipos tienen 0 goles. ¿Estás seguro de guardar este marcador?');
+    if (!confirmar) return;
+  }
+
+  console.log('Enviando al backend:', {
+    golesEquipoA: this.golesEquipoA,
+    golesEquipoB: this.golesEquipoB,
+    //jugador: jugadorSeleccionado
+  });
+
+  this.partidoService.actualizarMarcador(
+    this.partidoSeleccionado.id,
+    this.golesEquipoA,
+    this.golesEquipoB,
+    //jugadorSeleccionado, 
+    this.usuarioActual.token
+  ).subscribe({
+    next: (partidoActualizado) => {
+      const index = this.partidosDisponibles.findIndex(p => p.id === partidoActualizado.id);
+      if (index !== -1) {
+        this.partidosDisponibles[index] = partidoActualizado;
+      }
+      
+      this.mostrarMensajeExito('Marcador actualizado correctamente!');
+      
+      setTimeout(() => {
+        this.cerrarModalMarcador();
+      }, 2000);
+    },
+    error: (err) => {
+      console.error('Error actualizando marcador:', err);
+      this.mostrarMensajeError(err.error?.message || 'Error al actualizar el marcador.');
+    }
+  });
+}
+
+// Función para formatear fecha
+formatearFecha(fechaString: string): string {
+  const fecha = new Date(fechaString);
+  return fecha.toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+}
+
+// Función para obtener el estado del partido como texto legible
+getEstadoPartido(estado: string): string {
+  const estados: {[key: string]: string} = {
+    'PROGRAMADO': 'Programado',
+    'EN_CURSO': 'En Curso', 
+    'FINALIZADO': 'Finalizado',
+    'SUSPENDIDO': 'Suspendido'
+  };
+  return estados[estado] || estado;
+}
+
+// Función para obtener nombre del equipo por ID
+getNombreEquipo(equipoId: string): string {
+  const equipo = this.equiposDisponibles.find(e => e.id === equipoId);
+  return equipo ? equipo.nombre : 'Equipo Desconocido';
+}
 
   get jugadoresArray(): FormArray {
     return this.equipoForm.get('jugadores') as FormArray;

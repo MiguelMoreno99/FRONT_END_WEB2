@@ -36,4 +36,17 @@ export class PartidoService {
     headers = headers.set('Authorization', `Bearer ${token}`);
     return this.http.post<Partido>(this.apiUrl, partido, { headers });
   }
+
+  editarPartido(partidoId: string, partido: PartidoCreate, token: string): Observable<Partido> {
+    let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.put<Partido>(`${this.apiUrl}/${partidoId}`, partido, { headers });
+  }
+
+  actualizarMarcador(partidoId: string, golesEquipoA: number, golesEquipoB: number ,token: string): Observable<Partido> {
+    let headers = new HttpHeaders().set('ngrok-skip-browser-warning', '1');
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    const body = { golesEquipoA, golesEquipoB};
+    return this.http.patch<Partido>(`${this.apiUrl}/${partidoId}/marcador`, body, { headers });
+  }
 }

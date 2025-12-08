@@ -632,3 +632,218 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     align-items: center;
     gap: 0.3rem;
 }
+
+/* ==================== ESTILOS PARA MODAL DE MARCADOR ==================== */
+
+/* Lista de partidos */
+.partidos-lista {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.sin-partidos {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+}
+
+/* Tabla de partidos */
+.table-dark {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-dark thead th {
+  background: rgba(218, 165, 32, 0.2);
+  color: goldenrod;
+  border: none;
+  font-weight: 600;
+}
+
+.table-dark tbody tr {
+  transition: all 0.3s ease;
+}
+
+.table-dark tbody tr:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.table-dark td {
+  border-color: rgba(255, 255, 255, 0.1);
+  vertical-align: middle;
+}
+
+/* Contador de goles */
+.contador-goles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.btn-contador {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-decremento {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  border: 2px solid #f44336;
+}
+
+.btn-decremento:hover:not(:disabled) {
+  background: rgba(244, 67, 54, 0.3);
+  transform: scale(1.1);
+}
+
+.btn-decremento:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-incremento {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+  border: 2px solid #4CAF50;
+}
+
+.btn-incremento:hover:not(:disabled) {
+  background: rgba(76, 175, 80, 0.3);
+  transform: scale(1.1);
+}
+
+.btn-incremento:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.display-goles {
+  width: 80px;
+  height: 80px;
+  background: rgba(218, 165, 32, 0.1);
+  border: 3px solid goldenrod;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.numero-goles {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: goldenrod;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Separador */
+.separador {
+  color: goldenrod;
+  font-size: 3rem;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Información del partido */
+.partido-info {
+  border: 1px solid rgba(218, 165, 32, 0.3);
+  background: linear-gradient(135deg, rgba(218, 165, 32, 0.05), rgba(0, 0, 0, 0.2));
+}
+
+/* Badges de estado */
+.badge {
+  padding: 0.5em 1em;
+  font-size: 0.85em;
+  border-radius: 20px;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+}
+
+.bg-success {
+  background-color: #28a745 !important;
+}
+
+.bg-secondary {
+  background-color: #6c757d !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contador-goles {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .btn-contador {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .display-goles {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .numero-goles {
+    font-size: 2rem;
+  }
+  
+  .table-responsive {
+    font-size: 0.9rem;
+  }
+  
+  .modal-content {
+    margin: 10px;
+  }
+}
+
+/* Scrollbar para la lista de partidos */
+.partidos-lista::-webkit-scrollbar {
+  width: 8px;
+}
+
+.partidos-lista::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.partidos-lista::-webkit-scrollbar-thumb {
+  background: rgba(218, 165, 32, 0.5);
+  border-radius: 4px;
+}
+
+.partidos-lista::-webkit-scrollbar-thumb:hover {
+  background: rgba(218, 165, 32, 0.7);
+}
+
+/* Botones del modal */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 576px) {
+  .modal-actions {
+    flex-direction: column;
+  }
+  
+  .modal-actions button {
+    width: 100%;
+  }
+}
