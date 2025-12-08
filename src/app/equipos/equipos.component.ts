@@ -929,7 +929,7 @@ export class EquiposComponent implements OnInit {
         case 'rankingFifa':
           return 'Solo se permiten números enteros';
         case 'bandera':
-          return 'URL de imagen inválida (ej: https://ejemplo.com/imagen.jpg)';
+          return 'URL de imagen inválida (ej: https://flagcdn.com/us.svg)';
         default:
           return 'Formato inválido';
       }
