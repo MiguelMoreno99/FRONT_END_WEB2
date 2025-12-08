@@ -111,12 +111,14 @@ export class PartidosComponent implements OnInit {
   private loadPartidos() {
     this.partidoService.getPartidos().subscribe({
       next: (list) => {
-        this.partidosView = list.map(p => ({
+        const partidosValidos = list.filter(p => p.equipoA && p.equipoB);
+        this.partidosView = partidosValidos.map(p => ({
           ...p,
           stadiumImage: this.randomImage()
         }));
+
         this.aplicarFiltro();
-        console.log('Partidos cargados:', this.partidosView);
+        console.log('Partidos cargados (solo válidos):', this.partidosView);
       },
       error: (err) => {
         console.error('Error cargando partidos', err);

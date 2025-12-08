@@ -39,10 +39,12 @@ export class HomePageComponent implements OnInit {
   private cargarPartidos(): void {
     this.partidoService.getPartidos().subscribe({
       next: (partidos) => {
-        this.partidosEnJuego = partidos
+        const partidosValidos = partidos.filter(p => p.equipoA && p.equipoB);
+        this.partidosEnJuego = partidosValidos
           .filter(p => p.estado === 'EN_JUEGO')
           .map(p => ({ ...p, stadiumImage: '' }));
-        this.partidosProximos = partidos
+
+        this.partidosProximos = partidosValidos
           .filter(p => p.estado === 'PROGRAMADO')
           .slice(0, 3)
           .map(p => ({ ...p, stadiumImage: '' }));

@@ -9,8 +9,8 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class EquiposService {
-  //private apiUrl = 'http://localhost:8080/api/Equipo';
-  private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Equipo';
+  private apiUrl = 'http://localhost:8080/api/Equipo';
+  //private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Equipo';
 
   constructor(private http: HttpClient) { }
 

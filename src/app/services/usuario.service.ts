@@ -8,8 +8,8 @@ import { LoginRequest, Usuario, RegistroRequest, EditRequest, UsuarioRespuesta }
 })
 
 export class UsuarioService {
-  //private apiUrl = 'http://localhost:8080/api/Usuarios';
-  private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Usuarios';
+  private apiUrl = 'http://localhost:8080/api/Usuarios';
+  //private apiUrl = 'https://concludingly-unfeigning-lacresha.ngrok-free.dev/api/Usuarios';
 
   private currentUserSubject = new BehaviorSubject<Usuario | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
